@@ -20,7 +20,6 @@ public class SpecialMovesList{
 
 
 	public static void load(){
-		int offset = 0;
 		
 		SubAction[] none = {new SubAction(0x125,"No special Moves! DO NOT EDIT")};
 		
