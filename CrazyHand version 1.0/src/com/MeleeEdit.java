@@ -187,6 +187,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
         	tmp3[i]=SpecialMovesList.getListForCharacter(MeleeEdit.selected)[i].getLocalizedName();
         }
         
+        this.selectedSubaction = 0;
+        this.subactionList.setSelectedIndex(0);
+        
         specialList = new JComboBox(tmp3);
         specialList.setSelectedIndex(0);
         specialList.addActionListener(new SubactionListener());
@@ -222,7 +225,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
         	JComboBox cb = (JComboBox)e.getSource();
             selected = cb.getSelectedIndex();
             
-            
+            refreshSpecialMoves();
             FileIO.init();
             FileIO.readScripts();
             FileIO.setPosition(Character.characters[MeleeEdit.selected].offset);
