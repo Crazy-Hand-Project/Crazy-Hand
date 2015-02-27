@@ -17,8 +17,8 @@ public class SpecialMovesList{
 		}
 		
 	}
-
-
+	
+	
 	public static void load(){
 		
 		SubAction[] none = {new SubAction(0x125,"No special Moves! DO NOT EDIT")};
@@ -61,46 +61,46 @@ public class SpecialMovesList{
 	};
 	
 	public static SubAction[] bowserSpecialMoves = {
-		new SubAction(0x127, "b'SpecialNStart"),
-		new SubAction(0x128, "b'SpecialN"),
-		new SubAction(0x129, "b'SpecialNEnd"),
-		new SubAction(0x12A, "b'SpecialAirNStart"),
-		new SubAction(0x12B, "b'SpecialAirN"),
-		new SubAction(0x12C, "b'SpecialAirNEnd"),
-		new SubAction(0x12D, "b'SpecialSStart"),
-		new SubAction(0x12E, "b'SpecialSHit"),//One is forward, other is behind?
-		new SubAction(0x12F, "b'SpecialSHit(2)"),//One is forward, other is behind?
-		new SubAction(0x130, "b'SpecialSEndF"),
-		new SubAction(0x131, "b'SpecialSEndB"),
-		new SubAction(0x132, "b'SpecialAirSStart"),
-		new SubAction(0x133, "b'SpecialAirSHit"),//One is forward, other is behind?
-		new SubAction(0x134, "b'SpecialAirShit(2)"),//One is forward, other is behind?
-		new SubAction(0x135, "b'SpecialAirSEndF"),
-		new SubAction(0x136, "b'SpecialAirSEndB"),
-		new SubAction(0x137, "b'SpecialHi"),
-		new SubAction(0x138, "b'SpecialAirHi"),
-		new SubAction(0x139, "b'SpecialLw"),
-		new SubAction(0x13A, "b'SpecialAirLw"),
-		new SubAction(0x13B, "b'SpecialLwLanding")
+		new SubAction(0x127, "(Ground)Neutral B Start"),
+		new SubAction(0x128, "(Ground)Neutral B Loop"),
+		new SubAction(0x129, "(Ground)Neutral B End"),
+		new SubAction(0x12A, "(Air)Neutral B Start"),
+		new SubAction(0x12B, "(Air)Neutral B Loop"),
+		new SubAction(0x12C, "(Air)Neutral B End"),
+		new SubAction(0x12D, "(Ground)Side B Start"),
+		new SubAction(0x12E, "(Ground)Side B Hit"),//One is forward, other is behind?
+		new SubAction(0x12F, "(Ground)Side B Hit(2)"),//One is forward, other is behind?
+		new SubAction(0x130, "(Ground)Side B End Forward"),
+		new SubAction(0x131, "(Ground)Side B End Backward"),
+		new SubAction(0x132, "(Air)Side B Start"),
+		new SubAction(0x133, "(Air)Side B Hit"),//One is forward, other is behind?
+		new SubAction(0x134, "(Air)Side B Hit(2)"),//One is forward, other is behind?
+		new SubAction(0x135, "(Air)Side B End Forward"),
+		new SubAction(0x136, "(Air)Side B End Backward"),
+		new SubAction(0x137, "(Ground)Up B"),
+		new SubAction(0x138, "(Air)Up B"),
+		new SubAction(0x139, "(Ground)Down B"),
+		new SubAction(0x13A, "(Air)Down B"),
+		new SubAction(0x13B, "Down B Landing")
 	};
 	
 	public static SubAction[] ganonfalconSpecialMoves = {
-		new SubAction(0x12D, "b'SpecialN"),
-		new SubAction(0x12E, "b'SpecialAirN"),
-		new SubAction(0x12F, "b'SpecialSStart"),
-		new SubAction(0x130, "b'SpecialS"),
-		new SubAction(0x131, "b'SpecialAirSStart"),
-		new SubAction(0x132, "b'SpecialAirS"),
-		new SubAction(0x133, "b'SpecialHi"),
-		new SubAction(0x134, "b'SpecialAirHi"),
-		new SubAction(0x135, "b'SpecialHiCatch"),
-		new SubAction(0x136, "b'SpecialHiThrow"),
-		new SubAction(0x137, "b'SpecialLw"),
-		new SubAction(0x138, "b'SpecialLwEnd"),
-		new SubAction(0x139, "b'SpecialAirLw"),
-		new SubAction(0x13A, "b'SpecialAirLwEnd"),
-		new SubAction(0x13B, "b'SpecialLwEndAir"),
-		new SubAction(0x13C, "b'SpecialAirLwEndAir"),
+		new SubAction(0x12D, "(Ground)Neutral B"),
+		new SubAction(0x12E, "(Air)Neutral B"),
+		new SubAction(0x12F, "(Ground)Side B Start"),
+		new SubAction(0x130, "(Ground)Side B"),
+		new SubAction(0x131, "(Air)Side B Start"),
+		new SubAction(0x132, "(Air)Side B"),
+		new SubAction(0x133, "(Ground)Up B"),
+		new SubAction(0x134, "(Air)Up B"),
+		new SubAction(0x135, "Up B Hold"),
+		new SubAction(0x136, "Up B Release"),
+		new SubAction(0x137, "(Ground)Down B"),
+		new SubAction(0x138, "(Ground)Down B End"),
+		new SubAction(0x139, "(Air)Down B"),
+		new SubAction(0x13A, "(Air)Down B End"),
+		new SubAction(0x13B, "(Ground)Down B End In-Air"),
+		new SubAction(0x13C, "(Air)Down B End In-Air"),
 		
 		//Data isn't being read correctly for this pointer
 		//It may have something to do with FileIO and how it handles
@@ -110,53 +110,53 @@ public class SpecialMovesList{
 	};
 	
 	public static SubAction[] donkeyKongSpecialMoves = {
-		new SubAction(0x13F, "b'SpecialNStart"),
-		new SubAction(0x140, "b'SpecialNLoop"),
-		new SubAction(0x141, "b'SpecialNCancel"),
-		new SubAction(0x142, "b'SpecialN"),
-		new SubAction(0x143, "b'SpecialN(2?)"),
-		new SubAction(0x144, "b'SpecialAirNStart"),
-		new SubAction(0x145, "b'SpecialAirNLoop"),
-		new SubAction(0x146, "b'SpecialAirNCancel"),
-		new SubAction(0x147, "b'SpecialAirN"),
-		new SubAction(0x148, "b'SpecialAirN(2?)"),
-		new SubAction(0x149, "b'SpecialS"),
-		new SubAction(0x14A, "b'SpecialAirS"),
-		new SubAction(0x14B, "b'SpecialHi"),
-		new SubAction(0x14C, "b'SpecialAirHi"),
-		new SubAction(0x14D, "b'SpecialLwStart"),
-		new SubAction(0x14E, "b'SpecialLwLoop"),
-		new SubAction(0x14F, "b'SpecialLwEnd"),
-		new SubAction(0x150, "b'SpecialLwEnd(2?)"),
+		new SubAction(0x13F, "(Ground)Neutral B Start"),
+		new SubAction(0x140, "(Ground)Neutral B Loop"),
+		new SubAction(0x141, "(Ground)Neutral B Cancel"),
+		new SubAction(0x142, "(Ground)Neutral B"),
+		new SubAction(0x143, "(Ground)Neutral B(2)"),
+		new SubAction(0x144, "(Air)Neutral B Start"),
+		new SubAction(0x145, "(Air)Neutral B Loop"),
+		new SubAction(0x146, "(Air)Neutral B Cancel"),
+		new SubAction(0x147, "(Air)Neutral B"),
+		new SubAction(0x148, "(Air)Neutral B(2)"),
+		new SubAction(0x149, "(Ground)Side B"),
+		new SubAction(0x14A, "(Air)Side B"),
+		new SubAction(0x14B, "(Ground)Up B"),
+		new SubAction(0x14C, "(Air)Up B"),
+		new SubAction(0x14D, "Down B Start"),
+		new SubAction(0x14E, "Down B Loop"),
+		new SubAction(0x14F, "Down B End"),
+		new SubAction(0x150, "Down B End(2)"),
 	};
 	
 	public static SubAction[] spacieSpecialMoves = {
-		new SubAction(0x127, "b'SpecialNStart"),
-		new SubAction(0x128, "b'SpecialNLoop"),
-		new SubAction(0x129, "b'SpecialNEnd"),
-		new SubAction(0x12A, "b'SpecialAirNStart"),
-		new SubAction(0x12B, "b'SpecialAirNLoop"),
-		new SubAction(0x12C, "b'SpecialAirNEnd"),
-		new SubAction(0x12D, "b'SpecialSStart"),
-		new SubAction(0x12E, "b'SpecialS"),
-		new SubAction(0x12F, "b'SpecialSEnd"),
-		new SubAction(0x130, "b'SpecialAirSStart"),
-		new SubAction(0x131, "b'SpecialAirS"),
-		new SubAction(0x132, "b'SpecialAirSEnd"),
-		new SubAction(0x133, "b'SpecialHiHold"),
-		new SubAction(0x134, "b'SpecialHiHoldAir"),
-		new SubAction(0x135, "b'SpecialHi"),
-		new SubAction(0x136, "b'SpecialHiLanding"),
-		new SubAction(0x137, "b'SpecialHiFall"),
-		new SubAction(0x138, "b'SpecialHiBound"),
-		new SubAction(0x139, "b'SpecialLwStart"),
-		new SubAction(0x13A, "b'SpecialLwLoop"),
-		new SubAction(0x13B, "b'SpecialLwHit"),
-		new SubAction(0x13C, "b'SpecialLwEnd"),
-		new SubAction(0x13D, "b'SpecialAirLwStart"),
-		new SubAction(0x13E, "b'SpecialAirLwLoop"),
-		new SubAction(0x13F, "b'SpecialAirLwHit"),
-		new SubAction(0x140, "b'SpecialAirLwEnd"),
+		new SubAction(0x127, "(Ground)Neutral B Start"),
+		new SubAction(0x128, "(Ground)Neutral B Loop"),
+		new SubAction(0x129, "(Ground)Neutral B End"),
+		new SubAction(0x12A, "(Air)Neutral B Start"),
+		new SubAction(0x12B, "(Air)Neutral B Loop"),
+		new SubAction(0x12C, "(Air)Neutral B End"),
+		new SubAction(0x12D, "(Ground)Side B Start"),
+		new SubAction(0x12E, "(Ground)Side B"),
+		new SubAction(0x12F, "(Ground)Side B End"),
+		new SubAction(0x130, "(Air)Side B Start"),
+		new SubAction(0x131, "(Air)Side B"),
+		new SubAction(0x132, "(Air)Side B End"),
+		new SubAction(0x133, "(Ground)Up B Hold"),
+		new SubAction(0x134, "(Air)Up B Hold"),
+		new SubAction(0x135, "Up B"),
+		new SubAction(0x136, "Up B Landing"),
+		new SubAction(0x137, "Up B Fall"),
+		new SubAction(0x138, "Up B Bound"),
+		new SubAction(0x139, "(Ground)Down B Start"),
+		new SubAction(0x13A, "(Ground)Down B Loop"),
+		new SubAction(0x13B, "(Ground)Down B Hit"),
+		new SubAction(0x13C, "(Ground)Down B End"),
+		new SubAction(0x13D, "(Air)Down B Start"),
+		new SubAction(0x13E, "(Air)Down B Loop"),
+		new SubAction(0x13F, "(Air)Down B Hit"),
+		new SubAction(0x140, "(Air)Down B End"),
 		
 		//There's more entries after this, starting with AppealS
 		//It might be a taunt?
@@ -461,14 +461,14 @@ public class SpecialMovesList{
 		//0xD0 is FuraSleepEnd (6 moves down from 0xC9)
 		//0xD8 is CliffCatch (7 moves down from 0xD0)
 		//0x127 is SpecialN!
-		new SubAction(0x127, "(Ground)Fireball"),
-		new SubAction(0x128, "(Air)Fireball"),
-		new SubAction(0x129, "(Ground)Cape"),
-		new SubAction(0x12a, "(Air)Cape"),
-		new SubAction(0x12b, "(Ground)Up-B"),
-		new SubAction(0x12c, "(Air)Up-B"),
-		new SubAction(0x12d, "(Ground)Down-B"),
-		new SubAction(0x12e, "(Air)Down-B")
+		new SubAction(0x127, "(Ground)Neutral B"),
+		new SubAction(0x128, "(Air)Neutral B"),
+		new SubAction(0x129, "(Ground)Side B"),
+		new SubAction(0x12a, "(Air)Side B"),
+		new SubAction(0x12b, "(Ground)Up B"),
+		new SubAction(0x12c, "(Air)Up B"),
+		new SubAction(0x12d, "(Ground)Down B"),
+		new SubAction(0x12e, "(Air)Down B")
 	};
 	
 	public static SubAction[] feSwordsmanSpecialMoves = {
