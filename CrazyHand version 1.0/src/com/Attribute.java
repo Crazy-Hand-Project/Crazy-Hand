@@ -71,6 +71,42 @@ public class Attribute {
     	new Attribute("????",""),
     	new Attribute("WallJump H Velocity",""),
     	new Attribute("WallJump V Velocity",""),
+    	
+    	//Everything below this point is temporary
+    	//Trying to figure out the exact mechanics of double-jump cancelling
+    	//Mewtwo, Ness, and Yoshi all share a Double jump cancel? value of -1
+    	//They are the only characters in the roster that have that value set to -1
+    	//I've been digging around in their jump subactions and grafting them
+    	//onto other characters, and I'm making some progress.
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("DJC?",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("DJC?",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("????",""),
+    	new Attribute("Double jump cancel?", "")
  };
 
 	public String name,info;
