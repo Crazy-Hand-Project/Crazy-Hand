@@ -20,8 +20,12 @@ import static com.MeleeEdit.MENU_OTHER;;
 
 
 public class FileIO {
+	//TEST TEST TEST
+	
+	
 	
 	public static RandomAccessFile f;
+	//TEST!
     public static void init(){
        try {
 		f = new RandomAccessFile("root/Pl" + Character.characters[MeleeEdit.selected].id + ".dat", "rw");
