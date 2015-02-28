@@ -1,7 +1,7 @@
 package com;
 
 public class Character {
-	
+	//Ampers github test #2, ignore this
 	public static Character[] characters = {
 		new Character("Bowser","Kp",0x3644,0x007b40),
 		new Character("Captain Falcon","Ca",0x3774,0x007a98),
