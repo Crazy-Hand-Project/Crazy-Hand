@@ -146,21 +146,32 @@ public class FileIO {
         	}
         	Script temp;
         	
-        	if(e.id==0x2c){
-        		temp= new HitboxScript(e.name,d,offset+0x20+bytesDown);
+        	if(1==1){
+	        	if(e.id==0x2c){
+	        		temp= new HitboxScript(e.name,d,offset+0x20+bytesDown);
+	        	}
+	        	else if(e.id==0x04 || e.id==0x08){
+	        		temp= new TimerScript(e.name,d,offset+0x20+bytesDown);
+	        	}
+	        	else if(e.id==0xe0){
+	        		temp= new SmashChargeScript(e.name,d,offset+0x20+bytesDown);
+	        	}
+	        	else if(e.id==0x88){
+	        		temp= new ThrowScript(e.name, d, offset+0x20+bytesDown);
+	        	}
+	        	else if(e.id==0x68){
+	        		temp= new BodyStateScript(e.name, d, offset+0x20+bytesDown);
+	        	}
+	        	else{
+	        		temp= new Script(e.name,d,offset+0x20+bytesDown);
+	        	}
+        	
         	}
-        	else if(e.id==0x04 || e.id==0x08){
-        		temp= new TimerScript(e.name,d,offset+0x20+bytesDown);
+        	else
+        	{
+        		temp= new Script(e.name,d,offset+0x20+bytesDown);
         	}
-        	else if(e.id==0xe0){
-        		temp= new SmashChargeScript(e.name,d,offset+0x20+bytesDown);
-        	}
-        	else if(e.id==0x88){
-        		temp= new ThrowScript(e.name, d, offset+0x20+bytesDown);
-        	}
-        	else{
-        		temp = new Script(e.name,d,offset+0x20+bytesDown);
-        	}
+        	
         	Script.scripts.add(temp);
         	Script.number++;
         	
