@@ -38,7 +38,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	
 	
 
-	public static final int MENU_ATTRIBUTES=0,MENU_ATTACKS=1,MENU_SPECIAL_MOVES=2,MENU_ALL=3,MENU_OTHER=4;
+	public static final int MENU_ATTRIBUTES=0,MENU_ATTACKS=1,MENU_SPECIAL_MOVES=2,MENU_ALL=3,MENU_OTHER=5,MENU_ANIMATION=4;
 	
 	
 	
@@ -56,6 +56,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
     	"Subactions (Attacks only)",
     	"Subactions (Special moves)",
     	"Subactions (All)",
+    	"Animation Swapping",
     	"Other",
     	//"Special Moves",
     	//"Frames Speed Modifiers",
@@ -69,6 +70,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
     public JComboBox charList,subactionList,subactionList2,specialList;
     public JComboBox optionList;
     public JPanel comboPane,scriptPanel,restorePane,specialPanel;
+    public AnimationPanel animationPanel;
 
 
 
@@ -91,10 +93,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
         for(int i = 0; i < tmp2.length; i++){
         	tmp2[i]=SubAction.subActions[i].name;
         }
-        String[] tmp3 = new String[SubAction.subActionsAll.length];
-        for(int i = 0; i < tmp3.length; i++){
-        	tmp3[i]=SubAction.subActionsAll[i].name;
-        }
+
         
         charList = new JComboBox(tmp);
         charList.setSelectedIndex(0);
@@ -111,7 +110,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
         subactionList.addActionListener(new SubactionListener());
         subactionList.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         
-        subactionList2 = new JComboBox(tmp3);
+        subactionList2 = new JComboBox(FileIO.getSubactions());
         subactionList2.setSelectedIndex(0);
         subactionList2.addActionListener(new SubactionListener());
         subactionList2.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
@@ -146,7 +145,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
        //j.setPreferredSize(new Dimension(300,400);
 
        
-        
+        animationPanel = new AnimationPanel();
  
         //Create the scroll pane and add the table to it.
         aPane = new JScrollPane(attributeTable);
@@ -228,6 +227,17 @@ public class MeleeEdit extends JPanel implements ActionListener {
             refreshSpecialMoves();
             FileIO.init();
             FileIO.readScripts();
+            
+            
+            //updates the "all" subactions list for the new character.
+            //I might move this to a function later on. --Ampers
+            subactionList2.removeAllItems();
+            String[] tmp = FileIO.getSubactions();
+            for(int i = 0; i < tmp.length; i++){
+            	subactionList2.addItem(tmp[i]);
+            }
+            
+            
             FileIO.setPosition(Character.characters[MeleeEdit.selected].offset);
             for(int i = 0; i < Attribute.attributes.length; i ++){
         		attributeTable.setValueAt(FileIO.readFloat(), i, 1);
@@ -289,6 +299,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
             if(selectedMenu==MENU_OTHER){
             	remove(saveButton);
             	add(restorePane, BorderLayout.CENTER);
+            }
+            if(selectedMenu==MENU_ANIMATION){
+            	add(animationPanel, BorderLayout.CENTER);
             }
             
             
@@ -359,7 +372,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
     public static void main(String[] args) throws IOException {
     	
     	FileIO.init();
-    	
+    	FileIO.declareAnims();
     	SpecialMovesList.load();
     	
         javax.swing.SwingUtilities.invokeLater(new Runnable() {

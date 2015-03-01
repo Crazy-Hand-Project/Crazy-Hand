@@ -278,16 +278,27 @@ class HitboxScript extends Script {
         }
         public void scramble(){
         	int min=50, max=200;
-        	baseKnockback.setValue((int)(((Number)baseKnockback.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	knockbackGrowth.setValue((int)(((Number)knockbackGrowth.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	weightKnockback.setValue((int)(((Number)weightKnockback.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	damage.setValue((int)(((Number)damage.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	shieldDamage.setValue((int)(((Number)shieldDamage.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	size.setValue((int)(((Number)size.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	angle.setValue((int)(((Number)angle.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	zOff.setValue((int)(((Number)zOff.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	xOff.setValue((int)(((Number)xOff.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	yOff.setValue((int)(((Number)yOff.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
+        	//baseKnockback.setValue((int)(((Number)baseKnockback.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
+        	//knockbackGrowth.setValue((int)(((Number)knockbackGrowth.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
+        	//weightKnockback.setValue((int)(((Number)weightKnockback.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
+        	//damage.setValue((int)(((Number)damage.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
+        	//shieldDamage.setValue((int)(((Number)shieldDamage.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
+        	//size.setValue((int)(((Number)size.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
+        	//angle.setValue((int)(((Number)angle.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
+        	//zOff.setValue((int)(((Number)zOff.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
+        	//xOff.setValue((int)(((Number)xOff.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
+        	//yOff.setValue((int)(((Number)yOff.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
 
+        	
+        	baseKnockback.setValue(FileIO.randInt(0, 20));
+        	knockbackGrowth.setValue(FileIO.randInt(0, 140));
+        	//weightKnockback.setValue(0));
+        	damage.setValue(FileIO.randInt(0,25));
+        	shieldDamage.setValue(FileIO.randInt(0, 20));
+        	size.setValue(FileIO.randInt(0,3000));
+        	angle.setValue(FileIO.randInt(0, 360));
+        	zOff.setValue(FileIO.randInt(0,1500)*FileIO.sign());
+        	xOff.setValue(FileIO.randInt(0,1500)*FileIO.sign());
+        	yOff.setValue(FileIO.randInt(0,1500)*FileIO.sign());
     	}
     }

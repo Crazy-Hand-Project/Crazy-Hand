@@ -4,7 +4,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Random;
@@ -40,6 +42,20 @@ public class FileIO {
        }
 
     }
+    public static void init(int k){//initializes character of index "k"
+        try {
+ 		f = new RandomAccessFile("root/Pl" + Character.characters[k].id + ".dat", "rw");
+        } catch (FileNotFoundException e) {
+     	   e.printStackTrace();
+        }
+
+        try {
+     	   f.seek(Character.characters[MeleeEdit.selected].offset);
+        } catch (IOException e) {
+     	   e.printStackTrace();
+        }
+
+     }
     
     public static float readFloat(){
     	float val=0.9f;
@@ -89,8 +105,10 @@ public class FileIO {
     	MeleeEdit.scriptInner.removeAll();
     	
     	
-    	//fox 6, dash 2e
-    	//System.out.println("Start");
+    	if(MeleeEdit.selectedSubaction == -1){
+    		MeleeEdit.selectedSubaction = 0;
+    	}
+
     	int offTmp;
     	if(MeleeEdit.selectedMenu==MENU_ATTACKS){
     		offTmp = SubAction.subActions[MeleeEdit.selectedSubaction].offset*6*4;
@@ -99,7 +117,7 @@ public class FileIO {
     		offTmp = SpecialMovesList.getListForCharacter(MeleeEdit.selected)[MeleeEdit.selectedSubaction].offset*6*4;
     	}
     	else if(MeleeEdit.selectedMenu==MENU_ALL){
-    		offTmp = SubAction.subActionsAll[MeleeEdit.selectedSubaction].offset*6*4;
+    		offTmp = MeleeEdit.selectedSubaction*6*4;
     	}
     	else{
     		offTmp = 0;//The if/else statements above cover all the possible menus I've worked on, so this is to satisfy errors
@@ -211,8 +229,92 @@ public class FileIO {
 		}
     }
 
+    public static String[] getSubactions(){
+    	int numSubactions = SubAction.getNum();
+    	
+    	String[] subactions = new String[numSubactions];
+    	int tmp = 0;
+    	for(int i = 0; i < numSubactions; i++){
+    		int offTmp = i*6*4;
+        	int pointerLoc = Character.characters[MeleeEdit.selected].subOffset+0x20 +4*0+offTmp;
+        	setPosition(pointerLoc);
+        	int pointer = readInt();
+        	setPosition(pointer+0x20);
+        	
+        	
+        	String name = "";
+        	char tmp2;
+        	int counter = 4;
+        	while(true){
+        		tmp2 = (char)readByte();
+        		
+        		if(tmp2==00)
+        			break;
+        		if(tmp2=='_'){
+        			counter--;
+        		}
+        		else if(counter==1){
+        			name = name + tmp2;
+        		}
+        		if(counter==0){
+        			break;
+        		}
+        		
+        	}
+        	if(name==""){
+        		name="[No Name]";
+        	}
+        	//System.out.println(name);
+        	subactions[i]=name;
+
+    	}
+    	
+    	
+    	return subactions;
+
+    }
     
-    public static void randoTize(){//currently not working, causes crashes with the hitboxes sometimes?
+    public static void declareAnims(){//one time run to generate a list of all animation offsets/names
+    	try {
+    		
+    		//writer.println("The first line");
+    		//writer.println("The second line");
+    		int numSubactions = 0;//DEFINE THIS!
+    		//int tmp = 0;
+    		for(int k = 0; k < Character.characters.length; k++){
+    			numSubactions = (Character.characters[k].subEnd-Character.characters[k].subOffset)/6/4;
+    			
+    			MeleeEdit.selected=k;
+    			init();
+    			String[] names = getSubactions();
+    			
+        		
+        		PrintWriter writer = new PrintWriter("anm/" + Character.characters[k].id + "Anm.dat", "UTF-8");
+            	for(int i = 0; i < numSubactions; i++){
+            		int offTmp = i*6*4;
+                	int pointerLoc = Character.characters[k].subOffset+0x20 +4*1+offTmp;
+                	setPosition(pointerLoc);
+                	int animPointer = readInt();
+                	if(animPointer != 0)
+                		writer.println(names[i] + " " + Integer.toString(readInt()));
+                	//tmp++;
+                	//System.out.println(tmp);
+            	}
+            	writer.close();
+        	}
+    		
+    		
+    		
+    		
+    		
+           } catch (FileNotFoundException e) {
+        	   e.printStackTrace();
+           } catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public static void randoTize(){
     	int maxIts = Character.characters.length*(SubAction.subActions.length+Attribute.attributes.length);
     	int its=0;
     	
@@ -235,8 +337,13 @@ public class FileIO {
     				}
     				if(Attribute.attributes[k].name != "????" && hold){
     					f.seek(Character.characters[i].offset + k*4);
-        				float tmp = f.readFloat();
-        				tmp*=randInt(50,200)/100.f;
+        				//float tmp = f.readFloat();
+    					//35
+    					float tmp = (float)Attribute.avg[k];
+    					if(k==35)
+    						tmp*=randInt(80,120)/100.f;
+    					else
+    						tmp*=randInt(50,200)/100.f;
         				
         				for(int o = 0; o < ints.length; o++){//worst variable name I've ever used
         					if(ints[o]==k){
@@ -342,6 +449,11 @@ public class FileIO {
     public static int randInt(int min, int max) {
         int randomNum = rand.nextInt((max - min) + 1) + min;
         return randomNum;
+    }
+    public static int sign() {//just returns a random sign (-,+)
+        if(rand.nextInt(2)==1)
+        	return 1;
+        else return -1;
     }
     public static void save(){
     	try {
