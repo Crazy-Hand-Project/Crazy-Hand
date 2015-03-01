@@ -146,6 +146,8 @@ public class FileIO {
         	}
         	Script temp;
         	
+        	
+        	//Ignore this, just a quick way to toggle raw data showing up instead of scripts.
         	if(1==1){
 	        	if(e.id==0x2c){
 	        		temp= new HitboxScript(e.name,d,offset+0x20+bytesDown);
@@ -165,8 +167,8 @@ public class FileIO {
 	        	else{
 	        		temp= new Script(e.name,d,offset+0x20+bytesDown);
 	        	}
-        	
         	}
+        	
         	else
         	{
         		temp= new Script(e.name,d,offset+0x20+bytesDown);
