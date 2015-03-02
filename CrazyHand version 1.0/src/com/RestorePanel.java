@@ -102,6 +102,7 @@ class L102All implements ActionListener {
 
         for(int i = 0; i < Character.characters.length; i++)
         	FileIO.copy("def/102/Pl" + Character.characters[i].id + ".dat","root/Pl" + Character.characters[i].id + ".dat");
+        //FileIO.declareAnims();
         System.out.println("Restore All Complete!");
     }
 }

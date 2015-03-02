@@ -69,7 +69,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
     public JScrollPane aPane,scripts;
     public JComboBox charList,subactionList,subactionList2,specialList;
     public JComboBox optionList;
-    public JPanel comboPane,scriptPanel,restorePane,specialPanel;
+    public JPanel comboPane,scriptPanel,restorePane;//,specialPanel;
     public AnimationPanel animationPanel;
 
 
@@ -110,7 +110,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
         subactionList.addActionListener(new SubactionListener());
         subactionList.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         
-        subactionList2 = new JComboBox(FileIO.getSubactions());
+        subactionList2 = new JComboBox(FileIO.getDefaultSubactions());
         subactionList2.setSelectedIndex(0);
         subactionList2.addActionListener(new SubactionListener());
         subactionList2.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
@@ -167,7 +167,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 
 
-        specialPanel = new JPanel();
+        //specialPanel = new JPanel();
         
         add(comboPane, BorderLayout.PAGE_START);
         add(aPane, BorderLayout.CENTER);
@@ -181,7 +181,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
     
     public void refreshSpecialMoves()
     {
-    	String[] tmp3 = new String[SpecialMovesList.getListForCharacter(MeleeEdit.selected).length];
+    	/*String[] tmp3 = new String[SpecialMovesList.getListForCharacter(MeleeEdit.selected).length];
         for(int i = 0; i < tmp3.length; i++){
         	tmp3[i]=SpecialMovesList.getListForCharacter(MeleeEdit.selected)[i].getLocalizedName();
         }
@@ -200,6 +200,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
         specialPanel.removeAll();
     	specialPanel.add(specialList);
         specialPanel.add(scripts);
+        */
     }
     
     
@@ -207,12 +208,21 @@ public class MeleeEdit extends JPanel implements ActionListener {
     class SaveListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         	FileIO.save();
-        	System.out.println("Save Complete!");
         	
         	
+        	FileIO.init();
         	for(Script script: Script.scripts){
         		script.save();
         	}
+        	
+        	
+        	FileIO.init();
+        	for(AnimationNode n: animationPanel.nodes){
+        		n.save();
+        	}
+        	
+        	System.out.println("Save Complete!");
+        	
         	
         	
         	
@@ -232,7 +242,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
             //updates the "all" subactions list for the new character.
             //I might move this to a function later on. --Ampers
             subactionList2.removeAllItems();
-            String[] tmp = FileIO.getSubactions();
+            String[] tmp = FileIO.getDefaultSubactions();
             for(int i = 0; i < tmp.length; i++){
             	subactionList2.addItem(tmp[i]);
             }
@@ -262,7 +272,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
             if(selectedMenu==MENU_ATTACKS){
             	scriptPanel.remove(subactionList2);
                 scriptPanel.remove(scripts);
-                scriptPanel.remove(specialPanel);
+                //scriptPanel.remove(specialPanel);
                 scriptPanel.add(subactionList);
                 scriptPanel.add(scripts);
             	
@@ -271,24 +281,25 @@ public class MeleeEdit extends JPanel implements ActionListener {
             	//comboPane.add(subactionList);
             }
             if(selectedMenu==MENU_SPECIAL_MOVES){
-            	scriptPanel.remove(subactionList);
-                scriptPanel.remove(scripts);
-                scriptPanel.remove(subactionList2);
+            	//scriptPanel.remove(subactionList);
+                //scriptPanel.remove(scripts);
+                //scriptPanel.remove(subactionList2);
                 
-                refreshSpecialMoves();
+                //refreshSpecialMoves();
                 
-                scriptPanel.add(specialPanel);
-                scriptPanel.add(scripts);
+                //scriptPanel.add(specialPanel);
+                //scriptPanel.add(scripts);
                 
 
-            	add(scriptPanel, BorderLayout.CENTER);
-            	//comboPane.add(subactionList);
+            	//add(scriptPanel, BorderLayout.CENTER);
+            	
+            	////comboPane.add(subactionList);
             }
             if(selectedMenu==MENU_ALL){
             	
             	scriptPanel.remove(subactionList);
                 scriptPanel.remove(scripts);
-                scriptPanel.remove(specialPanel);
+                //scriptPanel.remove(specialPanel);
                 scriptPanel.add(subactionList2);
                 scriptPanel.add(scripts);
                 
@@ -372,8 +383,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
     public static void main(String[] args) throws IOException {
     	
     	FileIO.init();
-    	FileIO.declareAnims();
-    	SpecialMovesList.load();
+    	//FileIO.declareAnims();
+    	//SpecialMovesList.load();
     	
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {

@@ -91,6 +91,13 @@ public class FileIO {
 		}
     	return val;
     }
+    public static void writeInt(int i){
+		try {
+			f.writeInt(i);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
     public static void setPosition(int pos){
     	try {
 			f.seek(pos);
@@ -179,9 +186,9 @@ public class FileIO {
 	        	else if(e.id==0x88){
 	        		temp= new ThrowScript(e.name, d, offset+0x20+bytesDown);
 	        	}
-	        	else if(e.id==0x68){
-	        		temp= new BodyStateScript(e.name, d, offset+0x20+bytesDown);
-	        	}
+	        	//else if(e.id==0x68){
+	        	//	temp= new BodyStateScript(e.name, d, offset+0x20+bytesDown);
+	        	//}
 	        	else{
 	        		temp= new Script(e.name,d,offset+0x20+bytesDown);
 	        	}
@@ -229,7 +236,18 @@ public class FileIO {
 		}
     }
 
-    public static String[] getSubactions(){
+   
+    public static String[] getDefaultSubactions(){
+    	try {
+    		f = new RandomAccessFile("def/102/Pl" + Character.characters[MeleeEdit.selected].id + ".dat", "rw");
+           } catch (FileNotFoundException e) {
+        	   e.printStackTrace();
+           }
+    	
+    	
+    	
+    	
+    	
     	int numSubactions = SubAction.getNum();
     	
     	String[] subactions = new String[numSubactions];
@@ -286,17 +304,17 @@ public class FileIO {
     			
     			MeleeEdit.selected=k;
     			init();
-    			String[] names = getSubactions();
+    			String[] names = getDefaultSubactions();
     			
         		
-        		PrintWriter writer = new PrintWriter("anm/" + Character.characters[k].id + "Anm.dat", "UTF-8");
+        		PrintWriter writer = new PrintWriter("anm/" + Character.characters[k].id + ".anm", "UTF-8");
             	for(int i = 0; i < numSubactions; i++){
             		int offTmp = i*6*4;
-                	int pointerLoc = Character.characters[k].subOffset+0x20 +4*1+offTmp;
+                	int pointerLoc = Character.characters[k].subOffset+0x20 +4*0+offTmp;
                 	setPosition(pointerLoc);
-                	int animPointer = readInt();
-                	if(animPointer != 0)
-                		writer.println(names[i] + " " + Integer.toString(readInt()));
+                	int p1 = readInt(),p2 = readInt(), p3 = readInt(),dummy = readInt(),p4 = readByte();
+                	if(p2 != 0)
+                		writer.println(names[i] + " " + Integer.toString(p1) + " " + Integer.toString(p2)+ " " + Integer.toString(p3) + " " + Integer.toString(p4));
                 	//tmp++;
                 	//System.out.println(tmp);
             	}
