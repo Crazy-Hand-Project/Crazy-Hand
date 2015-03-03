@@ -19,7 +19,13 @@ public class AnimationPanel extends JPanel{
 	public AnimationPanel(){
 		super();
 		
-		MeleeEdit.selected=0;
+		
+		init();
+		
+	}
+	public void init(){
+		this.removeAll();
+		nodes.clear();
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
@@ -51,7 +57,6 @@ public class AnimationPanel extends JPanel{
 		an.getVerticalScrollBar().setUnitIncrement(10);
         an.setPreferredSize(new Dimension(700,500));
 		this.add(an);
-		
 	}
 	
 	

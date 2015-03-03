@@ -237,6 +237,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
             refreshSpecialMoves();
             FileIO.init();
             FileIO.readScripts();
+            animationPanel.init();
             
             
             //updates the "all" subactions list for the new character.
