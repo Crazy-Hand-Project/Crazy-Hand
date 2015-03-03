@@ -51,6 +51,8 @@ public class AnimationNode extends JPanel{
     	FileIO.writeInt(Integer.parseInt(t[3]));
     	FileIO.readInt();//dummy
     	FileIO.writeByte(Integer.parseInt(t[4]));
+   // 	System.out.println()
+    	
 	}
 	
 	
