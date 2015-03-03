@@ -3,11 +3,13 @@ package com;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -90,21 +92,58 @@ public class RestorePanel extends JPanel{
 
 class L102 implements ActionListener {
     public void actionPerformed(ActionEvent e) {
+    	try {
 
-        
-    	FileIO.copy("def/102/Pl" + Character.characters[MeleeEdit.selected].id + ".dat","root/Pl" + Character.characters[MeleeEdit.selected].id + ".dat");
+			File backupCopyFile = new File("def/102/Pl"
+					+ Character.characters[MeleeEdit.selected].id + ".dat");
+			
+			FileIO.loadedISOFile.reload();
+
+			FileIO.isoFileSystem.replaceFile(
+					FileIO.isoFileSystem.getCurrentFileInfo(),
+					Files.readAllBytes(backupCopyFile.toPath()));
+
+			MeleeEdit.refreshData();
+
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+
+    	//FileIO.copy("def/102/Pl" + Character.characters[MeleeEdit.selected].id + ".dat","root/Pl" + Character.characters[MeleeEdit.selected].id + ".dat");
     	System.out.println("Restore Complete!");
     }
 }
 
 class L102All implements ActionListener {
     public void actionPerformed(ActionEvent e) {
+    	for (int i = 0; i < Character.characters.length; i++) {
 
-        for(int i = 0; i < Character.characters.length; i++)
+			File backupCopyFile = new File("def/102/Pl"
+					+ Character.characters[i].id + ".dat");
+
+			try {
+				
+				FileIO.loadedISOFile.reload();
+				FileIO.isoFileSystem.replaceFile(
+						FileIO.isoFileSystem.getFileInfo("Pl"
+								+ Character.characters[i].id + ".dat"),
+						Files.readAllBytes(backupCopyFile.toPath()));
+
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+		}
+		MeleeEdit.refreshData();
+    }
+
+    /*    for(int i = 0; i < Character.characters.length; i++)
         	FileIO.copy("def/102/Pl" + Character.characters[i].id + ".dat","root/Pl" + Character.characters[i].id + ".dat");
         //FileIO.declareAnims();
         System.out.println("Restore All Complete!");
     }
+    /*/
 }
 
 class LRando implements ActionListener {

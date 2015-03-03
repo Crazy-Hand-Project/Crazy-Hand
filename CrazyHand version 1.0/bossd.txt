@@ -1,0 +1,202 @@
+public static SubAction[] masterHandActions = {
+
+	new SubAction(0x127, "Wait 1"),
+
+	new SubAction(0x128, "Wait 2"),
+
+	new SubAction(0x129, "Entry"),
+
+	new SubAction(0x12A, "Yarare"), //Death?
+
+	new SubAction(0x12B, "Yarare2"), //Death?
+
+	new SubAction(0x12C, "Waitharau"),
+
+	new SubAction(0x12D, "Harauloop (Hand Swipe)"),
+
+	new SubAction(0x12E, "Harauwait"),
+
+	new SubAction(0x12F, "Hippataku (Slap)"),
+
+	new SubAction(0x130, "Walk2"),
+
+	new SubAction(0x131, "Walkloop (Loop Finger Walk)"),
+
+	new SubAction(0x132, "Walkwait (Start Finger Walk)"),
+
+	new SubAction(0x133, "Walkshoot (Finger Kick)"),
+
+	new SubAction(0x134, "Drill"),
+
+	new SubAction(0x135, "Gootsubusuup"),
+
+	new SubAction(0x136, "Gootsubusuwait"),
+
+	new SubAction(0x137, "Gootsubusudown (Punch Down)"),
+
+	new SubAction(0x138, "Paatsubusu (Fake Punch Slap Down)"),
+
+	new SubAction(0x139, "Tsutsuku1 (Poke Wait Begin)"),
+
+	new SubAction(0x13A, "Tsutsuku2 (Poke)"),
+
+	new SubAction(0x13B, "Yubibeamstart (Laser Start)"),
+
+	new SubAction(0x13C, "Yubibeamloop (Laser Loop) "),
+
+	new SubAction(0x13D, "Yubibeamend (Laser END)"),
+
+	new SubAction(0x13E, "Yubideppou1 (Gun)"),
+
+	new SubAction(0x13F, "Yubideppou2 (Gun)"),
+
+	new SubAction(0x140, "Yubideppou3 (Gun)"),
+
+	new SubAction(0x141, "Okuhikouki1 (Plane Start)"),
+
+	new SubAction(0x142, "Okuhikouki2 (Plane Hit)"),
+
+	new SubAction(0x143, "Okuhikouki3 (Plane End)"),
+
+	new SubAction(0x144, "Okupunch (Fly-in Punch)"),
+
+	new SubAction(0x145, "Okutsubushi (Hand Smash Down)"),
+
+	new SubAction(0x146, "Okukie (Fly Up)"),
+
+	new SubAction(0x147, "Wait 1 (Grab Wait)"),
+
+	new SubAction(0x148, "Tsukamu (Grab)"),
+
+	new SubAction(0x149, "Cancel"),
+
+	new SubAction(0x14A, "Nigiri"),
+
+	new SubAction(0x14B, "Nigiri (2)"),
+
+	new SubAction(0x14C, "Nigiru"),
+
+	new SubAction(0x14D, "Nageru"),
+
+	new SubAction(0x14E, "Tatakituke"),
+
+	new SubAction(0x14F, "Shippai (Fail Grab)"),
+
+	new SubAction(0x150, "Tagtsubusu (Hands Punching Together)"),
+
+	new SubAction(0x151, "Taghakusyu (Hands Clapping)"),
+
+	new SubAction(0x152, "Taggoopaa (MH Catches CH's Punch)"),
+
+	new SubAction(0x153, "Tagtsukamu"),
+
+	new SubAction(0x154, "Tagnigiru"),
+
+	new SubAction(0x155, "Tagshippai"),
+
+	new SubAction(0x156, "Tagcancel"),
+
+	new SubAction(0x157, "Wait1 (3)"),
+
+	new SubAction(0x158, "Wait2 (2)"),
+
+	};
+
+	public static SubAction[] crazyHandActions = {
+			new SubAction(0x127, "Wait 1"),
+
+			new SubAction(0x128, "Wait 2"),
+
+			new SubAction(0x129, "Hippataku (Slap)"),
+
+			new SubAction(0x12A, "Waitharau"),
+
+			new SubAction(0x12B, "Harauloop (Hand Swipe)"),
+
+			new SubAction(0x12C, "Harauwait"),
+
+			new SubAction(0x12D, "Notautsu (Seizure)"),
+
+			new SubAction(0x12E, "Kumostart (Crawl Start)"),
+
+			new SubAction(0x12F, "Kumo (Crawl)"),
+
+			new SubAction(0x130, "Kumoend (Crawl End)"),
+
+			new SubAction(0x131, "Gootsubusuup"),
+
+			new SubAction(0x132, "Gootsubusuwait"),
+
+			new SubAction(0x133, "Gootsubusudown (Punch Down)"),
+
+			new SubAction(0x134, "Paatsubusu (Fake Punch Slap Down)"),
+
+			new SubAction(0x135, "Tsutsuku1 (Poke Wait Begin)"),
+
+			new SubAction(0x136, "Tsutsuku2 (Poke)"),
+
+			new SubAction(0x137, "Drill"),
+
+			new SubAction(0x138, "Yubibeamstart (Laser Start)"),
+
+			new SubAction(0x139, "Yubibeamloop (Laser Loop) "),
+
+			new SubAction(0x13A, "Yubibeamend (Laser END)"),
+
+			new SubAction(0x13B, "Yubibomb (Bombs)"),
+
+			new SubAction(0x13C, "Wait 1 (Grab Wait)"),
+
+			new SubAction(0x13D, "Tsukamu (Grab)"),
+
+			new SubAction(0x13E, "Cancel"),
+
+			new SubAction(0x13F, "Nigiri"),
+
+			new SubAction(0x140, "Nigiri (2)"),
+
+			new SubAction(0x141, "Nigiru"),
+
+			new SubAction(0x142, "Nageru"),
+
+			new SubAction(0x143, "Tatakituke"),
+
+			new SubAction(0x144, "Shippai (Fail Grab)"),
+
+			new SubAction(0x145, "Okukie (Fly Up)"),
+
+			new SubAction(0x146, "Okupunch (Fly-in Punch)"),
+
+			new SubAction(0x147, "Okutsubushi (Hand Smash Down)"),
+
+			new SubAction(0x148, "Okuhikouki1 (Plane Start)"),
+
+			new SubAction(0x149, "Okuhikouki2 (Plane Hit)"),
+
+			new SubAction(0x14A, "Okuhikouki3 (Plane End)"),
+
+			new SubAction(0x14B, "Tagtsubusu (Hands Punching Together)"),
+
+			new SubAction(0x14C, "Taghakusyu (Hands Clapping)"),
+
+			new SubAction(0x14D, "Taggoopaa (MH Catches CH's Punch)"),
+
+			new SubAction(0x14E, "Tagtsukamu"),
+
+			new SubAction(0x14F, "Tagnigiru"),
+
+			new SubAction(0x150, "Tagshippai"),
+
+			new SubAction(0x151, "Tagcancel"),
+
+			new SubAction(0x152, "Wait 1 (Tag Wait)"),
+
+			new SubAction(0x153, "Yarare"),
+
+			new SubAction(0x154, "Yarare2"),
+
+			new SubAction(0x155, "Entry"),
+
+			new SubAction(0x156, "Wait 1 (4)"),
+
+			new SubAction(0x157, "Wait 2 (2)"),
