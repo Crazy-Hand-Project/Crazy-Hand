@@ -3,6 +3,7 @@ package com;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -114,6 +115,14 @@ public class Script extends JPanel{
     	FileIO.setPosition(location);
 		for(int i = 0; i < data.length; i++)
 			FileIO.writeByte(data[i]);
+		
+		try {
+			FileIO.isoFileSystem.replaceFile(FileIO.isoFileSystem.getCurrentFileInfo(), FileIO.f.array());
+		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
     }
 	
 	

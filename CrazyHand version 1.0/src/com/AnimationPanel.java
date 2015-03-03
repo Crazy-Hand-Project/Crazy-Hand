@@ -20,10 +20,10 @@ public class AnimationPanel extends JPanel{
 		super();
 		
 		
-		init();
+		refresh();
 		
 	}
-	public void init(){
+	public void refresh(){
 		this.removeAll();
 		nodes.clear();
 		
