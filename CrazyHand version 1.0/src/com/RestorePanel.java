@@ -136,6 +136,7 @@ class L102All implements ActionListener {
 
 		}
 		MeleeEdit.refreshData();
+		//FileIO.declareAnims();
     }
 
     /*    for(int i = 0; i < Character.characters.length; i++)

@@ -50,7 +50,7 @@ public class FileIO {
 
 	}
 
-	public static void init(int k) {// initializes character of index "k"
+	/*public static void init(int k) {// initializes character of index "k"
 		byte[] isoFileData;
 		try {
 			isoFileData = loadedISOFile.getFileSystem().openFile(
@@ -63,7 +63,7 @@ public class FileIO {
 
 		f.position(Character.characters[MeleeEdit.selected].offset);
 
-	}
+	}*/
 
 	public static void loadISOFile() {
 		try {
@@ -140,8 +140,7 @@ public class FileIO {
 		} else if (MeleeEdit.selectedMenu == MENU_ALL) {
 			offTmp = MeleeEdit.selectedSubaction * 6 * 4;
 		} else {
-			offTmp = 0;// The if/else statements above cover all the possible
-						// menus I've worked on, so this is to satisfy errors
+			offTmp = SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;//defaults to attacks only
 		}
 
 		int pointerLoc = Character.characters[MeleeEdit.selected].subOffset
@@ -247,64 +246,60 @@ public class FileIO {
 
 		}
 	}
+	
+
 
 	public static String[] getDefaultSubactions() {
-		RandomAccessFile file;
-		try {
-			file = new RandomAccessFile("def/102/Pl"
-					+ Character.characters[MeleeEdit.selected].id + ".dat",
-					"rw");
-			FileChannel inChannel = file.getChannel();
-			long fileSize = inChannel.size();
-			f = ByteBuffer.allocate((int) fileSize);
-			inChannel.read(f);
-			// f.flip();
-			file.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        RandomAccessFile file = null;
+        try {
+            file = new RandomAccessFile("def/102/Pl"
+                    + Character.characters[MeleeEdit.selected].id + ".dat",
+                    "rw");
 
-		int numSubactions = SubAction.getNum();
+            int numSubactions = SubAction.getNum();
 
-		String[] subactions = new String[numSubactions];
-		int tmp = 0;
-		for (int i = 0; i < numSubactions; i++) {
-			int offTmp = i * 6 * 4;
-			int pointerLoc = Character.characters[MeleeEdit.selected].subOffset
-					+ 0x20 + 4 * 0 + offTmp;
-			setPosition(pointerLoc);
-			int pointer = readInt();
-			setPosition(pointer + 0x20);
+            String[] subactions = new String[numSubactions];
+            int tmp = 0;
+            for (int i = 0; i < numSubactions; i++) {
+                int offTmp = i * 6 * 4;
+                int pointerLoc = Character.characters[MeleeEdit.selected].subOffset
+                        + 0x20 + 4 * 0 + offTmp;
+                file.seek(pointerLoc);
+                int pointer = file.readInt();
+                file.seek(pointer + 0x20);
+                String name = "";
+                char tmp2;
+                int counter = 4;
+                while (true) {
+                    tmp2 = (char) file.readByte();
 
-			String name = "";
-			char tmp2;
-			int counter = 4;
-			while (true) {
-				tmp2 = (char) readByte();
+                    if (tmp2 == 00)
+                        break;
+                    if (tmp2 == '_') {
+                        counter--;
+                    } else if (counter == 1) {
+                        name = name + tmp2;
+                    }
+                    if (counter == 0) {
+                        break;
+                    }
 
-				if (tmp2 == 00)
-					break;
-				if (tmp2 == '_') {
-					counter--;
-				} else if (counter == 1) {
-					name = name + tmp2;
-				}
-				if (counter == 0) {
-					break;
-				}
+                }
+                if (name == "") {
+                    name = "[No Name]";
+                }
+                System.out.println(name);
+                subactions[i] = name;
 
-			}
-			if (name == "") {
-				name = "[No Name]";
-			}
-			System.out.println(name);
-			subactions[i] = name;
+            }
+            file.close();
+            return subactions;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
 
-		}
-
-		return subactions;
-
-	}
+    }
 
 	public static void declareAnims() {// one time run to generate a list of all
 										// animation offsets/names

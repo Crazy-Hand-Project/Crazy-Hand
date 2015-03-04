@@ -35,7 +35,7 @@ public class AnimationPanel extends JPanel{
 		j.setLayout(new BoxLayout(j, BoxLayout.PAGE_AXIS));
 		//names = FileIO.getSubactions();
 		defaultNames = FileIO.getDefaultSubactions();
-		anims = getAnims(MeleeEdit.selected);
+		anims = getAnims();
 		animNames = getNames();
 		
 		FileIO.init();
@@ -76,17 +76,18 @@ public class AnimationPanel extends JPanel{
 		return tmp;
 	}
 	
-	public static String[] getAnims(int c){
+	public static String[] getAnims(){
 		BufferedReader br = null;
 		int len=0;
 		try {
 			String s;
-			br = new BufferedReader(new FileReader("anm/" + Character.characters[c].id + ".anm"));
+			br = new BufferedReader(new FileReader("anm/" + Character.characters[MeleeEdit.selected].id + ".anm"));
 			while ((s = br.readLine()) != null){len++;}
 			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		//this stuff above is to find the length, down below it actually does stuff.
 		
 		
 		
@@ -99,7 +100,7 @@ public class AnimationPanel extends JPanel{
  
 			String s;
  
-			br = new BufferedReader(new FileReader("anm/" + Character.characters[c].id + ".anm"));
+			br = new BufferedReader(new FileReader("anm/" + Character.characters[MeleeEdit.selected].id + ".anm"));
  
 			while ((s = br.readLine()) != null) {
 				tmp[i]=s;

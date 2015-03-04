@@ -1,5 +1,7 @@
 package com;
 
+import java.awt.Font;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -30,17 +32,24 @@ public class AnimationNode extends JPanel{
 		}
 		
 		
-		JPanel t= new JPanel();
-        t.setLayout(new BoxLayout(t, BoxLayout.LINE_AXIS));
-        t.add(new JLabel(subName + " "));
+		
+		JLabel nameTag = new JLabel(subName + "               animation:  "); 
+		nameTag.setFont(new Font("wut", Font.BOLD, 14));
+		
+		Box  t = Box.createHorizontalBox();
+		t.add( Box.createHorizontalGlue() );
+        //t.setLayout(new BoxLayout(t, BoxLayout.LINE_AXIS));
+        t.add(nameTag);
         t.add(choice);
-        t.add(new JLabel("Value: " + Integer.toString(pointerValue)));
+        //t.add(new JLabel("Value: " + Integer.toString(pointerValue)));
+        t.add( Box.createHorizontalGlue() );
+        //t.add(new JLabel(" d "));
 		this.add(t);
 		
 	}
 	
 	public void save(){
-		FileIO.init();
+		//FileIO.init();
     	FileIO.setPosition(pointerLocation-4);
 
 

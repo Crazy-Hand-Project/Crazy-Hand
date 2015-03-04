@@ -102,6 +102,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		saveButton.setActionCommand("save");
 		saveButton.addActionListener(new SaveListener());
 
+		
+		FileIO.init();
+		
 		attributeTable = new JTable(new AttributeTable());
 		// attributeTable.setPreferredScrollableViewportSize(new Dimension(700,
 		// 600));
@@ -138,6 +141,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		add(comboPane, BorderLayout.PAGE_START);
 		add(aPane, BorderLayout.CENTER);
 		add(saveButton, BorderLayout.PAGE_END);
+		
+		
 
 	}
 
@@ -182,15 +187,36 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				script.save();
 			}
 
-			FileIO.init();
+			//FileIO.init();
 			for (AnimationNode n : animationPanel.nodes) {
 				n.save();
 			}
+			
+			
+			try {
+				FileIO.isoFileSystem.replaceFile(FileIO.isoFileSystem.getCurrentFileInfo(), FileIO.f.array());
+			
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
+			
+			
+			
+			
+			
 			System.out.println("Save Complete!");
 
 			FileIO.loadedISOFile.close();
+			
+			
+			
+			
+			
 
 		}
+		
+		
+		
 	}
 
 	class CharListener implements ActionListener {
@@ -201,6 +227,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			//refreshSpecialMoves();
 			FileIO.init();
 			FileIO.readScripts();
+			FileIO.init();
 			animationPanel.refresh();
 
 			// updates the "all" subactions list for the new character.
@@ -211,6 +238,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				subactionList2.addItem(tmp[i]);
 			}
 
+			FileIO.init();
 			FileIO.setPosition(Character.characters[MeleeEdit.selected].offset);
 			for (int i = 0; i < Attribute.attributes.length; i++) {
 				attributeTable.setValueAt(FileIO.readFloat(), i, 1);
