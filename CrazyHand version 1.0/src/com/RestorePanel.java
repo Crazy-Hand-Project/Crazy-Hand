@@ -102,6 +102,7 @@ class L102 implements ActionListener {
 			FileIO.isoFileSystem.replaceFile(
 					FileIO.isoFileSystem.getCurrentFileInfo(),
 					Files.readAllBytes(backupCopyFile.toPath()));
+			FileIO.loadedISOFile.close();
 
 			MeleeEdit.refreshData();
 
@@ -129,6 +130,7 @@ class L102All implements ActionListener {
 						FileIO.isoFileSystem.getFileInfo("Pl"
 								+ Character.characters[i].id + ".dat"),
 						Files.readAllBytes(backupCopyFile.toPath()));
+				FileIO.loadedISOFile.close();
 
 			} catch (IOException e1) {
 				e1.printStackTrace();
