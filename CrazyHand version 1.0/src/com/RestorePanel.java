@@ -130,13 +130,15 @@ class L102All implements ActionListener {
 						FileIO.isoFileSystem.getFileInfo("Pl"
 								+ Character.characters[i].id + ".dat"),
 						Files.readAllBytes(backupCopyFile.toPath()));
-				FileIO.loadedISOFile.close();
+				
 
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 
 		}
+    	
+    	FileIO.loadedISOFile.close();
 		MeleeEdit.refreshData();
 		//FileIO.declareAnims();
     }
