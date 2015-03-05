@@ -134,12 +134,19 @@ public class FileIO {
 
 		int offTmp;
 		if (MeleeEdit.selectedMenu == MENU_ATTACKS) {
+			if(MeleeEdit.selectedSubaction>=SubAction.subActions.length){
+				MeleeEdit.selectedSubaction=SubAction.subActions.length-1;
+			}
 			offTmp = SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;
 		} else if (MeleeEdit.selectedMenu == MENU_SPECIAL_MOVES) {
+			
 			offTmp = SpecialMovesList.getListForCharacter(MeleeEdit.selected)[MeleeEdit.selectedSubaction].offset * 6 * 4;
 		} else if (MeleeEdit.selectedMenu == MENU_ALL) {
 			offTmp = MeleeEdit.selectedSubaction * 6 * 4;
 		} else {
+			if(MeleeEdit.selectedSubaction>=SubAction.subActions.length){
+				MeleeEdit.selectedSubaction=SubAction.subActions.length-1;
+			}
 			offTmp = SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;//defaults to attacks only
 		}
 

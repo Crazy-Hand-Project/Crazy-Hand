@@ -44,6 +44,7 @@ public class AnimationNode extends JPanel{
         //t.add(new JLabel("Value: " + Integer.toString(pointerValue)));
         t.add( Box.createHorizontalGlue() );
         //t.add(new JLabel(" d "));
+        //the glue isn't working... I wanted them to all be pushed to the left side
 		this.add(t);
 		
 	}

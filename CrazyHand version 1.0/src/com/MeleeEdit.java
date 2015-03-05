@@ -34,13 +34,13 @@ import java.io.IOException;
 public class MeleeEdit extends JPanel implements ActionListener {
 
 	public static final int MENU_ATTRIBUTES = 0, MENU_ATTACKS = 1,
-			MENU_SPECIAL_MOVES = 2, MENU_ALL = 3, MENU_OTHER = 5,
-			MENU_ANIMATION = 4;
+			MENU_SPECIAL_MOVES = 20, MENU_ALL = 2, MENU_OTHER = 4,
+			MENU_ANIMATION = 3;
 
 	public static int selected = 0, selectedSubaction = 0, selectedMenu = 0;
 
 	public static String[] options = { "Attributes",
-			"Subactions (Attacks only)", "Subactions (Special moves)",
+			"Subactions (Attacks only)",// "Subactions (Special moves)",
 			"Subactions (All)", "Animation Swapping", "Other",
 	// "Special Moves",
 	// "Frames Speed Modifiers",
@@ -51,10 +51,14 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	public JButton saveButton;
 	public static JTable attributeTable;
 	public JScrollPane aPane, scripts;
-	public JComboBox charList, subactionList, subactionList2, specialList;
+	public JComboBox charList, subactionList;
+
+	public static JComboBox subactionList2;
+
+	public JComboBox specialList;
 	public JComboBox optionList;
 	public JPanel comboPane, scriptPanel, restorePane;// ,specialPanel;
-	public AnimationPanel animationPanel;
+	public static AnimationPanel animationPanel;
 
 	public static JPanel scriptInner;
 
@@ -142,7 +146,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		add(aPane, BorderLayout.CENTER);
 		add(saveButton, BorderLayout.PAGE_END);
 		
-		
+		FileIO.loadedISOFile.close();
 
 	}
 
@@ -180,17 +184,31 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 				}
 			}
-
-			FileIO.save();
-			FileIO.init();
-			for (Script script : Script.scripts) {
-				script.save();
+			
+			
+			
+			if(selectedMenu == MENU_ATTRIBUTES){
+				FileIO.save();
 			}
-
-			//FileIO.init();
-			for (AnimationNode n : animationPanel.nodes) {
-				n.save();
+			if(selectedMenu == MENU_ATTACKS ||selectedMenu == MENU_ALL){
+				FileIO.init();
+				for (Script script : Script.scripts) {
+					script.save();
+				}
+				
+				FileIO.init();
+				FileIO.readScripts();
+				frame.pack();
 			}
+			if(selectedMenu == MENU_ANIMATION){
+				//FileIO.init();
+				for (AnimationNode n : animationPanel.nodes) {
+					n.save();
+				}
+			}
+			
+
+			
 			
 			
 			try {
@@ -202,11 +220,11 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			
 			
 			
-			
+			FileIO.loadedISOFile.close();
 			
 			System.out.println("Save Complete!");
 
-			FileIO.loadedISOFile.close();
+			
 			
 			
 			
@@ -223,30 +241,54 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JComboBox cb = (JComboBox) e.getSource();
 			selected = cb.getSelectedIndex();
-
-			//refreshSpecialMoves();
-			FileIO.init();
-			FileIO.readScripts();
-			FileIO.init();
-			animationPanel.refresh();
-
-			// updates the "all" subactions list for the new character.
-			// I might move this to a function later on. --Ampers
-			subactionList2.removeAllItems();
-			String[] tmp = FileIO.getDefaultSubactions();
-			for (int i = 0; i < tmp.length; i++) {
-				subactionList2.addItem(tmp[i]);
+			
+			
+			
+			if(selectedMenu == MENU_ATTRIBUTES){
+				updateAttributes();
+			}
+			if(selectedMenu == MENU_ATTACKS ||selectedMenu == MENU_ALL){
+				updateSubactions();
+			}
+			if(selectedMenu == MENU_ANIMATION){
+				updateAnimations();
 			}
 
-			FileIO.init();
-			FileIO.setPosition(Character.characters[MeleeEdit.selected].offset);
-			for (int i = 0; i < Attribute.attributes.length; i++) {
-				attributeTable.setValueAt(FileIO.readFloat(), i, 1);
-			}
+
+			
+
+			frame.pack();
+
+			FileIO.loadedISOFile.close();
 			System.out.println("Character Selection Updated");
 		}
 	}
-
+	public static void updateAttributes(){
+		FileIO.init();
+		FileIO.setPosition(Character.characters[MeleeEdit.selected].offset);
+		for (int i = 0; i < Attribute.attributes.length; i++) {
+			attributeTable.setValueAt(FileIO.readFloat(), i, 1);
+		}
+	}
+	public static void updateSubactions(){
+		FileIO.init();
+		FileIO.readScripts();
+		
+		// updates the "all" subactions list for the new character.
+		// I might move this to a function later on. --Ampers
+		subactionList2.removeAllItems();
+		String[] tmp = FileIO.getDefaultSubactions();
+		for (int i = 0; i < tmp.length; i++) {
+			subactionList2.addItem(tmp[i]);
+		}
+	}
+	public void updateAnimations(){
+		FileIO.init();
+		animationPanel.refresh();
+		
+		add(animationPanel, BorderLayout.CENTER);
+	}
+	
 	class OptionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JComboBox cb = (JComboBox) e.getSource();
@@ -260,6 +302,10 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 				add(aPane, BorderLayout.CENTER);
 				// comboPane.remove(subactionList);
+				
+				
+				updateAttributes();
+				
 			}
 			if (selectedMenu == MENU_ATTACKS) {
 				scriptPanel.remove(subactionList2);
@@ -270,6 +316,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 				add(scriptPanel, BorderLayout.CENTER);
 				// comboPane.add(subactionList);
+				
+				updateSubactions();
 			}
 			if (selectedMenu == MENU_SPECIAL_MOVES) {
 				// scriptPanel.remove(subactionList);
@@ -295,6 +343,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 				add(scriptPanel, BorderLayout.CENTER);
 				// comboPane.add(subactionList);
+				
+				updateSubactions();
 			}
 			if (selectedMenu == MENU_OTHER) {
 				remove(saveButton);
@@ -302,6 +352,10 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			}
 			if (selectedMenu == MENU_ANIMATION) {
 				add(animationPanel, BorderLayout.CENTER);
+				
+				
+				
+				updateAnimations();
 			}
 
 			frame.pack();
@@ -381,7 +435,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				// Create and set up the window.
-				frame = new JFrame("Crazy Hand v1.0");
+				frame = new JFrame("Crazy Hand v1.10");
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 				ImageIcon img = new ImageIcon("img/hand.png");

@@ -116,12 +116,12 @@ public class Script extends JPanel{
 		for(int i = 0; i < data.length; i++)
 			FileIO.writeByte(data[i]);
 		
-		try {
-			FileIO.isoFileSystem.replaceFile(FileIO.isoFileSystem.getCurrentFileInfo(), FileIO.f.array());
+		//try {
+		//	FileIO.isoFileSystem.replaceFile(FileIO.isoFileSystem.getCurrentFileInfo(), FileIO.f.array());
 		
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		//} catch (IOException e) {
+		//	e.printStackTrace();
+		//}
 		
     }
 	
