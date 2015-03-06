@@ -137,6 +137,8 @@ class L102All implements ActionListener {
 
 		FileIO.loadedISOFile.close();
 		MeleeEdit.refreshData();
+		
+		System.out.println("Restore Complete!");
 		// FileIO.declareAnims();
 	}
 

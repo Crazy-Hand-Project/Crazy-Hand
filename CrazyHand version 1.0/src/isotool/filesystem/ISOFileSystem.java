@@ -45,7 +45,7 @@ public class ISOFileSystem {
 		MappedByteBuffer b = isoFile
 				.getISO()
 				.getChannel()
-				.map(MapMode.READ_WRITE, 0,
+				.map(MapMode.READ_ONLY, 0,
 						isoFile.getISO().getChannel().size());
 
 		for (ISOFileInfo info : cachedISOFiles.values()) {
@@ -55,11 +55,9 @@ public class ISOFileSystem {
 			for (int i = 0; i < info.size; i++) {
 				outFile[i] = (byte) b.get();
 			}
-
 			info.setData(outFile);
 		}
 
-		Utilities.unmap(isoFile.getISO().getChannel(), b);
 	}
 
 	private void seekFiles(ISOFileInfo folderFileInfo, long offset)
@@ -74,7 +72,7 @@ public class ISOFileSystem {
 			buffer[0] = 0;
 			Utilities.checkByteOrder(buffer);
 			long stringOffset = BitConverter.ToUInt32(buffer, 0);
-			String isoFileName = getFileName(stringOffset);
+			String isoFileName = getAbsoluteFileName(stringOffset);
 
 			isoFile.getISO().read(buffer, 0, 4);
 			Utilities.checkByteOrder(buffer);
@@ -88,10 +86,11 @@ public class ISOFileSystem {
 			ISOFileInfo fileInfo = new ISOFileInfo(isoFileName, fileSize,
 					fileOffset, currentOffset, isFolder, null);
 
-			if (isoFileName.startsWith("Pl")) { // only adds fighter files for
-												// now
-
+			if (isMovesetFile(isoFileName)) {
 				cachedISOFiles.put(isoFileName, fileInfo);
+				// from 274 to 34 files being loaded
+				//idk why i loaded 274 useless files into memory.
+
 			}
 
 			currentOffset += 0xC;
@@ -104,7 +103,14 @@ public class ISOFileSystem {
 
 	}
 
-	private String getFileName(long stringOffset) throws IOException {
+	/**
+	 * Gets the file name that is stored in the ISO.
+	 * 
+	 * @param stringOffset
+	 * @return
+	 * @throws IOException
+	 */
+	private String getAbsoluteFileName(long stringOffset) throws IOException {
 		String filename = "";
 		if (isoFile.getStringTableOffset() == 0)
 			return null;
@@ -180,6 +186,10 @@ public class ISOFileSystem {
 	public void clearLoadedFiles() {
 		cachedISOFiles.clear();
 
+	}
+
+	private boolean isMovesetFile(String name) {
+		return (name.startsWith("Pl") && name.replace(".dat", "").length() == 4);
 	}
 
 	public HashMap<String, ISOFileInfo> getISOFiles() {
