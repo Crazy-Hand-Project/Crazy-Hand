@@ -212,7 +212,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			
 			
 			try {
-				FileIO.isoFileSystem.replaceFile(FileIO.isoFileSystem.getCurrentFileInfo(), FileIO.f.array());
+				FileIO.isoFileSystem.replaceFile(FileIO.isoFileSystem.getCurrentFile(), FileIO.f.array());
 			
 			} catch (IOException e2) {
 				e2.printStackTrace();

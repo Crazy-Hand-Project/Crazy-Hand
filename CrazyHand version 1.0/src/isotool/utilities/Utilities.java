@@ -1,8 +1,6 @@
 package isotool.utilities;
 
 import java.nio.ByteOrder;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
 
 public class Utilities {
 
@@ -43,15 +41,6 @@ public class Utilities {
 	public static void checkByteOrder(byte[] buffer) {
 		if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN))
 			reverse(buffer);
-	}
-
-	public static void unmap(FileChannel fc, MappedByteBuffer bb)
-			throws Exception {
-		Class<?> fcClass = fc.getClass();
-		java.lang.reflect.Method unmapMethod = fcClass.getDeclaredMethod(
-				"unmap", new Class[] { java.nio.MappedByteBuffer.class });
-		unmapMethod.setAccessible(true);
-		unmapMethod.invoke(null, new Object[] { bb });
 	}
 
 }

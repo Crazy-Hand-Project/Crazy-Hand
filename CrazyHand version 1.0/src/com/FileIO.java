@@ -3,7 +3,7 @@ package com;
 import static com.MeleeEdit.MENU_ALL;
 import static com.MeleeEdit.MENU_ATTACKS;
 import static com.MeleeEdit.MENU_SPECIAL_MOVES;
-import isotool.filesystem.ISOFile;
+import isotool.filesystem.ISO;
 import isotool.filesystem.ISOFileSystem;
 
 import java.io.File;
@@ -30,7 +30,7 @@ public class FileIO {
 
 	public static ISOFileSystem isoFileSystem;
 
-	public static ISOFile loadedISOFile;
+	public static ISO loadedISOFile;
 
 	// TEST!
 	public static void init() {
@@ -79,12 +79,12 @@ public class FileIO {
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = fc.getSelectedFile();
-				loadedISOFile = new ISOFile(selectedFile);
+				loadedISOFile = new ISO(selectedFile);
 				isoFileSystem = loadedISOFile.getFileSystem();
 
 			} else {
 				// TODO you must select a ISO file! msg
-				return;
+				throw new RuntimeException("You must select a ISO file!");
 			}
 
 		} catch (IOException e) {

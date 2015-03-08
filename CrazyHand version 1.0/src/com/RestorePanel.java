@@ -91,7 +91,7 @@ class L102 implements ActionListener {
 			FileIO.loadedISOFile.reload();
 
 			FileIO.isoFileSystem.replaceFile(
-					FileIO.isoFileSystem.getCurrentFileInfo(),
+					FileIO.isoFileSystem.getCurrentFile(),
 					Files.readAllBytes(backupCopyFile.toPath()));
 			FileIO.loadedISOFile.close();
 
@@ -125,7 +125,7 @@ class L102All implements ActionListener {
 			try {
 
 				FileIO.isoFileSystem.replaceFile(
-						FileIO.isoFileSystem.getFileInfo("Pl"
+						FileIO.isoFileSystem.getISOFile("Pl"
 								+ Character.characters[i].id + ".dat"),
 						Files.readAllBytes(backupCopyFile.toPath()));
 

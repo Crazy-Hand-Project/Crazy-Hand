@@ -4,8 +4,8 @@ import isotool.BitConverter;
 import isotool.utilities.Utilities;
 
 import java.io.IOException;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel.MapMode;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.HashMap;
 
 /**
@@ -17,52 +17,33 @@ import java.util.HashMap;
  */
 public class ISOFileSystem {
 
-	private HashMap<String, ISOFileInfo> cachedISOFiles;
+	private HashMap<String, ISOFile> cachedISOFiles;
 
-	private ISOFile isoFile;
+	private ISO isoFile;
+	private ISOFile currentLoadedFile;
 
-	private ISOFileInfo currentLoadedFileInfo;
-
-	public ISOFileSystem(ISOFile isoFile, ISOFileInfo fileInfo) {
-		cachedISOFiles = new HashMap<String, ISOFileInfo>();
-		this.isoFile = isoFile;
-		this.currentLoadedFileInfo = fileInfo;
+	public ISOFileSystem(ISO iso, ISOFile isoFile) {
+		cachedISOFiles = new HashMap<String, ISOFile>();
+		this.isoFile = iso;
+		this.currentLoadedFile = isoFile;
 		try {
-			seekFiles(fileInfo, isoFile.getStringTableOffset());
-			setFileData();
+			readFiles(isoFile, iso.getStringTableOffset());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	/**
-	 * Gets the cached ISO file's data and sets it.
+	 * Reads all of the file's information that is in the ISO.
 	 * 
-	 * @throws Exception
+	 * @param isoFolder
+	 *            - The folder's file information.
+	 * @param offset
+	 *            - the fst offset.
+	 * @throws IOException
 	 */
-	private void setFileData() throws Exception {
-		MappedByteBuffer b = isoFile
-				.getISO()
-				.getChannel()
-				.map(MapMode.READ_ONLY, 0,
-						isoFile.getISO().getChannel().size());
-
-		for (ISOFileInfo info : cachedISOFiles.values()) {
-
-			byte[] outFile = new byte[(int) info.size];
-			b.position((int) info.fileOffset);
-			for (int i = 0; i < info.size; i++) {
-				outFile[i] = (byte) b.get();
-			}
-			info.setData(outFile);
-		}
-
-	}
-
-	private void seekFiles(ISOFileInfo folderFileInfo, long offset)
-			throws IOException {
-		long currentOffset = folderFileInfo.fstOffset + 0xC;
+	private void readFiles(ISOFile isoFolder, long offset) throws IOException {
+		long currentOffset = isoFolder.fstOffset + 0xC;
 		while (currentOffset < offset) {
 			isoFile.getISO().seek(currentOffset);
 			boolean isFolder = isoFile.getISO().readByte() == 1;
@@ -83,24 +64,59 @@ public class ISOFileSystem {
 
 			long fileSize = BitConverter.ToUInt32(buffer, 0);
 
-			ISOFileInfo fileInfo = new ISOFileInfo(isoFileName, fileSize,
-					fileOffset, currentOffset, isFolder, null);
+			ISOFile file = new ISOFile(isoFileName, fileSize, fileOffset,
+					currentOffset, isFolder, null);
 
 			if (isMovesetFile(isoFileName)) {
-				cachedISOFiles.put(isoFileName, fileInfo);
-				// from 274 to 34 files being loaded
-				//idk why i loaded 274 useless files into memory.
-
+				cachedISOFiles.put(isoFileName, file);
+				try {
+					readData(file);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 			currentOffset += 0xC;
 
 			if (isFolder) {
 				currentOffset = isoFile.getFSTOffset() + (fileSize * 0xC);
-				seekFiles(fileInfo, currentOffset);
+				readFiles(file, currentOffset);
 			}
 		}
 
+	}
+
+	/**
+	 * Reads the given ISO file into bytes and stores them for later use.
+	 * 
+	 * @param file
+	 *            - the file to read.
+	 * @throws Exception
+	 */
+	private void readData(ISOFile file) throws Exception {
+
+		try {
+
+			long fileSize = file.size;
+			long offset = file.fileOffset;
+			long totalLength = file.size + file.fileOffset;
+
+			FileChannel inChannel = isoFile.getISO().getChannel();
+
+			while (offset < totalLength) {
+				ByteBuffer buffer = ByteBuffer.allocate((int) fileSize);
+				long len = offset + fileSize < totalLength ? fileSize
+						: totalLength - offset;
+				inChannel.read(buffer, offset);
+				buffer.flip();
+				file.setData(buffer.array());
+				buffer.clear();
+				offset += len;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -129,26 +145,36 @@ public class ISOFileSystem {
 	}
 
 	/**
+	 * Checks if the file is a character moveset file. An example of a character
+	 * file would be: <b>PlBo.dat</b> for Bowser.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	private boolean isMovesetFile(String name) {//should be 34 files
+		return (name.startsWith("Pl") && name.replace(".dat", "").length() == 4);
+	}
+
+	/**
 	 * Replaces a file in the ISO. The files must have the same size!
 	 * 
-	 * @param info
+	 * @param file
 	 *            - The ISO file to replace.
 	 * @param data
 	 *            - The new file's data.
 	 * @throws IOException
 	 */
-	public boolean replaceFile(ISOFileInfo info, byte[] data)
-			throws IOException {
+	public boolean replaceFile(ISOFile file, byte[] data) throws IOException {
 		if (isoFile.isOpen()) {
-			if (info.size != data.length) {
+			if (file.size != data.length) {
 				System.out.println("Length does not match!"
-						+ " File to Replace: " + info.size + " With: "
+						+ " File to Replace: " + file.size + " With: "
 						+ data.length);
 				return false;
 			}
-			isoFile.getISO().seek(info.fileOffset);
+			isoFile.getISO().seek(file.fileOffset);
 			isoFile.getISO().write(data, 0, data.length);
-			info.setData(data);
+			file.setData(data);
 
 			return true;
 		}
@@ -157,47 +183,42 @@ public class ISOFileSystem {
 	}
 
 	/**
-	 * Opens and gets the file's data.
+	 * Loads a file's data.
 	 * 
 	 * @param fileName
-	 *            - The ISO file's name.
-	 * @return - the ISO file's data.
+	 *            - the file's name.
+	 * @return - the file's data.
 	 * @throws IOException
 	 */
 	public byte[] openFile(String fileName) throws IOException {
-		ISOFileInfo info = getFileInfo(fileName);
-		if (info.data != null) {
-			currentLoadedFileInfo = info;
-			return info.data;
+		ISOFile file = getISOFile(fileName);
+		if (file.data != null) {
+			currentLoadedFile = file;
+			return file.data;
 		}
 
 		return null;
 	}
 
-	public ISOFileInfo getFileInfo(String fileName) {
-		ISOFileInfo info = cachedISOFiles.get(fileName);
+	public ISOFile getISOFile(String fileName) {
+		ISOFile info = cachedISOFiles.get(fileName);
 		if (info == null) {
-			System.out.println("Could not load file info!");
-			return null;
+			throw new RuntimeException("Could not load cached ISO file!");
 		}
 		return info;
 	}
 
-	public void clearLoadedFiles() {
+	public void clearCachedISOFiles() {
 		cachedISOFiles.clear();
 
 	}
 
-	private boolean isMovesetFile(String name) {
-		return (name.startsWith("Pl") && name.replace(".dat", "").length() == 4);
-	}
-
-	public HashMap<String, ISOFileInfo> getISOFiles() {
+	public HashMap<String, ISOFile> getISOFiles() {
 		return cachedISOFiles;
 	}
 
-	public ISOFileInfo getCurrentFileInfo() {
-		return currentLoadedFileInfo;
+	public ISOFile getCurrentFile() {
+		return currentLoadedFile;
 	}
 
 }
