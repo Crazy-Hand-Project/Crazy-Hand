@@ -57,7 +57,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 	public JComboBox specialList;
 	public JComboBox optionList;
-	public JPanel comboPane, scriptPanel, restorePane;// ,specialPanel;
+	public JPanel comboPane, scriptPanel;// ,specialPanel;
+
+	public static RestorePanel restorePane;
 	public static AnimationPanel animationPanel;
 
 	public static JPanel scriptInner;
@@ -109,6 +111,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		
 		FileIO.init();
 		
+		restorePane = new RestorePanel();
+		
 		attributeTable = new JTable(new AttributeTable());
 		// attributeTable.setPreferredScrollableViewportSize(new Dimension(700,
 		// 600));
@@ -128,7 +132,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		aPane = new JScrollPane(attributeTable);
 		aPane.setPreferredSize(new Dimension(700, 500));
 
-		restorePane = new RestorePanel();
+		
 
 		scripts = new JScrollPane(scriptInner);
 		scripts.setPreferredSize(new Dimension(700, 600));
@@ -147,6 +151,15 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		add(saveButton, BorderLayout.PAGE_END);
 		
 		FileIO.loadedISOFile.close();
+		
+		
+		//try {
+	    //    Runtime.getRuntime().exec("cmd.exe /c start");
+	    //    Runtime.getRuntime().exec("GCReEx.exe -x a.iso");
+	    //    System.out.println("ok");
+	    //} catch (IOException ex) {
+	    //    ex.printStackTrace();
+	    //}
 
 	}
 

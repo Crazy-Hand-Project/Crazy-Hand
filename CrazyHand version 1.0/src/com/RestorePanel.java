@@ -11,12 +11,14 @@ import java.nio.file.Files;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class RestorePanel extends JPanel {
 	public JButton btn102, btn102All, btn101, btn101All, btn100, btn100All,
 			btnPAL, btnPALAll, randoBtn;
+	public JCheckBox rawBox;
 
 	public RestorePanel() {
 		super();
@@ -32,6 +34,7 @@ public class RestorePanel extends JPanel {
 		btn102All.setActionCommand("Restore");
 		btn102All.addActionListener(new L102All());
 		this.add(btn102All);
+		this.add(Box.createVerticalStrut(15));
 
 		btn101 = new JButton("Restore This Character to v1.01 Defaults");
 		btn101.setActionCommand("Restore");
@@ -62,6 +65,17 @@ public class RestorePanel extends JPanel {
 		btnPALAll.setActionCommand("Restore");
 		// 102Btn.addActionListener(new 102BtnListener());
 		// this.add(btnPALAll);
+		
+		
+		
+		
+		
+		
+		rawBox = new JCheckBox("Use raw data for subactions");
+		//rawBox.setMnemonic(KeyEvent.VK_C);
+		rawBox.setSelected(false);
+		this.add(rawBox);
+		
 
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
@@ -69,13 +83,22 @@ public class RestorePanel extends JPanel {
 		randoBtn.setActionCommand("Restore");
 		randoBtn.addActionListener(new LRando());
 
-		this.add(Box.createVerticalStrut(45));
+		this.add(Box.createVerticalStrut(15));
 
 		this.add(randoBtn);
-		this.add(Box.createVerticalStrut(15));
+		this.add(Box.createVerticalStrut(10));
 		this.add(new JLabel(
-				"  Note: This will take approximately 10-20 seconds to complete and there's no visual cue of progress yet."));
+				"  Note: Randomization will take approximately 10-20 seconds to complete and there's no visual cue of progress yet."));
 
+		
+		
+		
+		this.add(Box.createVerticalStrut(300));
+		this.add(new JLabel(
+				"  Hidden message! :O"));
+
+		
+		
 		this.setPreferredSize(new Dimension(700, 200));
 	}
 

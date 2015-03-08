@@ -199,7 +199,7 @@ public class FileIO {
 
 			// Ignore this, just a quick way to toggle raw data showing up
 			// instead of scripts.
-			if (1 == 1) {
+			if (!MeleeEdit.restorePane.rawBox.isSelected()) {
 				if (e.id == 0x2c) {
 					temp = new HitboxScript(e.name, d, offset + 0x20
 							+ bytesDown);
@@ -211,9 +211,9 @@ public class FileIO {
 				} else if (e.id == 0x88) {
 					temp = new ThrowScript(e.name, d, offset + 0x20 + bytesDown);
 				}
-				// else if(e.id==0x68){
-				// temp= new BodyStateScript(e.name, d, offset+0x20+bytesDown);
-				// }
+				 else if(e.id==0x68){
+				 temp= new BodyStateScript(e.name, d, offset+0x20+bytesDown);
+				 }
 				else {
 					temp = new Script(e.name, d, offset + 0x20 + bytesDown);
 				}
