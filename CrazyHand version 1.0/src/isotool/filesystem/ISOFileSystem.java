@@ -151,7 +151,7 @@ public class ISOFileSystem {
 	 * @param name
 	 * @return
 	 */
-	private boolean isMovesetFile(String name) {//should be 34 files
+	private boolean isMovesetFile(String name) {// should be 34 files
 		return (name.startsWith("Pl") && name.replace(".dat", "").length() == 4);
 	}
 
@@ -183,7 +183,7 @@ public class ISOFileSystem {
 	}
 
 	/**
-	 * Loads a file's data.
+	 * Opens a file.
 	 * 
 	 * @param fileName
 	 *            - the file's name.

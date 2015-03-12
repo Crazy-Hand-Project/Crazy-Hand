@@ -50,20 +50,19 @@ public class FileIO {
 
 	}
 
-	/*public static void init(int k) {// initializes character of index "k"
-		byte[] isoFileData;
-		try {
-			isoFileData = loadedISOFile.getFileSystem().openFile(
-					"Pl" + Character.characters[k].id + ".dat");
-
-			f = ByteBuffer.wrap(isoFileData);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		f.position(Character.characters[MeleeEdit.selected].offset);
-
-	}*/
+	/*
+	 * public static void init(int k) {// initializes character of index "k"
+	 * byte[] isoFileData; try { isoFileData =
+	 * loadedISOFile.getFileSystem().openFile( "Pl" + Character.characters[k].id
+	 * + ".dat");
+	 * 
+	 * f = ByteBuffer.wrap(isoFileData); } catch (IOException e) {
+	 * e.printStackTrace(); }
+	 * 
+	 * f.position(Character.characters[MeleeEdit.selected].offset);
+	 * 
+	 * }
+	 */
 
 	public static void loadISOFile() {
 		try {
@@ -71,7 +70,8 @@ public class FileIO {
 					"ISO Files", "iso");
 			final JFileChooser fc = new JFileChooser();
 
-			fc.setCurrentDirectory(Options.hasLastIso ? new File(Options.isoPath) :new File(System.getProperty("user.dir")));
+			fc.setCurrentDirectory(Options.hasLastIso ? new File(
+					Options.isoPath) : new File(System.getProperty("user.dir")));
 			fc.addChoosableFileFilter(isoFilter);
 			fc.setFileFilter(isoFilter);
 
@@ -81,14 +81,13 @@ public class FileIO {
 				File selectedFile = fc.getSelectedFile();
 				loadedISOFile = new ISO(selectedFile);
 				isoFileSystem = loadedISOFile.getFileSystem();
-				
-				
+				if (MeleeEdit.frame != null)
+					MeleeEdit.updateTitle(fc.getSelectedFile().getName());
+
 				Options.isoPath = fc.getCurrentDirectory().getPath();
-				
-				System.out.println(Options.isoPath);
 			} else {
-				// TODO you must select a ISO file! msg
-				throw new RuntimeException("You must select a ISO file!");
+				if (loadedISOFile == null)
+					throw new RuntimeException("You must select a ISO file!");
 			}
 
 		} catch (IOException e) {
@@ -138,20 +137,23 @@ public class FileIO {
 
 		int offTmp;
 		if (MeleeEdit.selectedMenu == MENU_ATTACKS) {
-			if(MeleeEdit.selectedSubaction>=SubAction.subActions.length){
-				MeleeEdit.selectedSubaction=SubAction.subActions.length-1;
+			if (MeleeEdit.selectedSubaction >= SubAction.subActions.length) {
+				MeleeEdit.selectedSubaction = SubAction.subActions.length - 1;
 			}
 			offTmp = SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;
 		} else if (MeleeEdit.selectedMenu == MENU_SPECIAL_MOVES) {
-			
+
 			offTmp = SpecialMovesList.getListForCharacter(MeleeEdit.selected)[MeleeEdit.selectedSubaction].offset * 6 * 4;
 		} else if (MeleeEdit.selectedMenu == MENU_ALL) {
 			offTmp = MeleeEdit.selectedSubaction * 6 * 4;
 		} else {
-			if(MeleeEdit.selectedSubaction>=SubAction.subActions.length){
-				MeleeEdit.selectedSubaction=SubAction.subActions.length-1;
+			if (MeleeEdit.selectedSubaction >= SubAction.subActions.length) {
+				MeleeEdit.selectedSubaction = SubAction.subActions.length - 1;
 			}
-			offTmp = SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;//defaults to attacks only
+			offTmp = SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;// defaults
+																						// to
+																						// attacks
+																						// only
 		}
 
 		int pointerLoc = Character.characters[MeleeEdit.selected].subOffset
@@ -214,11 +216,10 @@ public class FileIO {
 							+ bytesDown);
 				} else if (e.id == 0x88) {
 					temp = new ThrowScript(e.name, d, offset + 0x20 + bytesDown);
-				}
-				 else if(e.id==0x68){
-				 temp= new BodyStateScript(e.name, d, offset+0x20+bytesDown);
-				 }
-				else {
+				} else if (e.id == 0x68) {
+					temp = new BodyStateScript(e.name, d, offset + 0x20
+							+ bytesDown);
+				} else {
 					temp = new Script(e.name, d, offset + 0x20 + bytesDown);
 				}
 			}
@@ -257,60 +258,58 @@ public class FileIO {
 
 		}
 	}
-	
-
 
 	public static String[] getDefaultSubactions() {
-        RandomAccessFile file = null;
-        try {
-            file = new RandomAccessFile("def/102/Pl"
-                    + Character.characters[MeleeEdit.selected].id + ".dat",
-                    "rw");
+		RandomAccessFile file = null;
+		try {
+			file = new RandomAccessFile("def/102/Pl"
+					+ Character.characters[MeleeEdit.selected].id + ".dat",
+					"rw");
 
-            int numSubactions = SubAction.getNum();
+			int numSubactions = SubAction.getNum();
 
-            String[] subactions = new String[numSubactions];
-            int tmp = 0;
-            for (int i = 0; i < numSubactions; i++) {
-                int offTmp = i * 6 * 4;
-                int pointerLoc = Character.characters[MeleeEdit.selected].subOffset
-                        + 0x20 + 4 * 0 + offTmp;
-                file.seek(pointerLoc);
-                int pointer = file.readInt();
-                file.seek(pointer + 0x20);
-                String name = "";
-                char tmp2;
-                int counter = 4;
-                while (true) {
-                    tmp2 = (char) file.readByte();
+			String[] subactions = new String[numSubactions];
+			int tmp = 0;
+			for (int i = 0; i < numSubactions; i++) {
+				int offTmp = i * 6 * 4;
+				int pointerLoc = Character.characters[MeleeEdit.selected].subOffset
+						+ 0x20 + 4 * 0 + offTmp;
+				file.seek(pointerLoc);
+				int pointer = file.readInt();
+				file.seek(pointer + 0x20);
+				String name = "";
+				char tmp2;
+				int counter = 4;
+				while (true) {
+					tmp2 = (char) file.readByte();
 
-                    if (tmp2 == 00)
-                        break;
-                    if (tmp2 == '_') {
-                        counter--;
-                    } else if (counter == 1) {
-                        name = name + tmp2;
-                    }
-                    if (counter == 0) {
-                        break;
-                    }
+					if (tmp2 == 00)
+						break;
+					if (tmp2 == '_') {
+						counter--;
+					} else if (counter == 1) {
+						name = name + tmp2;
+					}
+					if (counter == 0) {
+						break;
+					}
 
-                }
-                if (name == "") {
-                    name = "[No Name]";
-                }
-                //System.out.println(name);
-                subactions[i] = name;
+				}
+				if (name == "") {
+					name = "[No Name]";
+				}
+				// System.out.println(name);
+				subactions[i] = name;
 
-            }
-            file.close();
-            return subactions;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+			}
+			file.close();
+			return subactions;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 
-    }
+	}
 
 	public static void declareAnims() {// one time run to generate a list of all
 										// animation offsets/names
@@ -398,7 +397,7 @@ public class FileIO {
 					f.position(Character.characters[i].offset + k * 4);
 					f.putFloat(tmp);
 					its++;
-					System.out.println(its / (float) maxIts * 100 + "%");
+					// System.out.println(its / (float) maxIts * 100 + "%");
 				}
 			}
 			for (int k = 0; k < SubAction.subActions.length; k++) {
@@ -416,12 +415,27 @@ public class FileIO {
 
 				}
 				its++;
-				System.out.println(its / (float) maxIts * 100 + "%");
+				// System.out.println(its / (float) maxIts * 100 + "%");
+			}
+			try {
+				FileIO.loadedISOFile.reload();
+				FileIO.isoFileSystem
+						.replaceFile(FileIO.isoFileSystem.getCurrentFile(),
+								FileIO.f.array());
+
+				System.out.println("Saved: "
+						+ FileIO.isoFileSystem.getCurrentFile().getName());
+
+			} catch (IOException e1) {
+				e1.printStackTrace();
 			}
 
 			its++;
-			System.out.println(its / (float) maxIts * 100 + "%");
+			// System.out.println(its / (float) maxIts * 100 + "%");
 		}
+
+		FileIO.loadedISOFile.close();
+
 	}
 
 	public static void randoScripts(int sub, int chara) {

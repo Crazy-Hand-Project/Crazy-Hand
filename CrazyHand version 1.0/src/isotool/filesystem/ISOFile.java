@@ -24,6 +24,10 @@ public class ISOFile {
 		this.data = data;
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	public void setData(byte[] data) {
 		this.data = data;
 	}
