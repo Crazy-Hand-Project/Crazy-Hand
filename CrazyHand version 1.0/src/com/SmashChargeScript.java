@@ -168,9 +168,6 @@ public class SmashChargeScript extends Script{
         this.add(Box.createVerticalStrut(5));
         
         damageRate.setValue(data[3]+ data[2]*Math.pow(2, 8));
-    	
-   
-     
         
     }
     

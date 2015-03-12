@@ -225,7 +225,7 @@ class HitboxScript extends Script {
             
             this.setBackground(Color.WHITE);
             this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-
+            
         }
         
         

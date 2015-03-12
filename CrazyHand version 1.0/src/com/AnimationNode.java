@@ -27,8 +27,8 @@ public class AnimationNode extends JPanel{
 			if(pointerValue==Integer.parseInt(t[2])){
 				choice.setSelectedIndex(i);
 			}
-			if(i==0)
-				System.out.println(pointerValue + " " + Integer.parseInt(t[1]));
+			//if(i==0)
+				//System.out.println(pointerValue + " " + Integer.parseInt(t[1]));
 		}
 		
 		

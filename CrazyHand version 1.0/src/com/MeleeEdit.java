@@ -1,35 +1,28 @@
 package com;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class MeleeEdit extends JPanel implements ActionListener {
 
@@ -76,6 +69,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		for (int i = 0; i < tmp2.length; i++) {
 			tmp2[i] = SubAction.subActions[i].name;
 		}
+		
 
 		charList = new JComboBox(tmp);
 		charList.setSelectedIndex(0);
@@ -440,6 +434,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	}
 
 	public static void main(String[] args) throws IOException {
+		Options.loadOptions();
 		FileIO.loadISOFile();
 		FileIO.init();
 		// FileIO.declareAnims();
@@ -469,6 +464,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 			}
 		});
+		
+		Options.saveOptions();
+		
 	}
 
 	@Override
@@ -476,9 +474,102 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		// not used, but required
 
 	}
+	
+	//I won't lie to you guys, this code is a clusterfuck and I'm surprised it's functional
+	//given that I did the programming equivalent of throwing fish at a wall until one turned into pasta
+	//But it works and it *is* comprehensible, just confusing and probably not optimized.
+	public static void changeScripts(int old, boolean movingDown) {
+		
+		int n = movingDown ? old : old+1;
+		
+		if(n<1||n>Script.scripts.size()-1){
+			System.out.println("Moving scripts out of bounds! Values: " + old + ","+n);
+			return;
+		}
+		
+		if(movingDown)old-=1;
+		
+		Script tmp = Script.scripts.get(old);
+		Script tmp2 = Script.scripts.get(n);
+
+		int to = tmp.location;
+		int tn = tmp2.location;
+		
+		if(Event.getEvent(tmp.id).length > Event.getEvent(tmp2.id).length){
+			if(tmp.location>tmp2.location){
+				to=tn;
+				tn = tn+Event.getEvent(tmp.id).length;
+			}
+			else{
+				tn=to;
+				to = tn+Event.getEvent(tmp2.id).length;
+			}
+		}
+		else if(Event.getEvent(tmp.id).length < Event.getEvent(tmp2.id).length){
+			if(tmp.location>tmp2.location){
+				to=tn;
+				tn = to+Event.getEvent(tmp2.id).length;
+			}
+			else{
+				tn=to;
+				to = tn+Event.getEvent(tmp2.id).length;
+			}
+		}
+		else{
+			if(tmp.location>tmp2.location){
+				to=tn;
+				tn=to+Event.getEvent(tmp.id).length;
+			}
+			else{
+				tn=to;
+				to=tn+Event.getEvent(tmp.id).length;
+			}
+		}
+		
+		tmp.location = to;
+		tmp2.location = tn;
+		
+		tmp.updateNametag();
+		tmp2.updateNametag();
+		
+		tmp.updateData();
+		tmp2.updateData();
+		
+		if(tmp.location > tmp2.location){
+			Script.scripts.set(old, tmp);
+			Script.scripts.set(n, tmp2);
+		}
+		else{
+			Script.scripts.set(old, tmp2);
+			Script.scripts.set(n, tmp);
+		}
+		
+		tmp = Script.scripts.get(old);
+		tmp2 = Script.scripts.get(n);
+		
+		FileIO.init();
+		for (Script script : Script.scripts) {
+			script.save();
+		}
+		
+		FileIO.init();
+		FileIO.readScripts();
+		
+		MeleeEdit.scriptInner.updateUI();
+		
+	}
 
 	public static void setScripts() {
 		int i = -1;
+		
+		scriptInner.removeAll();
+		
+		Collections.sort(Script.scripts, new ScriptComparator());
+		
+		
+		
+		
+		
 		for (Script script : Script.scripts) {
 			i++;
 

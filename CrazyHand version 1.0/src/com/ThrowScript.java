@@ -59,7 +59,7 @@ class ThrowScript extends Script {
     	throwType = new JComboBox(tmp);
     	throwType.setSelectedIndex(throwT == 0 ? 0 : 1);
     	
-    	System.out.println(throwT);
+    	//System.out.println(throwT);
     	
     	
         Attribute = new JComboBox<String>(tmp2);
@@ -146,6 +146,7 @@ class ThrowScript extends Script {
         
         this.setBackground(Color.WHITE);
         this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        
 
     }
     public static int bit(int num, int bit, int set) {

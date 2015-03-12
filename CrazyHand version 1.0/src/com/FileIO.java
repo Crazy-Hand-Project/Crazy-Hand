@@ -71,7 +71,7 @@ public class FileIO {
 					"ISO Files", "iso");
 			final JFileChooser fc = new JFileChooser();
 
-			fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
+			fc.setCurrentDirectory(Options.hasLastIso ? new File(Options.isoPath) :new File(System.getProperty("user.dir")));
 			fc.addChoosableFileFilter(isoFilter);
 			fc.setFileFilter(isoFilter);
 
@@ -81,7 +81,11 @@ public class FileIO {
 				File selectedFile = fc.getSelectedFile();
 				loadedISOFile = new ISO(selectedFile);
 				isoFileSystem = loadedISOFile.getFileSystem();
-
+				
+				
+				Options.isoPath = fc.getCurrentDirectory().getPath();
+				
+				System.out.println(Options.isoPath);
 			} else {
 				// TODO you must select a ISO file! msg
 				throw new RuntimeException("You must select a ISO file!");
@@ -295,7 +299,7 @@ public class FileIO {
                 if (name == "") {
                     name = "[No Name]";
                 }
-                System.out.println(name);
+                //System.out.println(name);
                 subactions[i] = name;
 
             }
