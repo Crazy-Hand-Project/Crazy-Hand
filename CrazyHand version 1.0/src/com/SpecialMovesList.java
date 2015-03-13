@@ -54,6 +54,8 @@ public class SpecialMovesList{
 		movesToCharacterMap.put(Character.characters[28],none);
 		movesToCharacterMap.put(Character.characters[29],bowserSpecialMoves);
 		movesToCharacterMap.put(Character.characters[30],none);
+		movesToCharacterMap.put(Character.characters[31],none);
+		movesToCharacterMap.put(Character.characters[32],none);
 	}
 	
 	public static SubAction[] placeholder = {
