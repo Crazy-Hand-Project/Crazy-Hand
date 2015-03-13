@@ -91,12 +91,13 @@ public class ISO {
 	}
 
 	/**
-	 * Reloads the ISO file to allow I/O operations to be performed.
+	 * Reloads the ISO file to allow read and writing to the ISO.
 	 * 
 	 * @throws FileNotFoundException
 	 */
 	public void reload() throws FileNotFoundException {
-		isoFile = new RandomAccessFile(chosenISOFile, "rw");
+		if (!isOpen())
+			isoFile = new RandomAccessFile(chosenISOFile, "rw");
 	}
 
 	/**
@@ -117,7 +118,7 @@ public class ISO {
 	/**
 	 * Is the ISO open?
 	 * 
-	 * @return true if the ISO is open.
+	 * @return true if the ISO is open or instanced.
 	 */
 	public boolean isOpen() {
 		return isoFile != null;
@@ -129,6 +130,10 @@ public class ISO {
 
 	public ISOFileSystem getFileSystem() {
 		return fileSystem;
+	}
+
+	public File getChosenISOFile() {
+		return chosenISOFile;
 	}
 
 	public long getFSTOffset() {

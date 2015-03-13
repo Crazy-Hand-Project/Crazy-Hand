@@ -1,37 +1,30 @@
 package com;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.table.AbstractTableModel;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class MeleeEdit extends JPanel implements ActionListener {
 
@@ -110,11 +103,10 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		saveButton.setActionCommand("save");
 		saveButton.addActionListener(new SaveListener());
 
-		
 		FileIO.init();
-		
+
 		restorePane = new RestorePanel();
-		
+
 		attributeTable = new JTable(new AttributeTable());
 		// attributeTable.setPreferredScrollableViewportSize(new Dimension(700,
 		// 600));
@@ -134,8 +126,6 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		aPane = new JScrollPane(attributeTable);
 		aPane.setPreferredSize(new Dimension(700, 500));
 
-		
-
 		scripts = new JScrollPane(scriptInner);
 		scripts.setPreferredSize(new Dimension(700, 600));
 		scripts.getVerticalScrollBar().setUnitIncrement(10);
@@ -151,17 +141,16 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		add(comboPane, BorderLayout.PAGE_START);
 		add(aPane, BorderLayout.CENTER);
 		add(saveButton, BorderLayout.PAGE_END);
-		
-		FileIO.loadedISOFile.close();
-		
-		
-		//try {
-	    //    Runtime.getRuntime().exec("cmd.exe /c start");
-	    //    Runtime.getRuntime().exec("GCReEx.exe -x a.iso");
-	    //    System.out.println("ok");
-	    //} catch (IOException ex) {
-	    //    ex.printStackTrace();
-	    //}
+
+		// FileIO.loadedISOFile.close();
+
+		// try {
+		// Runtime.getRuntime().exec("cmd.exe /c start");
+		// Runtime.getRuntime().exec("GCReEx.exe -x a.iso");
+		// System.out.println("ok");
+		// } catch (IOException ex) {
+		// ex.printStackTrace();
+		// }
 
 	}
 
@@ -189,88 +178,66 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 	class SaveListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (!FileIO.loadedISOFile.isOpen()) {
 
-				try {
-					FileIO.loadedISOFile.reload();
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-					return;
+			try {
+				FileIO.loadedISOFile.reload();
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+				return;
 
-				}
 			}
-			
-			
-			
-			if(selectedMenu == MENU_ATTRIBUTES){
+
+			if (selectedMenu == MENU_ATTRIBUTES) {
 				FileIO.save();
 			}
-			if(selectedMenu == MENU_ATTACKS ||selectedMenu == MENU_ALL){
+			if (selectedMenu == MENU_ATTACKS || selectedMenu == MENU_ALL) {
 				FileIO.init();
 				for (Script script : Script.scripts) {
 					script.save();
 				}
-				
+
 				FileIO.init();
 				FileIO.readScripts();
 				frame.pack();
 			}
-			if(selectedMenu == MENU_ANIMATION){
-				//FileIO.init();
+			if (selectedMenu == MENU_ANIMATION) {
+				// FileIO.init();
 				for (AnimationNode n : animationPanel.nodes) {
 					n.save();
 				}
 			}
-			
 
-			
-			
-			
 			try {
-				FileIO.isoFileSystem.replaceFile(FileIO.isoFileSystem.getCurrentFile(), FileIO.f.array());
-			
+				FileIO.isoFileSystem
+						.replaceFile(FileIO.isoFileSystem.getCurrentFile(),
+								FileIO.f.array());
+
 			} catch (IOException e2) {
 				e2.printStackTrace();
 			}
-			
-			
-			
+
 			FileIO.loadedISOFile.close();
-			
+
 			System.out.println("Save Complete!");
 
-			
-			
-			
-			
-			
-			
-
 		}
-		
-		
-		
+
 	}
 
 	class CharListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JComboBox cb = (JComboBox) e.getSource();
 			selected = cb.getSelectedIndex();
-			
-			
-			
-			if(selectedMenu == MENU_ATTRIBUTES){
+
+			if (selectedMenu == MENU_ATTRIBUTES) {
 				updateAttributes();
 			}
-			if(selectedMenu == MENU_ATTACKS ||selectedMenu == MENU_ALL){
+			if (selectedMenu == MENU_ATTACKS || selectedMenu == MENU_ALL) {
 				updateSubactions();
 			}
-			if(selectedMenu == MENU_ANIMATION){
+			if (selectedMenu == MENU_ANIMATION) {
 				updateAnimations();
 			}
-
-
-			
 
 			frame.pack();
 
@@ -278,17 +245,19 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			System.out.println("Character Selection Updated");
 		}
 	}
-	public static void updateAttributes(){
+
+	public static void updateAttributes() {
 		FileIO.init();
 		FileIO.setPosition(Character.characters[MeleeEdit.selected].offset);
 		for (int i = 0; i < Attribute.attributes.length; i++) {
 			attributeTable.setValueAt(FileIO.readFloat(), i, 1);
 		}
 	}
-	public static void updateSubactions(){
+
+	public static void updateSubactions() {
 		FileIO.init();
 		FileIO.readScripts();
-		
+
 		// updates the "all" subactions list for the new character.
 		// I might move this to a function later on. --Ampers
 		subactionList2.removeAllItems();
@@ -297,13 +266,14 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			subactionList2.addItem(tmp[i]);
 		}
 	}
-	public void updateAnimations(){
+
+	public void updateAnimations() {
 		FileIO.init();
 		animationPanel.refresh();
-		
+
 		add(animationPanel, BorderLayout.CENTER);
 	}
-	
+
 	class OptionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JComboBox cb = (JComboBox) e.getSource();
@@ -317,10 +287,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 				add(aPane, BorderLayout.CENTER);
 				// comboPane.remove(subactionList);
-				
-				
+
 				updateAttributes();
-				
+
 			}
 			if (selectedMenu == MENU_ATTACKS) {
 				scriptPanel.remove(subactionList2);
@@ -331,7 +300,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 				add(scriptPanel, BorderLayout.CENTER);
 				// comboPane.add(subactionList);
-				
+
 				updateSubactions();
 			}
 			if (selectedMenu == MENU_SPECIAL_MOVES) {
@@ -358,7 +327,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 				add(scriptPanel, BorderLayout.CENTER);
 				// comboPane.add(subactionList);
-				
+
 				updateSubactions();
 			}
 			if (selectedMenu == MENU_OTHER) {
@@ -367,9 +336,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			}
 			if (selectedMenu == MENU_ANIMATION) {
 				add(animationPanel, BorderLayout.CENTER);
-				
-				
-				
+
 				updateAnimations();
 			}
 
@@ -442,6 +409,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	}
 
 	public static void main(String[] args) throws IOException {
+		Options.loadOptions();
 		FileIO.loadISOFile();
 		FileIO.init();
 		// FileIO.declareAnims();
@@ -450,7 +418,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				// Create and set up the window.
-				frame = new JFrame("Crazy Hand v1.10");
+				frame = new JFrame();
+				updateTitle(FileIO.loadedISOFile.getChosenISOFile().getName());
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 				ImageIcon img = new ImageIcon("img/hand.png");
@@ -469,6 +438,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 			}
 		});
+
+		Options.saveOptions();
+
 	}
 
 	@Override
@@ -477,8 +449,96 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 	}
 
+	// I won't lie to you guys, this code is a clusterfuck and I'm surprised
+	// it's functional
+	// given that I did the programming equivalent of throwing fish at a wall
+	// until one turned into pasta
+	// But it works and it *is* comprehensible, just confusing and probably not
+	// optimized.
+	public static void changeScripts(int old, boolean movingDown) {
+
+		int n = movingDown ? old : old + 1;
+
+		if (n < 1 || n > Script.scripts.size() - 1) {
+			System.out.println("Moving scripts out of bounds! Values: " + old
+					+ "," + n);
+			return;
+		}
+
+		if (movingDown)
+			old -= 1;
+
+		Script tmp = Script.scripts.get(old);
+		Script tmp2 = Script.scripts.get(n);
+
+		int to = tmp.location;
+		int tn = tmp2.location;
+
+		if (Event.getEvent(tmp.id).length > Event.getEvent(tmp2.id).length) {
+			if (tmp.location > tmp2.location) {
+				to = tn;
+				tn = tn + Event.getEvent(tmp.id).length;
+			} else {
+				tn = to;
+				to = tn + Event.getEvent(tmp2.id).length;
+			}
+		} else if (Event.getEvent(tmp.id).length < Event.getEvent(tmp2.id).length) {
+			if (tmp.location > tmp2.location) {
+				to = tn;
+				tn = to + Event.getEvent(tmp2.id).length;
+			} else {
+				tn = to;
+				to = tn + Event.getEvent(tmp2.id).length;
+			}
+		} else {
+			if (tmp.location > tmp2.location) {
+				to = tn;
+				tn = to + Event.getEvent(tmp.id).length;
+			} else {
+				tn = to;
+				to = tn + Event.getEvent(tmp.id).length;
+			}
+		}
+
+		tmp.location = to;
+		tmp2.location = tn;
+
+		tmp.updateNametag();
+		tmp2.updateNametag();
+
+		tmp.updateData();
+		tmp2.updateData();
+
+		if (tmp.location > tmp2.location) {
+			Script.scripts.set(old, tmp);
+			Script.scripts.set(n, tmp2);
+		} else {
+			Script.scripts.set(old, tmp2);
+			Script.scripts.set(n, tmp);
+		}
+
+		tmp = Script.scripts.get(old);
+		tmp2 = Script.scripts.get(n);
+
+		FileIO.init();
+		for (Script script : Script.scripts) {
+			script.save();
+		}
+
+		FileIO.init();
+		FileIO.readScripts();
+
+		MeleeEdit.scriptInner.updateUI();
+
+	}
+
 	public static void setScripts() {
 		int i = -1;
+
+		scriptInner.removeAll();
+
+		Collections.sort(Script.scripts, new ScriptComparator());
+
 		for (Script script : Script.scripts) {
 			i++;
 
@@ -506,8 +566,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	 * Refreshes the data values.
 	 */
 	public static void refreshData() {
-		//currently this is only used for when restoring characters to defaults
-		//It refreshes the subactions values, etc to reflect the change to default
+		// currently this is only used for when restoring characters to defaults
+		// It refreshes the subactions values, etc to reflect the change to
+		// default
 		FileIO.init();
 		FileIO.readScripts();
 		FileIO.setPosition(Character.characters[MeleeEdit.selected].offset);
@@ -515,5 +576,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			MeleeEdit.attributeTable.setValueAt(FileIO.readFloat(), i, 1);
 		}
 
+	}
+
+	public static void updateTitle(String isoPath) {
+		frame.setTitle("Crazy Hand " + Config.VERSION + " [" + isoPath + "]");
 	}
 }

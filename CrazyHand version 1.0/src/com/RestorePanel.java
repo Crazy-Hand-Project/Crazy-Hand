@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 
 public class RestorePanel extends JPanel {
 	public JButton btn102, btn102All, btn101, btn101All, btn100, btn100All,
-			btnPAL, btnPALAll, randoBtn;
+			btnPAL, btnPALAll, randoBtn, openISOBtn;
 	public JCheckBox rawBox;
 
 	public RestorePanel() {
@@ -65,23 +65,21 @@ public class RestorePanel extends JPanel {
 		btnPALAll.setActionCommand("Restore");
 		// 102Btn.addActionListener(new 102BtnListener());
 		// this.add(btnPALAll);
-		
-		
-		
-		
-		
-		
+
 		rawBox = new JCheckBox("Use raw data for subactions");
-		//rawBox.setMnemonic(KeyEvent.VK_C);
+		// rawBox.setMnemonic(KeyEvent.VK_C);
 		rawBox.setSelected(false);
 		this.add(rawBox);
-		
 
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
 		randoBtn = new JButton("Randomize ALL Characters");
 		randoBtn.setActionCommand("Restore");
 		randoBtn.addActionListener(new LRando());
+
+		openISOBtn = new JButton("Open Another ISO...");
+		openISOBtn.addActionListener(new OpenISOAction());
+		this.add(openISOBtn);
 
 		this.add(Box.createVerticalStrut(15));
 
@@ -90,15 +88,9 @@ public class RestorePanel extends JPanel {
 		this.add(new JLabel(
 				"  Note: Randomization will take approximately 10-20 seconds to complete and there's no visual cue of progress yet."));
 
-		
-		
-		
 		this.add(Box.createVerticalStrut(300));
-		this.add(new JLabel(
-				"  Hidden message! :O"));
+		this.add(new JLabel("  Hidden message! :O"));
 
-		
-		
 		this.setPreferredSize(new Dimension(700, 200));
 	}
 
@@ -160,7 +152,7 @@ class L102All implements ActionListener {
 
 		FileIO.loadedISOFile.close();
 		MeleeEdit.refreshData();
-		
+
 		System.out.println("Restore Complete!");
 		// FileIO.declareAnims();
 	}
@@ -177,5 +169,13 @@ class LRando implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		FileIO.randoTize();
+
+	}
+
+}
+
+class OpenISOAction implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+		FileIO.loadISOFile();
 	}
 }
