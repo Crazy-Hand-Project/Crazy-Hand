@@ -68,11 +68,23 @@ public class Script extends JPanel{
 			tmp = tmp + Integer.toHexString(data[i]);
 			tmp = tmp + " ";
 		}
-		nameTag = new JLabel("[ " + number + " ]  " + name + "(Loc:"+this.location+")"); 
-		nameTag.setFont(new Font("wut", Font.BOLD, 16));
+		
+		if(name.contains("gcs")){
+			ImageIcon img = new ImageIcon("img/"+name.split("gcs")[1]+".png");
+			System.out.println(name.split("gcs")[1]);
+			nameTag = new JLabel("[ " + number + " ]  " + name + "(Loc:"+this.location+")"); 
+			nameTag.setFont(new Font("wut", Font.BOLD, 16));
+		}
+		else{
+			nameTag = new JLabel("[ " + number + " ]  " + name + "(Loc:"+this.location+")"); 
+			nameTag.setFont(new Font("wut", Font.BOLD, 16));
+		}
+		
+		
+		
 		
 		Box b0 = Box.createVerticalBox();
-		ImageIcon img = new ImageIcon("img/hand.png");
+		
 		
 		JButton upButton = new JButton("^");
 		upButton.setToolTipText("Move this script up");
@@ -128,10 +140,9 @@ public class Script extends JPanel{
             b.add( Box.createHorizontalGlue() );
             this.add(b);
             
-            //For scripts larger than 0x4 but without a special script box of their own, such as SFX
-          // this.scriptSize = (hex.getText().length()+1)/2;
-            
         }
+        
+        
 		this.setBackground(new Color(255,255,255));
 		this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));

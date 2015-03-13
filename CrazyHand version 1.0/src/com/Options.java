@@ -23,10 +23,12 @@ public class Options
 			for(int i = 0; i < lines.size(); i ++)
 			{
 				String o = lines.get(i);
-				if(o.startsWith("optLastISO:"))
-				{
+				if(o.startsWith("optLastISO:")) {
 					hasLastIso = true;
 					isoPath = o.split("optLastISO:")[1];
+				}
+				else if(o.startsWith("optRawData:")) {
+					rawEnabled = o.split("optRawData:")[1]=="true";
 				}
 				System.out.println(o);
 			}
@@ -42,6 +44,7 @@ public class Options
 	
 	public static boolean hasLastIso = false;
 	public static String isoPath = "";
+	public static boolean rawEnabled = false;
 	
 	public static void saveOptions()
 	{

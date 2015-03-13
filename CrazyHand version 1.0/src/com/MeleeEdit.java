@@ -44,7 +44,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	public JButton saveButton;
 	public static JTable attributeTable;
 	public JScrollPane aPane, scripts;
-	public JComboBox charList, subactionList;
+	public JComboBox charList;
+
+	public static JComboBox subactionList;
 
 	public static JComboBox subactionList2;
 
@@ -59,6 +61,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 	public MeleeEdit() {
 		super(new BorderLayout());
+		
+		SpecialMovesList.load();
 
 		String[] tmp = new String[Character.characters.length];
 		for (int i = 0; i < tmp.length; i++) {
@@ -259,9 +263,19 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		// updates the "all" subactions list for the new character.
 		// I might move this to a function later on. --Ampers
 		subactionList2.removeAllItems();
+		subactionList.removeAllItems();
 		String[] tmp = FileIO.getDefaultSubactions();
 		for (int i = 0; i < tmp.length; i++) {
 			subactionList2.addItem(tmp[i]);
+		}
+		for(int i = 0; i < SubAction.subActions.length; i ++)
+		{
+			subactionList.addItem(SubAction.subActions[i].name);
+		}
+		SubAction[] moves=SpecialMovesList.getListForCharacter(selected);
+		for(int i = 0; i < moves.length; i ++)
+		{
+			subactionList.addItem(moves[i].name);
 		}
 	}
 
