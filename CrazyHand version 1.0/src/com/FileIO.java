@@ -211,9 +211,12 @@ public class FileIO {
 				} else if (e.id == 0x88) {
 					temp = new ThrowScript(e.name, d, offset + 0x20 + bytesDown);
 				}
-				 else if(e.id==0x68){
-				 temp= new BodyStateScript(e.name, d, offset+0x20+bytesDown);
-				 }
+				else if(e.id==0x68){
+					temp= new BodyStateScript(e.name, d, offset+0x20+bytesDown);
+				}
+				else if(e.id==0x28){
+					temp= new GraphicScript(e.name, d, offset+0x20+bytesDown);
+				}
 				else {
 					temp = new Script(e.name, d, offset + 0x20 + bytesDown);
 				}

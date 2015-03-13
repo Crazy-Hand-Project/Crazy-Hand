@@ -19,6 +19,8 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.table.AbstractTableModel;
 
 import java.awt.BorderLayout;
@@ -457,8 +459,6 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				// Create and set up the content pane.
 				MeleeEdit contentPane = new MeleeEdit();
 
-				//
-				//
 
 				contentPane.setOpaque(true);
 				frame.setContentPane(contentPane);
