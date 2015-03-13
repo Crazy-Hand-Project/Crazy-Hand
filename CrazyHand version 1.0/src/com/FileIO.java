@@ -134,13 +134,16 @@ public class FileIO {
 		if (MeleeEdit.selectedSubaction == -1) {
 			MeleeEdit.selectedSubaction = 0;
 		}
-
+		
+		boolean specialFlag = MeleeEdit.selectedSubaction > SubAction.subActions.length-1;//Used for reading special moves once finished reading normal attacks
+		
 		int offTmp;
 		if (MeleeEdit.selectedMenu == MENU_ATTACKS) {
-			if (MeleeEdit.selectedSubaction >= SubAction.subActions.length) {
-				MeleeEdit.selectedSubaction = SubAction.subActions.length - 1;
+			if (MeleeEdit.selectedSubaction >= SubAction.subActions.length+SpecialMovesList.getListForCharacter(MeleeEdit.selected).length) {
+				MeleeEdit.selectedSubaction = SubAction.subActions.length+SpecialMovesList.getListForCharacter(MeleeEdit.selected).length - 1;
 			}
-			offTmp = SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;
+			offTmp =specialFlag ? SpecialMovesList.getListForCharacter(MeleeEdit.selected)[MeleeEdit.selectedSubaction-SubAction.subActions.length].offset * 6 * 4
+								: SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;
 		} else if (MeleeEdit.selectedMenu == MENU_SPECIAL_MOVES) {
 
 			offTmp = SpecialMovesList.getListForCharacter(MeleeEdit.selected)[MeleeEdit.selectedSubaction].offset * 6 * 4;
@@ -155,6 +158,8 @@ public class FileIO {
 																						// attacks
 																						// only
 		}
+		
+		
 
 		int pointerLoc = Character.characters[MeleeEdit.selected].subOffset
 				+ 0x20 + 4 * 3 + offTmp;
@@ -167,10 +172,10 @@ public class FileIO {
 		setPosition(pointerLoc);
 		int offset = readInt();
 		// System.out.println("Pointer: " + Integer.toHexString(offset));
-
+		
 		int id;
 		int bytesDown = 0;
-
+		
 		while (true) {
 			setPosition(offset + 0x20 + bytesDown);
 			id = readByte();
@@ -191,7 +196,7 @@ public class FileIO {
 						Script.scripts.add(new Script("NO DATA FOUND",
 								new int[4], 4));
 					}
-					break;
+						break;
 				}
 
 			}
