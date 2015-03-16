@@ -27,10 +27,10 @@ class BodyStateScript extends Script {
     	
         int state = this.setBits(23,31);
         
-        
+        if(state > 2)state=2;
         
         bodyState = new JComboBox(tmp);
-        bodyState.setSelectedIndex(state);
+        bodyState.setSelectedIndex(state <= 2 ? state : 2);
         
       //  System.out.println(state);
         

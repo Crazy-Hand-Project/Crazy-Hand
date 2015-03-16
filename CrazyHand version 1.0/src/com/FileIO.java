@@ -183,15 +183,14 @@ public class FileIO {
 			id &= ~0b10;
 
 			Event e = Event.getEvent(id);
-
 			if (e.id == 0) {
 				if (readByte() == 0 && readByte() == 0 && readByte() == 0) {// check
-																			// three
-																			// times
-																			// for
-																			// three
-																			// more
-																			// bytes
+																							   // three
+																							   // times
+																							   // for
+																							   // three
+																							   // more
+																							   // bytes
 					if (bytesDown == 0) {
 						Script.scripts.add(new Script("NO DATA FOUND",
 								new int[4], 4));
@@ -216,19 +215,16 @@ public class FileIO {
 							+ bytesDown);
 				} else if (e.id == 0x04 || e.id == 0x08) {
 					temp = new TimerScript(e.name, d, offset + 0x20 + bytesDown);
+					for(int i = 0; i < d.length; i ++)
+					{
+						System.out.println(d[i]);
+					}
 				} else if (e.id == 0xe0) {
 					temp = new SmashChargeScript(e.name, d, offset + 0x20
 							+ bytesDown);
 				} else if (e.id == 0x88) {
 					temp = new ThrowScript(e.name, d, offset + 0x20 + bytesDown);
-				}
-				else if(e.id==0x68){
-					temp= new BodyStateScript(e.name, d, offset+0x20+bytesDown);
-				}
-				else if(e.id==0x28){
-					temp= new GraphicScript(e.name, d, offset+0x20+bytesDown);
-				}
-				else if (e.id == 0x68) {
+				} else if (e.id == 0x68) {
 					temp = new BodyStateScript(e.name, d, offset + 0x20
 							+ bytesDown);
 				} else {
@@ -239,7 +235,7 @@ public class FileIO {
 			else {
 				temp = new Script(e.name, d, offset + 0x20 + bytesDown);
 			}
-
+			System.out.println(e.name + ":" + offset + 0x20 + bytesDown);
 			Script.scripts.add(temp);
 			Script.number++;
 
