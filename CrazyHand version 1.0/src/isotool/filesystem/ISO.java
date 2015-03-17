@@ -36,30 +36,33 @@ public class ISO {
 		readSectors();
 	}
 
+	/**
+	 * Reloads the ISO file to allow read and writing to the ISO.
+	 * 
+	 * @throws FileNotFoundException
+	 */
+	public void reload() throws FileNotFoundException {
+		if (!isOpen())
+			isoFile = new RandomAccessFile(chosenISOFile, "rw");
+	}
+
+	/**
+	 * Attempts to close the ISO. This method should be called if the ISO is
+	 * done with reading and writing operations.
+	 */
+	public void close() {
+		if (isoFile != null) {
+			try {
+				isoFile.close();
+				isoFile = null;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	private void readSectors() throws IOException {
 		try {
-			/*
-			 * TODO Start.dol and other &&systemdata files if (isoFile .length()
-			 * > 0x438L) { isoFile.seek(0x400L);
-			 * 
-			 * int pos5;
-			 * 
-			 * int size; int fileOff; //toc.fils.get(2).pos = 0; //
-			 * toc.fils.get(2).len = 0x2440; // toc.fils.get(3).pos = 0x2440;
-			 * isoFile.readInt(); isoFile.seek(isoFile.getChannel().position() +
-			 * 0x1cL); fileOff = isoFile.readInt(); pos5 = isoFile.readInt();
-			 * isoFile.readInt(); size = pos5 - fileOff;
-			 * isoFile.seek(isoFile.getChannel().position() + 8L);
-			 * isoFile.readInt(); //(int) isoFile.length();
-			 * 
-			 * startDol = new ISOFileInfo("Start.dol", size,fileOff, FSTOffset,
-			 * false);
-			 * 
-			 * }
-			 * 
-			 * /
-			 */
-
 			isoFile.seek(OffsetFSTOffset);
 			byte[] buffer = new byte[4];
 			isoFile.read(buffer, 0, 4);
@@ -88,31 +91,6 @@ public class ISO {
 		ISOFile rootFolder = new ISOFile("root", 0, 0, FSTOffset, true, null);
 		fileSystem = new ISOFileSystem(this, rootFolder);
 		close();
-	}
-
-	/**
-	 * Reloads the ISO file to allow read and writing to the ISO.
-	 * 
-	 * @throws FileNotFoundException
-	 */
-	public void reload() throws FileNotFoundException {
-		if (!isOpen())
-			isoFile = new RandomAccessFile(chosenISOFile, "rw");
-	}
-
-	/**
-	 * Attempts to close the ISO. This method should always be called if the
-	 * program is finished with writing or reading from the ISO.
-	 */
-	public void close() {
-		if (isoFile != null) {
-			try {
-				isoFile.close();
-				isoFile = null;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	/**

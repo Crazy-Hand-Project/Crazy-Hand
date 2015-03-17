@@ -35,16 +35,12 @@ public class FileIO {
 	// TEST!
 	public static void init() {
 		byte[] isoFileData;
-		try {
-			isoFileData = loadedISOFile.getFileSystem()
-					.openFile(
-							"Pl" + Character.characters[MeleeEdit.selected].id
-									+ ".dat");
+		isoFileData = loadedISOFile.getFileSystem()
+				.getFileData(
+						"Pl" + Character.characters[MeleeEdit.selected].id
+								+ ".dat");
 
-			f = ByteBuffer.wrap(isoFileData);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		f = ByteBuffer.wrap(isoFileData);
 
 		f.position(Character.characters[MeleeEdit.selected].offset);
 
@@ -370,14 +366,10 @@ public class FileIO {
 				36, 42, 43, 58, 59, 60, 61, 62, 65, 66 };
 		for (int i = 0; i < Character.characters.length - 1; i++) {
 			byte[] isoFileData;
-			try {
-				isoFileData = loadedISOFile.getFileSystem().openFile(
-						"Pl" + Character.characters[i].id + ".dat");
+			isoFileData = loadedISOFile.getFileSystem().getFileData(
+					"Pl" + Character.characters[i].id + ".dat");
 
-				f = ByteBuffer.wrap(isoFileData);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			f = ByteBuffer.wrap(isoFileData);
 			for (int k = 0; k < Attribute.attributes.length; k++) {
 				boolean hold = false;
 				for (int p = 0; p < dos.length; p++) {

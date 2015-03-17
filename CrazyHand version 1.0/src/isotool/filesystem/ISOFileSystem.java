@@ -27,10 +27,12 @@ public class ISOFileSystem {
 		this.isoFile = iso;
 		this.currentLoadedFile = isoFile;
 		try {
+			readDOL();
 			readFiles(isoFile, iso.getStringTableOffset());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	/**
@@ -68,12 +70,7 @@ public class ISOFileSystem {
 					currentOffset, isFolder, null);
 
 			if (isMovesetFile(isoFileName)) {
-				cachedISOFiles.put(isoFileName, file);
-				try {
-					readData(file);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				cacheFile(file);
 			}
 
 			currentOffset += 0xC;
@@ -84,6 +81,52 @@ public class ISOFileSystem {
 			}
 		}
 
+	}
+
+	/**
+	 * Reads the game's start.dol file.
+	 * 
+	 * @throws IOException
+	 */
+	private void readDOL() throws IOException {
+		if (isoFile.getISO().length() > 0x438L) {
+			// Start.dol file load
+			isoFile.getISO().seek(0x400L);
+			int pos;
+			int size;
+			int fileOff;
+			pos = 0;
+			size = 0x2440;
+			isoFile.getISO().readInt();
+			isoFile.getISO().seek(
+					isoFile.getISO().getChannel().position() + 0x1cL);
+			fileOff = isoFile.getISO().readInt();
+			pos = isoFile.getISO().readInt();
+			isoFile.getISO().readInt();
+			size = pos - fileOff;
+			isoFile.getISO()
+					.seek(isoFile.getISO().getChannel().position() + 8L);
+			isoFile.getISO().readInt();
+			ISOFile startDol = new ISOFile("Start.dol", size, fileOff,
+					isoFile.getFSTOffset(), false);
+			cacheFile(startDol);
+
+		}
+	}
+
+	/**
+	 * Caches a ISO file.
+	 * 
+	 * @param file
+	 *            - the ISO file to cache.
+	 */
+	private void cacheFile(ISOFile file) {
+		try {
+			readData(file);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		cachedISOFiles.put(file.getName(), file);
 	}
 
 	/**
@@ -145,8 +188,8 @@ public class ISOFileSystem {
 	}
 
 	/**
-	 * Checks if the file is a character moveset file. An example of a character
-	 * file would be: <b>PlBo.dat</b> for Bowser.
+	 * Checks if the file is a character file. An example of a character file
+	 * would be: <b>PlBo.dat</b> for Bowser.
 	 * 
 	 * @param name
 	 * @return
@@ -183,14 +226,14 @@ public class ISOFileSystem {
 	}
 
 	/**
-	 * Opens a file.
+	 * Gets the file's data.
 	 * 
 	 * @param fileName
 	 *            - the file's name.
 	 * @return - the file's data.
 	 * @throws IOException
 	 */
-	public byte[] openFile(String fileName) throws IOException {
+	public byte[] getFileData(String fileName) {
 		ISOFile file = getISOFile(fileName);
 		if (file.data != null) {
 			currentLoadedFile = file;

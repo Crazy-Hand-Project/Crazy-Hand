@@ -24,6 +24,11 @@ public class ISOFile {
 		this.data = data;
 	}
 
+	public ISOFile(String name, long size, long fileOffset, long fstOffset,
+			boolean isFolder) {
+		this(name, size, fileOffset, fstOffset, isFolder, null);
+	}
+
 	public String getName() {
 		return name;
 	}
