@@ -126,13 +126,7 @@ public class Script extends JPanel{
             	}
             }
             
-            MaskFormatter formatter = null;
-            try {
-                formatter = new MaskFormatter(hexForm);
-            } catch (java.text.ParseException exc) {
-                System.err.println("formatter is bad: " + exc.getMessage());
-                System.exit(-1);
-            }
+            MaskFormatter formatter = createHexadecimalMaskFormatter();
             hex = new JFormattedTextField(formatter);
             hex.setValue(tmp);
             
@@ -297,6 +291,29 @@ public class Script extends JPanel{
 			}
 		
 		return result;
+	}
+	
+	
+	public MaskFormatter createHexadecimalMaskFormatter()
+	{
+		String hexForm = "";
+        
+        for(int i = 0; i < data.length; i++){
+        	hexForm=hexForm + "HH";
+        	if(i != data.length-1){
+        		hexForm=hexForm + " ";
+        	}
+        }
+    	
+    	MaskFormatter formatter = null;
+        try {
+            formatter = new MaskFormatter(hexForm);
+        } catch (java.text.ParseException exc) {
+            System.err.println("formatter is bad: " + exc.getMessage());
+            System.exit(-1);
+        }
+        
+        return formatter;
 	}
 	
 	

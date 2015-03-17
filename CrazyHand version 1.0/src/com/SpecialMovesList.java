@@ -5,11 +5,15 @@ import java.util.HashMap;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
 
+import com.SpecialMovesList.SpecialMoveAttribute;
+
 public class SpecialMovesList{
 	
 	ArrayList<SubAction> specialMoves = new ArrayList<SubAction>();
 	public static HashMap<Character,SubAction[]> movesToCharacterMap = new HashMap<Character,SubAction[]>();
-	
+	public static HashMap<Character,SpecialMoveAttribute[]> specialAttributesToCharacterMap = new HashMap<Character, SpecialMoveAttribute[]>();
+	//Don't think this is needed.
+	/*
 	public class SpecialMove extends SubAction{
 
 		public SpecialMove(int o, String s){
@@ -17,7 +21,7 @@ public class SpecialMovesList{
 		}
 		
 	}
-	
+	*/
 	
 	public static void load(){
 		
@@ -56,6 +60,8 @@ public class SpecialMovesList{
 		movesToCharacterMap.put(Character.characters[30],none);
 		movesToCharacterMap.put(Character.characters[31],none);
 		movesToCharacterMap.put(Character.characters[32],none);
+		
+		specialAttributesToCharacterMap.put(Character.characters[25], youngLinkAtts);
 	}
 	
 	public static SubAction[] placeholder = {
@@ -708,5 +714,30 @@ public class SpecialMovesList{
 		
 		return sb;
 	}
+	
+	//WIP
+	public static SpecialMoveAttribute[] youngLinkAtts = {
+		new SpecialMoveAttribute(0x3724, "Arrow property", "Frames until max arrow angle?")
+		
+	};
+	
+	public static class SpecialMoveAttribute{
+		int loc;
+		String name;
+		String info;
+		public SpecialMoveAttribute(int i, String n, String s)
+		{
+			this.loc=i;
+			this.name=n;
+			this.info=s;
+		}
+	}
+
+	public static SpecialMoveAttribute[] getSpecialAttributesForCharacter(int selected) {
+		
+		return specialAttributesToCharacterMap.get(Character.characters[MeleeEdit.selected]);
+	}
+	
+	
 	
 }

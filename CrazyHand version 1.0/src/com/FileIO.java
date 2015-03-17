@@ -223,7 +223,10 @@ public class FileIO {
 				} else if (e.id == 0x68) {
 					temp = new BodyStateScript(e.name, d, offset + 0x20
 							+ bytesDown);
-				} else {
+				} else if (e.id == 0x0C) {
+					temp = new LoopScript(e.name, d, offset + 0x20 + bytesDown);
+				}
+				else {
 					temp = new Script(e.name, d, offset + 0x20 + bytesDown);
 				}
 			}
