@@ -12,12 +12,14 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class RestorePanel extends JPanel {
 	public JButton btn102, btn102All, btn101, btn101All, btn100, btn100All,
-			btnPAL, btnPALAll, randoBtn, openISOBtn;
+			btnPAL, btnPALAll, randoBtn, openISOBtn, openDolphinBtn;
 	public JCheckBox rawBox;
 
 	public RestorePanel() {
@@ -80,6 +82,10 @@ public class RestorePanel extends JPanel {
 		openISOBtn = new JButton("Open Another ISO...");
 		openISOBtn.addActionListener(new OpenISOAction());
 		this.add(openISOBtn);
+		
+		openDolphinBtn = new JButton("Open this ISO in dolphin(Windows only)");
+		openDolphinBtn.addActionListener(new OpenDolphinAction());
+		this.add(openDolphinBtn);
 
 		this.add(Box.createVerticalStrut(15));
 
@@ -92,6 +98,42 @@ public class RestorePanel extends JPanel {
 		this.add(new JLabel("  Hidden message! :O"));
 
 		this.setPreferredSize(new Dimension(700, 200));
+	}
+	
+	class OpenDolphinAction implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			String OS = System.getProperty("os.name");
+			if(OS.startsWith("Windows")) {
+				if(1==1) {
+					FileNameExtensionFilter exeFilter = new FileNameExtensionFilter(
+							"EXE Files", "exe");
+					final JFileChooser fc = new JFileChooser();
+
+					fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
+					fc.addChoosableFileFilter(exeFilter);
+					fc.setFileFilter(exeFilter);
+
+					int returnVal = fc.showOpenDialog(MeleeEdit.frame);
+
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
+						Options.dolphinPath=fc.getCurrentDirectory().getPath();
+						Options.hasDolphinPath=true;
+						Options.writeDolphinRunFile();
+						Options.saveOptions();
+					}
+				}
+				
+				try {
+					Runtime.getRuntime().exec("cmd /c start runDolphin.bat");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			else {
+				
+			}
+		}
 	}
 
 }
@@ -179,3 +221,6 @@ class OpenISOAction implements ActionListener {
 		FileIO.loadISOFile();
 	}
 }
+
+
+

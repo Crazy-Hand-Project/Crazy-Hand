@@ -23,10 +23,10 @@ public class Event {
 		new Event(0xD0, 0x4, "Continuation control?"),
     	new Event(0x5C, 0x4, "Allow Interrupt (IASA)"),
     	new Event(0x4C, 0x4, "Autocancel"),
-    	new Event(0x50, 0x4, "Reverse Direction"),
+    	new Event(0x50, 0x4, "Release Grabbed Character"),//Formerly Reverse Direction
     	new Event(0x04, 0x4, "Synchronous Timer"),
     	new Event(0x08, 0x4, "Asynchronous Timer"),
-    	new Event(0x0C, 0x8, "Set Loop"),
+    	new Event(0x0C, 0x4, "Set Loop"),
     	new Event(0x10, 0x4, "Execute Loop"),
     	new Event(0x1C, 0x8, "Subroutine"),
     	new Event(0x14, 0x8, "GoTo"),
@@ -37,6 +37,7 @@ public class Event {
     	new Event(0x44, 0xC, "Sound Effect"),
     	new Event(0x48, 0x4, "Random Smash SFX"),
     	new Event(0x74, 0x4, "Unknown"),//0x74 for unknown is a placeholder so that if a user selects it there aren't issues
+    	new Event(0x03, 0x8, "Unsure"),//Something weird in Ness's throws.
     };
 
 	public int id, length;

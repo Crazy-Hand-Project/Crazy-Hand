@@ -143,7 +143,7 @@ public class Script extends JPanel{
 		this.setBackground(new Color(255,255,255));
 		this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		
+		this.updateScriptBoxInfo();
 	}
 	public void save(){
     	updateData();
@@ -163,8 +163,22 @@ public class Script extends JPanel{
 		
     }
 	
+	public boolean isScriptInsideLoop;
 	
-	
+	public void updateScriptBoxInfo(){//Used for scripts inside loops
+		if(this.isScriptInsideLoop){
+			this.setBackground(new Color(0xC9C4A5));
+			for(int i = 0; i < this.getComponentCount(); i ++)
+			{
+				this.getComponent(i).setBackground(new Color(0xA19970));
+			}
+			this.setToolTipText("This script is part of a loop");
+		}
+		else{
+			this.setBackground(Color.white);
+			this.setToolTipText("");
+		}
+	}
 	
 	
 	public void updateData(){

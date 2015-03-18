@@ -81,6 +81,8 @@ public class FileIO {
 					MeleeEdit.updateTitle(fc.getSelectedFile().getName());
 
 				Options.isoPath = fc.getCurrentDirectory().getPath();
+				Options.hasLastIso=true;
+				Options.saveOptions();
 			} else {
 				if (loadedISOFile == null)
 					throw new RuntimeException("You must select a ISO file!");
@@ -126,7 +128,12 @@ public class FileIO {
 		Script.number = 1;
 		Script.scripts.clear();
 		MeleeEdit.scriptInner.removeAll();
-
+		
+		//-1 means that loopScript should be set to 0(Used after 10 00 00 00)
+		//0 means that a script is NOT inside a loop
+		//1 means that a script is inside a loop
+		int loopScript=0;
+		
 		if (MeleeEdit.selectedSubaction == -1) {
 			MeleeEdit.selectedSubaction = 0;
 		}
@@ -225,8 +232,13 @@ public class FileIO {
 							+ bytesDown);
 				} else if (e.id == 0x0C) {
 					temp = new LoopScript(e.name, d, offset + 0x20 + bytesDown);
+					
+					loopScript=1;
 				}
 				else {
+					if(e.id==0x10)
+						loopScript=-1;
+					
 					temp = new Script(e.name, d, offset + 0x20 + bytesDown);
 				}
 			}
@@ -234,6 +246,15 @@ public class FileIO {
 			else {
 				temp = new Script(e.name, d, offset + 0x20 + bytesDown);
 			}
+			
+			System.out.println("loopscript:"+loopScript);
+			temp.isScriptInsideLoop=loopScript!=0;
+			temp.updateScriptBoxInfo();
+			
+			if(loopScript==-1)loopScript=0;
+			
+			System.out.println("script:"+temp.isScriptInsideLoop);
+			
 			System.out.println(e.name + ":" + offset + 0x20 + bytesDown);
 			Script.scripts.add(temp);
 			Script.number++;
