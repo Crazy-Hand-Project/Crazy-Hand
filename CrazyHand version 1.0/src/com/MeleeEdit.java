@@ -2,6 +2,7 @@ package com;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +17,11 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -45,6 +50,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	public static JTable attributeTable;
 	public JScrollPane aPane, scripts;
 	public JComboBox charList;
+	
+	//Playing around with this, gonna see how it looks in the program.
+	public static JMenuBar fileMenu;
 
 	public static JComboBox subactionList;
 
@@ -137,13 +145,43 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 		scriptPanel.add(subactionList);
 		scriptPanel.add(scripts);
+		
+		
+		if(fileMenu==null){
+			fileMenu = new JMenuBar();
+			
+			JMenu menu = new JMenu("File");
+			
+			fileListener fl = new fileListener();
+			
+				JMenuItem openButton = new JMenuItem("Open ISO");
+				openButton.setActionCommand("openISO");
+				openButton.addActionListener(fl);
+				JMenuItem closeButton = new JMenuItem("Close");
+				closeButton.addActionListener(fl);
+				closeButton.setActionCommand("close");
+				JMenuItem m = new JMenuItem();
+				m.setEnabled(false);
+				
+			menu.add(openButton);
+			menu.add(m);
+			menu.add(closeButton);
+			
+			JButton helpButton = new JButton("Help");
+			helpButton.setBackground(new Color(0xEBEBEB));
+			helpButton.setBorder(BorderFactory.createEmptyBorder());
+			helpButton.addActionListener(new helpListener());
+			
+			
+			fileMenu.add(menu);
+			//fileMenu.add(helpButton);
+		}
 
 		// specialPanel = new JPanel();
-
 		add(comboPane, BorderLayout.PAGE_START);
 		add(aPane, BorderLayout.CENTER);
 		add(saveButton, BorderLayout.PAGE_END);
-
+		
 		// FileIO.loadedISOFile.close();
 
 		// try {
@@ -155,27 +193,39 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		// }
 
 	}
+	
+	class fileListener implements ActionListener {
 
-	public void refreshSpecialMoves() {
-		/*
-		 * String[] tmp3 = new
-		 * String[SpecialMovesList.getListForCharacter(MeleeEdit
-		 * .selected).length]; for(int i = 0; i < tmp3.length; i++){
-		 * tmp3[i]=SpecialMovesList
-		 * .getListForCharacter(MeleeEdit.selected)[i].getLocalizedName(); }
-		 * 
-		 * this.selectedSubaction = 0; this.subactionList.setSelectedIndex(0);
-		 * 
-		 * specialList = new JComboBox(tmp3); specialList.setSelectedIndex(0);
-		 * specialList.addActionListener(new SubactionListener());
-		 * specialList.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-		 * 
-		 * 
-		 * 
-		 * specialPanel.setLayout(new BoxLayout(specialPanel,
-		 * BoxLayout.PAGE_AXIS)); specialPanel.removeAll();
-		 * specialPanel.add(specialList); specialPanel.add(scripts);
-		 */
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(e.getActionCommand()=="openISO"){
+				FileIO.loadISOFile();
+			}
+			else if(e.getActionCommand()=="close"){
+				Container comp = getParent();
+				Container comp2 = null;
+				while(comp != null){
+					comp2 = comp;
+					comp = comp2.getParent();
+				}
+				if(comp2 instanceof JFrame){
+					((JFrame)comp2).dispose();
+				}
+			}
+		}
+		
+	}
+
+	class helpListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			HelpWindow w = new HelpWindow();
+			
+			w.show();
+			
+		}
+		
 	}
 
 	class SaveListener implements ActionListener {
@@ -445,15 +495,17 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 				contentPane.setOpaque(true);
 				frame.setContentPane(contentPane);
-
+				frame.setJMenuBar(fileMenu);
 				// Display the window.
 				frame.pack();
 				frame.setVisible(true);
 
 			}
 		});
-
+		
+		
 		Options.saveOptions();
+		
 
 	}
 

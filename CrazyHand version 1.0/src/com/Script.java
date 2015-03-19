@@ -165,7 +165,8 @@ public class Script extends JPanel{
 	
 	public boolean isScriptInsideLoop;
 	
-	public void updateScriptBoxInfo(){//Used for scripts inside loops
+	public void updateScriptBoxInfo(){//Mainly used for scripts inside loops
+									  //This function will be added to as new needs arise.
 		if(this.isScriptInsideLoop){
 			this.setBackground(new Color(0xC9C4A5));
 			for(int i = 0; i < this.getComponentCount(); i ++)
