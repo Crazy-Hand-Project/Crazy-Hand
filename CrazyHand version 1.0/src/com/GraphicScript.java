@@ -22,6 +22,7 @@ class GraphicScript extends Script {
     	JFormattedTextField graphicID,
     			xPos = new JFormattedTextField(0),
     			yPos = new JFormattedTextField(0),
+    			zPos = new JFormattedTextField(0),
     			xExtent = new JFormattedTextField(0),
     			yExtent = new JFormattedTextField(0),
     			zExtent = new JFormattedTextField(0);
@@ -45,15 +46,16 @@ class GraphicScript extends Script {
 
         	
             String tmp = Integer.toHexString(this.setBits(32,47));
-            while(tmp.length()<4){
+            while(tmp.length()<4){//makes it a 4-digit number just for appearance
             	tmp="0" + tmp;
             }
             graphicID.setValue(tmp);
-            xPos.setValue(this.setBits(80,87));
-            yPos.setValue(this.setBits(96,103));
-            xExtent.setValue(this.setBits(112,119));
-            yExtent.setValue(this.setBits(128,135));
-            zExtent.setValue(this.setBits(144,151));
+            xPos.setValue(this.setBits(96,111));
+            yPos.setValue(this.setBits(80,95));
+            zPos.setValue(this.setBits(64,79));
+            zExtent.setValue(this.setBits(112,127));
+            yExtent.setValue(this.setBits(128,143));
+            xExtent.setValue(this.setBits(144,159));
 
             
             
@@ -78,14 +80,20 @@ class GraphicScript extends Script {
             
             
             
-            tempPanel.add(new JLabel("X Position: "));
+            tempPanel.add(new JLabel("X Offset: "));
             tempPanel.add(xPos);
             tempPanel.add(Box.createHorizontalStrut(5));
             tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
             tempPanel.add(Box.createHorizontalStrut(5));
             
-            tempPanel.add(new JLabel("Y Position: "));
+            tempPanel.add(new JLabel("Y Offset: "));
             tempPanel.add(yPos);
+            tempPanel.add(Box.createHorizontalStrut(5));
+            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
+            tempPanel.add(Box.createHorizontalStrut(5));
+            
+            tempPanel.add(new JLabel("Z Offset: "));
+            tempPanel.add(zPos);
             tempPanel.add(Box.createHorizontalStrut(5));
             tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
             tempPanel.add(Box.createHorizontalStrut(5));
@@ -96,19 +104,19 @@ class GraphicScript extends Script {
             //tempPanel= new JPanel();
             //tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.LINE_AXIS));
             
-            tempPanel.add(new JLabel("X Extent: "));
+            tempPanel.add(new JLabel("X Scatter: "));
             tempPanel.add(xExtent);
             tempPanel.add(Box.createHorizontalStrut(5));
             tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
             tempPanel.add(Box.createHorizontalStrut(5));
             
-            tempPanel.add(new JLabel("Y Extent: "));
+            tempPanel.add(new JLabel("Y Scatter: "));
             tempPanel.add(yExtent);
             tempPanel.add(Box.createHorizontalStrut(5));
             tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
             tempPanel.add(Box.createHorizontalStrut(5));
             
-            tempPanel.add(new JLabel("Z Extent: "));
+            tempPanel.add(new JLabel("Z Scatter: "));
             tempPanel.add(zExtent);
             tempPanel.add(Box.createHorizontalStrut(5));
             tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
@@ -140,12 +148,14 @@ class GraphicScript extends Script {
         	data[4]=byte0;
         	data[5]=byte1;
             
-            //this.saveBits(32,48,((Number)graphicID.getValue()).intValue());
-            this.saveBits(80,87,((Number)xPos.getValue()).intValue());
-            this.saveBits(96,103,((Number)yPos.getValue()).intValue());
-            this.saveBits(112,119,((Number)xExtent.getValue()).intValue());
-            this.saveBits(128,135,((Number)yExtent.getValue()).intValue());
-            this.saveBits(144,151,((Number)zExtent.getValue()).intValue());
+
+            this.saveBits(96,111,((Number)xPos.getValue()).intValue());
+            this.saveBits(80,95,((Number)yPos.getValue()).intValue());
+            this.saveBits(64,79,((Number)zPos.getValue()).intValue());
+            this.saveBits(144,159,((Number)xExtent.getValue()).intValue());
+            this.saveBits(128,143,((Number)yExtent.getValue()).intValue());
+            this.saveBits(112,127,((Number)zExtent.getValue()).intValue());
+
 
   		
         }

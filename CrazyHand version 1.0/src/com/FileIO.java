@@ -228,14 +228,18 @@ public class FileIO {
 				} else if (e.id == 0x88) {
 					temp = new ThrowScript(e.name, d, offset + 0x20 + bytesDown);
 				} else if (e.id == 0x68) {
-					temp = new BodyStateScript(e.name, d, offset + 0x20
-							+ bytesDown);
-				} else if (e.id == 0x0C) {
+					temp = new BodyStateScript(e.name, d, offset + 0x20 + bytesDown);
+				} 
+				else if (e.id == 0x44) {
+					temp = new SoundScript(e.name, d, offset + 0x20 + bytesDown);
+				}else if (e.id == 0x0C) {
 					temp = new LoopScript(e.name, d, offset + 0x20 + bytesDown);
 					
 					loopScript=1;
 				}
-				else {
+				else if (e.id == 0x28) {
+					temp = new GraphicScript(e.name, d, offset + 0x20+ bytesDown);
+				} else {
 					if(e.id==0x10)
 						loopScript=-1;
 					

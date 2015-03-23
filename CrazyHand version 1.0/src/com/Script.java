@@ -76,14 +76,14 @@ public class Script extends JPanel{
 		
 		
 		
-		Box b0 = Box.createVerticalBox();
+		Box b0 = Box.createHorizontalBox();
 		
 		
-		JButton upButton = new JButton("^");
+		JButton upButton = new JButton("Up");
 		upButton.setToolTipText("Move this script up");
 		upButton.setActionCommand("scriptUp");
 		
-		JButton downButton = new JButton("v");
+		JButton downButton = new JButton("Down");
 		downButton.setToolTipText("Move this script down");
 		downButton.setActionCommand("scriptDown");
 		
@@ -168,10 +168,10 @@ public class Script extends JPanel{
 	public void updateScriptBoxInfo(){//Mainly used for scripts inside loops
 									  //This function will be added to as new needs arise.
 		if(this.isScriptInsideLoop){
-			this.setBackground(new Color(0xC9C4A5));
+			this.setBackground(new Color(0xDDDDEE));
 			for(int i = 0; i < this.getComponentCount(); i ++)
 			{
-				this.getComponent(i).setBackground(new Color(0xA19970));
+				this.getComponent(i).setBackground(new Color(0xD0D0E0));
 			}
 			this.setToolTipText("This script is part of a loop");
 		}
