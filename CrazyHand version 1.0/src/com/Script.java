@@ -33,7 +33,7 @@ public class Script extends JPanel{
 	public boolean hexField=true;
 	public JFormattedTextField hex;
 	public int id;
-	public JLabel nameTag;
+	public JLabel numTag,offsetTag;
 	public JButton extras;
 	public JComboBox scriptSwitchBar;
 	
@@ -70,8 +70,10 @@ public class Script extends JPanel{
 			tmp = tmp + " ";
 		}
 
-			nameTag = new JLabel("[ " + number + " ]  " + name + "(Loc:"+Integer.toHexString(this.location)+")"); 
-			nameTag.setFont(new Font("wut", Font.BOLD, 16));
+			numTag = new JLabel(" " + number + "   ");// + name + "(Loc:"+Integer.toHexString(this.location)+")"); 
+			numTag.setFont(new Font("wut", Font.BOLD, 18));
+			offsetTag = new JLabel("   Offset: 0x" + Integer.toHexString(this.location));
+			offsetTag.setFont(new Font("wut", Font.ITALIC, 12));
 				
 		
 		
@@ -98,21 +100,31 @@ public class Script extends JPanel{
         JPanel pan = new JPanel();
         pan.setLayout(new BoxLayout(pan, BoxLayout.X_AXIS));
 		Box  b = Box.createHorizontalBox();
-        b.add(nameTag);
-        b.add( Box.createHorizontalGlue() );
+        b.add(numTag);
+        
         
         for(int i = 0; i < Event.events.length; i ++){
-        	allScripts[i]=Event.events[i].name+"(Size:"+Event.events[i].length+")";
+        	allScripts[i]=Event.events[i].name+"  ["+Event.events[i].length+" bytes]";
         }
         
         scriptSwitchBar = new JComboBox(allScripts);
         scriptSwitchBar.setSelectedIndex(Event.getEventPlacementFromName(Event.getEvent(this.id).name));
         scriptSwitchBar.addActionListener(bac);
         scriptSwitchBar.setToolTipText("Change the kind of script this is.");
-         b.add(scriptSwitchBar);
+        scriptSwitchBar.setFont(new Font("wut", Font.BOLD, 14));
+        b.add(scriptSwitchBar);
+         
+        b.add(offsetTag);
+        b.add( Box.createHorizontalGlue() );
+        
+        
         pan.add(b);
         pan.add(b0);
+        
 		this.add(pan);
+		
+		
+		
 		
         
         if(hexField){
