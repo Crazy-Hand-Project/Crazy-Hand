@@ -1,4 +1,4 @@
-package com;
+package com.scripts;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -16,7 +16,7 @@ import javax.swing.SwingConstants;
 import javax.swing.text.MaskFormatter;
 
 
-class GraphicScript extends Script {
+public class GraphicScript extends Script {
     	
 	
     	JFormattedTextField graphicID,

@@ -9,6 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 public class Options
 {
 	public static boolean advanced = false;
@@ -31,8 +34,8 @@ public class Options
 					rawEnabled = o.split("optRawData:")[1]=="true";
 				}
 				else if(o.startsWith("optDolphinPath:")){
-					//hasDolphinPath = true;
-					//dolphinPath = o.split("optDolphinPath:)")[1];
+					hasDolphinPath = true;
+					dolphinPath = o.split("optDolphinPath:")[1];
 				}
 				System.out.println(o);
 			}
@@ -46,10 +49,8 @@ public class Options
 		
 	}
 	
-	public static boolean hasLastIso = false;
-	public static boolean hasDolphinPath = false;
-	public static String dolphinPath = "";
-	public static String isoPath = "";
+	public static boolean hasLastIso = false, hasDolphinPath = false;
+	public static String dolphinPath = "",isoPath = "";
 	public static boolean rawEnabled = false;
 	
 	public static void saveOptions()
@@ -85,7 +86,8 @@ public class Options
 	}
 	
 	
-	/*[Command line usage]
+	/*Parameters for running Dolphin from console. 
+	    [Command line usage]
 		Usage: Dolphin [-h] [-d] [-l] [-e <str>] [-b] [-V <str>] [-A <str>]
 		  -h, --help                	Show this help message
 		  -d, --debugger            	Opens the debugger
@@ -96,6 +98,9 @@ public class Options
 		  -A, --audio_emulation=<str>  	Low level (LLE) or high level (HLE) audio
 	 */
 	
+	//Currently only writes a functional file for Windows.
+	//I need to find a couple people with mac/linux willing to test the program
+	//so I can make run files for their OS.
 	public static void writeDolphinRunFile(){
 		File f = new File("runDolphin.bat");
 		
@@ -123,6 +128,48 @@ public class Options
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	public static void openDolphin()
+	{
+		String OS = System.getProperty("os.name");
+		if(OS.startsWith("Windows")) {
+			if(!Options.hasDolphinPath) {
+				FileNameExtensionFilter exeFilter = new FileNameExtensionFilter(
+						"EXE Files", "exe");
+				final JFileChooser fc = new JFileChooser();
+
+				fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
+				fc.addChoosableFileFilter(exeFilter);
+				fc.setFileFilter(exeFilter);
+
+				int returnVal = fc.showOpenDialog(MeleeEdit.frame);
+
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					Options.dolphinPath=fc.getCurrentDirectory().getPath();
+					Options.hasDolphinPath=true;
+					Options.writeDolphinRunFile();
+					Options.saveOptions();
+				}
+			}
+			
+			try {
+				Runtime.getRuntime().exec("cmd /c start runDolphin.bat");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
+			try {
+				Runtime.getRuntime().exec("cmd /c start runDolphin.bat");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

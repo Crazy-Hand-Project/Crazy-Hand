@@ -1,4 +1,4 @@
-package com;
+package com.scripts;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -16,7 +16,7 @@ import javax.swing.SwingConstants;
 import javax.swing.text.MaskFormatter;
 
 
-class SoundScript extends Script {
+public class SoundScript extends Script {
     	
 	
     	JFormattedTextField soundID;
@@ -79,7 +79,6 @@ class SoundScript extends Script {
         
         
         public void updateData(){
-
             this.saveBits(44,63,((Number)soundID.getValue()).intValue());
 
 

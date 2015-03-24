@@ -2,13 +2,13 @@ package com;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.swing.BorderFactory;
@@ -17,8 +17,9 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -26,20 +27,25 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
+
+import com.SpecialMovesList.SpecialMoveAttribute;
+import com.scripts.Script;
+import com.scripts.ScriptComparator;
 
 public class MeleeEdit extends JPanel implements ActionListener {
 
 	public static final int MENU_ATTRIBUTES = 0, MENU_ATTACKS = 1,
-			MENU_SPECIAL_MOVES = 20, MENU_ALL = 2, MENU_OTHER = 4,
-			MENU_ANIMATION = 3;
+			MENU_SPECIAL_MOVES = 20, MENU_ALL = 2, MENU_OTHER = 5,
+			MENU_ANIMATION = 3, MENU_SPECIAL_ATTRIBUTES = 4;
 
 	public static int selected = 0, selectedSubaction = 0, selectedMenu = 0;
 
 	public static String[] options = { "Attributes",
 			"Subactions (Attacks only)",// "Subactions (Special moves)",
-			"Subactions (All)", "Animation Swapping", "Other",
+			"Subactions (All)", "Animation Swapping", "Special Attributes", "Other",
 	// "Special Moves",
 	// "Frames Speed Modifiers",
 	//
@@ -47,8 +53,11 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 	public static JFrame frame;
 	public JButton saveButton;
-	public static JTable attributeTable;
-	public JScrollPane aPane, scripts;
+	public JMenuItem saveSubactionButton, loadSubactionButton;
+	public static JTable attributeTable, attributeTable2;
+	public JScrollPane aPane, SApane;
+
+	public JScrollPane scripts;
 	public JComboBox charList;
 	
 	//Playing around with this, gonna see how it looks in the program.
@@ -74,7 +83,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 		String[] tmp = new String[Character.characters.length];
 		for (int i = 0; i < tmp.length; i++) {
-			tmp[i] = Character.characters[i].name;
+			tmp[i] = ""+i;
 		}
 
 		String[] tmp2 = new String[SubAction.subActions.length];
@@ -84,11 +93,22 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 		charList = new JComboBox(tmp);
 		charList.setSelectedIndex(0);
+		charList.setEditable(false);
+		
+		ComboBoxRenderer renderer = new ComboBoxRenderer();
+		renderer.setPreferredSize(new Dimension(64,58));
+		charList.setRenderer(renderer);
+		charList.setPreferredSize(new Dimension(100,70));
+		charList.setMaximumSize(charList.getPreferredSize());
 		charList.addActionListener(new CharListener());
 		charList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		optionList = new JComboBox(options);
 		optionList.setSelectedIndex(0);
+		
+		optionList.setPreferredSize(new Dimension(200, 40));
+		optionList.setMaximumSize(optionList.getPreferredSize());
+		
 		optionList.addActionListener(new OptionListener());
 		optionList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -105,7 +125,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		comboPane = new JPanel();
 		comboPane.setLayout(new BoxLayout(comboPane, BoxLayout.LINE_AXIS));
 		comboPane.add(charList);
-		comboPane.add(Box.createHorizontalStrut(5));
+		comboPane.add(Box.createHorizontalGlue());
 		comboPane.add(optionList);
 		comboPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -122,7 +142,14 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		// 600));
 		attributeTable.setFillsViewportHeight(true);
 		attributeTable.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
+		
+		attributeTable2 = new JTable(new SpecialAttributeTable());
+		attributeTable2.setFillsViewportHeight(true);
+		attributeTable2.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		
+		SApane = new JScrollPane(attributeTable2);
+		SApane.setPreferredSize(new Dimension(700, 500));
+		
 		scriptInner = new JPanel();
 		scriptInner.setLayout(new BoxLayout(scriptInner, BoxLayout.PAGE_AXIS));
 
@@ -151,29 +178,66 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			fileMenu = new JMenuBar();
 			
 			JMenu menu = new JMenu("File");
+			JMenu runMenu = new JMenu("Run");
+			JMenu optionsMenu = new JMenu("Options");
 			
 			fileListener fl = new fileListener();
 			
 				JMenuItem openButton = new JMenuItem("Open ISO");
-				openButton.setActionCommand("openISO");
-				openButton.addActionListener(fl);
+					openButton.setActionCommand("openISO");
+					openButton.addActionListener(fl);
 				JMenuItem closeButton = new JMenuItem("Close");
-				closeButton.addActionListener(fl);
-				closeButton.setActionCommand("close");
+					closeButton.addActionListener(fl);
+					closeButton.setActionCommand("close");
+				saveSubactionButton = new JMenuItem("Save subaction");
+					saveSubactionButton.addActionListener(fl);
+					saveSubactionButton.setActionCommand("savesubaction");
+					saveSubactionButton.setEnabled(false);
+				loadSubactionButton = new JMenuItem("Load subaction");
+					loadSubactionButton.addActionListener(fl);
+					loadSubactionButton.setActionCommand("loadsubaction");
+					loadSubactionButton.setEnabled(false);
 				JMenuItem m = new JMenuItem();
-				m.setEnabled(false);
+					m.setEnabled(false);
 				
 			menu.add(openButton);
 			menu.add(m);
+			
+			// * I half-assed these functionalities; I'll have them done right soon.
+			/*
+			menu.add(saveSubactionButton);
+			menu.add(loadSubactionButton);
+			*/
 			menu.add(closeButton);
 			
+				JMenuItem dolphinButton = new JMenuItem("Run loaded ISO in Dolphin");
+				if(!System.getProperty("os.name").startsWith("Windows")){
+					dolphinButton.setToolTipText("This currently only works for windows!");
+					dolphinButton.setEnabled(false);
+				}
+				dolphinButton.addActionListener(fl);
+				dolphinButton.setActionCommand("runDolphin");
+				
+			runMenu.add(dolphinButton);
+			
+			
+			
+				optionsMenu.setActionCommand("options");
+				optionsMenu.addActionListener(fl);
+			/*
 			JButton helpButton = new JButton("Help");
 			helpButton.setBackground(new Color(0xEBEBEB));
 			helpButton.setBorder(BorderFactory.createEmptyBorder());
 			helpButton.addActionListener(new helpListener());
-			
+			*/
 			
 			fileMenu.add(menu);
+			fileMenu.add(Box.createHorizontalStrut(5));
+			fileMenu.add(runMenu);
+			
+			//fileMenu.add(Box.createHorizontalStrut(5));
+			//fileMenu.add(optionsMenu);
+			
 			//fileMenu.add(helpButton);
 		}
 
@@ -194,6 +258,45 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 	}
 	
+	class ComboBoxRenderer extends JLabel implements ListCellRenderer {
+				
+		public ComboBoxRenderer() {
+			setOpaque(true);
+			setHorizontalAlignment(CENTER);
+			setVerticalAlignment(CENTER);
+		}
+		
+		public Component getListCellRendererComponent(
+				                    JList list,
+				                    Object value,
+				                    int index,
+				                    boolean isSelected,
+				                    boolean cellHasFocus) {
+			
+			int selectedIndex = Integer.parseInt(((String)value));
+			
+			if(selectedIndex<0){return this;}
+			
+			if (isSelected) {
+				setBackground(list.getSelectionBackground());
+				setForeground(list.getSelectionForeground());
+			}
+			else {
+				setBackground(list.getBackground());
+				setForeground(list.getForeground());
+			}
+			
+			ImageIcon icon = Character.characters[selectedIndex].characterIcon;
+			if (icon != null && icon.getImage() != null) {
+				setFont(list.getFont());
+				setIcon(icon);
+			}
+			
+				return this;
+		}
+				
+	}
+	
 	class fileListener implements ActionListener {
 
 		@Override
@@ -211,6 +314,15 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				if(comp2 instanceof JFrame){
 					((JFrame)comp2).dispose();
 				}
+			}
+			else if(e.getActionCommand()=="runDolphin"){
+				Options.openDolphin();
+			}
+			else if(e.getActionCommand()=="savesubaction"){
+				FileIO.saveSubaction();
+			}
+			else if(e.getActionCommand()=="loadsubaction"){
+				FileIO.loadSubaction();
 			}
 		}
 		
@@ -239,7 +351,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 			}
 
-			if (selectedMenu == MENU_ATTRIBUTES) {
+			if (selectedMenu == MENU_ATTRIBUTES || selectedMenu == MENU_SPECIAL_ATTRIBUTES) {
 				FileIO.save();
 			}
 			if (selectedMenu == MENU_ATTACKS || selectedMenu == MENU_ALL) {
@@ -284,6 +396,17 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			if (selectedMenu == MENU_ATTRIBUTES) {
 				updateAttributes();
 			}
+			if(selectedMenu == MENU_SPECIAL_ATTRIBUTES){
+				if(SpecialMovesList.getSpecialAttributesForCharacter(selected) != null){
+					updateSpecialAttributes();
+				}
+				else
+				{
+					selectedMenu = MENU_ATTRIBUTES;
+					optionList.setSelectedIndex(MENU_ATTRIBUTES);
+					updateAttributes();
+				}
+			}
 			if (selectedMenu == MENU_ATTACKS || selectedMenu == MENU_ALL) {
 				updateSubactions();
 			}
@@ -304,6 +427,31 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		for (int i = 0; i < Attribute.attributes.length; i++) {
 			attributeTable.setValueAt(FileIO.readFloat(), i, 1);
 		}
+	}
+	
+	public void updateSpecialAttributes() {
+		
+		FileIO.init();
+
+		boolean b = false;
+		for(int i = 0; i < this.getComponentCount(); i ++) {
+			if(this.getComponent(i) == SApane){
+				b = true;
+			}
+		}
+		
+		if(b)
+		this.remove(SApane);
+		
+		attributeTable2 = new JTable(new SpecialAttributeTable());
+		attributeTable2.setFillsViewportHeight(true);
+		attributeTable2.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		
+		SApane = new JScrollPane(attributeTable2);
+		SApane.setPreferredSize(new Dimension(700, 500));
+		
+		
+		this.add(SApane);
 	}
 
 	public static void updateSubactions() {
@@ -340,11 +488,38 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JComboBox cb = (JComboBox) e.getSource();
 			selectedMenu = cb.getSelectedIndex();
-
+			
+			saveSubactionButton.setEnabled(false);
+			loadSubactionButton.setEnabled(false);
+			
 			removeAll();
 			add(comboPane, BorderLayout.PAGE_START);
 			add(saveButton, BorderLayout.PAGE_END);
+			
+			if(selectedMenu == MENU_SPECIAL_ATTRIBUTES) {
+				/*
+				FileIO.init();
+				FileIO.readScriptsWithinRange(0x00003624/6/4, 0x000037A8/6/4);
+				
+				scriptPanel.remove(subactionList2);
+				scriptPanel.remove(scripts);
+				scriptPanel.add(subactionList);
+				scriptPanel.add(scripts);
 
+				add(scriptPanel, BorderLayout.CENTER);
+				*/
+				
+				if(SpecialMovesList.getSpecialAttributesForCharacter(selected) != null){
+					updateSpecialAttributes();
+				}
+				else {
+					MeleeEdit.selectedMenu = MENU_ATTRIBUTES;
+					optionList.setSelectedIndex(MENU_ATTRIBUTES);
+					add(aPane, BorderLayout.CENTER);
+					updateAttributes();
+				}
+			}
+			
 			if (selectedMenu == MENU_ATTRIBUTES) {
 
 				add(aPane, BorderLayout.CENTER);
@@ -354,6 +529,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 			}
 			if (selectedMenu == MENU_ATTACKS) {
+				saveSubactionButton.setEnabled(true);
+				loadSubactionButton.setEnabled(true);
 				scriptPanel.remove(subactionList2);
 				scriptPanel.remove(scripts);
 				// scriptPanel.remove(specialPanel);
@@ -380,7 +557,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				// //comboPane.add(subactionList);
 			}
 			if (selectedMenu == MENU_ALL) {
-
+				saveSubactionButton.setEnabled(true);
+				loadSubactionButton.setEnabled(true);
 				scriptPanel.remove(subactionList);
 				scriptPanel.remove(scripts);
 				// scriptPanel.remove(specialPanel);
@@ -431,6 +609,78 @@ public class MeleeEdit extends JPanel implements ActionListener {
 					tmp[i][2] = "Don't modify.";
 				else
 					tmp[i][2] = Attribute.attributes[i].info;
+			}
+			return tmp;
+		}
+
+		public int getColumnCount() {
+			return columnNames.length;
+		}
+
+		public int getRowCount() {
+			return data.length;
+		}
+
+		public String getColumnName(int col) {
+			return columnNames[col];
+		}
+
+		public Object getValueAt(int row, int col) {
+			return data[row][col];
+		}
+
+		public Class getColumnClass(int c) {
+			return getValueAt(0, c).getClass();
+		}
+
+		public boolean isCellEditable(int row, int col) {
+			if (col == 1)
+				return true;
+			else
+				return false;
+		}
+
+		public void setValueAt(Object value, int row, int col) {
+			if (value == null)
+				return;
+			data[row][col] = value;
+			fireTableCellUpdated(row, col);
+		}
+	}
+	
+	class SpecialAttributeTable extends AbstractTableModel {
+		public String[] columnNames = { "Attribute", "Value", "Used for", "Info"};
+		public Object[][] data = initGrid();
+
+		public Object[][] initGrid() {
+			int off = Character.characters[selected].spOffset;
+			
+			SpecialMoveAttribute[] list = SpecialMovesList.getSpecialAttributesForCharacter(selected);
+			System.out.println("Loading special move attributes");
+			Object[][] tmp = new Object[SpecialMovesList.getSpecialAttributesForCharacter(selected).length][4];
+			for (int i = 0; i < list.length; i++) {
+				tmp[i][0] = list[i].name;
+
+					if(list[i].isInt){
+						FileIO.setPosition(list[i].loc);
+						tmp[i][1] = Float.parseFloat(""+FileIO.readInt());
+					}
+					else{
+						FileIO.setPosition(list[i].loc);
+						tmp[i][1] = FileIO.readFloat();
+					}
+					
+					if (list[i].name.equals("????"))
+						tmp[i][3] = "Unsure what this value is.";
+					else
+						tmp[i][3] = list[i].info;
+					
+					if(list[i].isInt){
+						tmp[i][3] += " (Integer values only!)";
+					}
+					
+					tmp[i][2] = list[i].associatedMove;
+					
 			}
 			return tmp;
 		}

@@ -1,5 +1,7 @@
 package com;
 
+import javax.swing.ImageIcon;
+
 public class Character {
 	
 	public static Character[] characters = {
@@ -39,12 +41,18 @@ public class Character {
 	};
 
 	public String name,id;
-	public int offset,subOffset,subEnd;
+	public int offset,subOffset,subEnd,spOffset;
+	public ImageIcon characterIcon;
 	public Character(String nm, String i, int off, int sub, int sEnd){
 		name=nm;
 		id=i;
 		offset=off;
 		subOffset=sub;
 		subEnd=sEnd;
+		String s = "img/icons/"+this.name+".png";
+		System.out.println(s);
+		this.characterIcon = new ImageIcon(s);
+		
+		this.spOffset = 0x37CC;
 	}
 }

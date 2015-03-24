@@ -1,4 +1,4 @@
-package com;
+package com.scripts;
 
 import java.awt.Dimension;
 

@@ -19,7 +19,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class RestorePanel extends JPanel {
 	public JButton btn102, btn102All, btn101, btn101All, btn100, btn100All,
-			btnPAL, btnPALAll, randoBtn, openISOBtn, openDolphinBtn;
+			btnPAL, btnPALAll, randoBtn;
 	public JCheckBox rawBox;
 
 	public RestorePanel() {
@@ -85,12 +85,8 @@ public class RestorePanel extends JPanel {
 		this.add(openISOBtn);
 		*/
 		
-		
-		openDolphinBtn = new JButton("Open this ISO in dolphin(Windows only)");
-		openDolphinBtn.addActionListener(new OpenDolphinAction());
-		this.add(openDolphinBtn);
 
-		this.add(Box.createVerticalStrut(15));
+
 
 		this.add(randoBtn);
 		this.add(Box.createVerticalStrut(10));
@@ -104,50 +100,9 @@ public class RestorePanel extends JPanel {
 	}
 	
 	
-	public void openDolphin()
-	{
-		String OS = System.getProperty("os.name");
-		if(OS.startsWith("Windows")) {
-			if(1==1) {
-				FileNameExtensionFilter exeFilter = new FileNameExtensionFilter(
-						"EXE Files", "exe");
-				final JFileChooser fc = new JFileChooser();
-
-				fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
-				fc.addChoosableFileFilter(exeFilter);
-				fc.setFileFilter(exeFilter);
-
-				int returnVal = fc.showOpenDialog(MeleeEdit.frame);
-
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					Options.dolphinPath=fc.getCurrentDirectory().getPath();
-					Options.hasDolphinPath=true;
-					Options.writeDolphinRunFile();
-					Options.saveOptions();
-				}
-			}
-			
-			try {
-				Runtime.getRuntime().exec("cmd /c start runDolphin.bat");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else {
-			
-		}
-	}
 	
 	
 	
-	
-	
-	class OpenDolphinAction implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
-			openDolphin();
-		}
-	}
 }
 
 class L102 implements ActionListener {

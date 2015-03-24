@@ -21,6 +21,10 @@ import java.util.Random;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.SpecialMovesList.SpecialMoveAttribute;
+import com.scripts.*;
+
+
 ;
 
 public class FileIO {
@@ -217,7 +221,7 @@ public class FileIO {
 					temp = new HitboxScript(e.name, d, offset + 0x20
 							+ bytesDown);
 				} else if (e.id == 0x04 || e.id == 0x08) {
-					temp = new TimerScript(e.name, d, offset + 0x20 + bytesDown);
+					temp = new SynchronousScript(e.name, d, offset + 0x20 + bytesDown);
 					for(int i = 0; i < d.length; i ++)
 					{
 						System.out.println(d[i]);
@@ -228,18 +232,18 @@ public class FileIO {
 				} else if (e.id == 0x88) {
 					temp = new ThrowScript(e.name, d, offset + 0x20 + bytesDown);
 				} else if (e.id == 0x68) {
-					temp = new BodyStateScript(e.name, d, offset + 0x20 + bytesDown);
-				} 
-				else if (e.id == 0x44) {
-					temp = new SoundScript(e.name, d, offset + 0x20 + bytesDown);
-				}else if (e.id == 0x0C) {
+					temp = new BodyStateScript(e.name, d, offset + 0x20
+							+ bytesDown);
+				} else if (e.id == 0x0C) {
 					temp = new LoopScript(e.name, d, offset + 0x20 + bytesDown);
 					
 					loopScript=1;
 				}
+			
 				else if (e.id == 0x28) {
 					temp = new GraphicScript(e.name, d, offset + 0x20+ bytesDown);
-				} else {
+				}
+				else {
 					if(e.id==0x10)
 						loopScript=-1;
 					
@@ -505,7 +509,7 @@ public class FileIO {
 			if (e.id == 0x2c) {
 				temp = new HitboxScript(e.name, d, offset + 0x20 + bytesDown);
 			} else if (e.id == 0x04 || e.id == 0x08) {
-				temp = new TimerScript(e.name, d, offset + 0x20 + bytesDown);
+				temp = new SynchronousScript(e.name, d, offset + 0x20 + bytesDown);
 			} else if (e.id == 0xe0) {
 				temp = new SmashChargeScript(e.name, d, offset + 0x20
 						+ bytesDown);
@@ -534,9 +538,31 @@ public class FileIO {
 	}
 
 	public static void save() {
-		f.position(Character.characters[MeleeEdit.selected].offset);
-		for (int i = 0; i < Attribute.attributes.length; i++) {
-			f.putFloat((float) MeleeEdit.attributeTable.getValueAt(i, 1));
+		if(MeleeEdit.selectedMenu==MeleeEdit.MENU_ATTRIBUTES){
+			f.position(Character.characters[MeleeEdit.selected].offset);
+			for (int i = 0; i < Attribute.attributes.length; i++) {
+				f.putFloat((float) MeleeEdit.attributeTable.getValueAt(i, 1));
+			}
+		}
+		else if(MeleeEdit.selectedMenu==MeleeEdit.MENU_SPECIAL_ATTRIBUTES){
+			SpecialMoveAttribute[] list = SpecialMovesList.getSpecialAttributesForCharacter(MeleeEdit.selected);
+			for(int i = 0; i < list.length; i ++)
+			{
+				if(list[i].loc != -1 && list[i].name!="" && !(MeleeEdit.attributeTable2.getValueAt(i, 1) instanceof String)){
+					f.position(list[i].loc);
+					if(list[i].isInt){
+						
+						Object val = MeleeEdit.attributeTable2.getValueAt(i, 1);
+						
+				
+						
+						f.putInt(Math.round((float)val));
+					}
+					else{
+						f.putFloat((float) MeleeEdit.attributeTable2.getValueAt(i, 1));
+					}
+				}
+			}
 		}
 	}
 
@@ -546,4 +572,270 @@ public class FileIO {
 			f.putFloat((float) MeleeEdit.attributeTable.getValueAt(i, 1));
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	public static JFileChooser subactionChooser;
+	
+	//TODO read me.
+	//Saving and loading subactions doesn't function properly at the moment.
+	//The main reason why is for whatever reason the first X(X being 2 or 4 from what I've fiddled with) amount of values either aren't saved to or read from .subact files.
+	//If anyone wants to play around with this, feel free. Tell me if you are though because I plan to fix this ASAP.
+	
+	public static void saveSubaction() {
+		if(subactionChooser == null){
+			subactionChooser = new JFileChooser();
+			FileNameExtensionFilter datFilter = new FileNameExtensionFilter(
+					"Subaction Files", ".subact");
+			subactionChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+			subactionChooser.addChoosableFileFilter(datFilter);
+			subactionChooser.setFileFilter(datFilter);
+		}
+		subactionChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+
+		
+		int returnVal = subactionChooser.showSaveDialog(MeleeEdit.frame);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			try {
+				File fi = subactionChooser.getSelectedFile();
+				String filePath = fi.getAbsolutePath();
+				if(!filePath.endsWith(".subact")) {
+				    fi = new File(filePath + ".subact");
+				}
+			
+			RandomAccessFile raf = new RandomAccessFile(fi, "rw");
+			
+			boolean specialFlag = MeleeEdit.selectedSubaction > SubAction.subActions.length-1;//Used for reading special moves once finished reading normal attacks
+			
+			int offTmp;
+			if (MeleeEdit.selectedMenu == MENU_ATTACKS) {
+				if (MeleeEdit.selectedSubaction >= SubAction.subActions.length+SpecialMovesList.getListForCharacter(MeleeEdit.selected).length) {
+					MeleeEdit.selectedSubaction = SubAction.subActions.length+SpecialMovesList.getListForCharacter(MeleeEdit.selected).length - 1;
+				}
+				offTmp =specialFlag ? SpecialMovesList.getListForCharacter(MeleeEdit.selected)[MeleeEdit.selectedSubaction-SubAction.subActions.length].offset * 6 * 4
+									: SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;
+			} else if (MeleeEdit.selectedMenu == MENU_SPECIAL_MOVES) {
+	
+				offTmp = SpecialMovesList.getListForCharacter(MeleeEdit.selected)[MeleeEdit.selectedSubaction].offset * 6 * 4;
+			} else if (MeleeEdit.selectedMenu == MENU_ALL) {
+				offTmp = MeleeEdit.selectedSubaction * 6 * 4;
+			} else {
+				if (MeleeEdit.selectedSubaction >= SubAction.subActions.length) {
+					MeleeEdit.selectedSubaction = SubAction.subActions.length - 1;
+				}
+				offTmp = SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;// defaults
+																							// to
+																							// attacks
+																							// only
+			}
+			
+			
+	
+			int pointerLoc = Character.characters[MeleeEdit.selected].subOffset
+					+ 0x20 + 4 * 3 + offTmp;
+			
+			setPosition(pointerLoc);
+			//int offset = readInt();
+			
+			int id;
+			int bytesDown = 0;
+			
+
+			int c=0;
+			raf.seek(0);
+			while (c < Script.scripts.size()) {
+				Script s = Script.scripts.get(c);
+				for(int i = 0; i < s.data.length; i ++){
+					raf.writeByte(((byte) (s.data[i] & 0xff)));
+				}
+				System.out.println(c);
+				c++;
+			}
+			
+
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static int readByte(RandomAccessFile fr) {
+		int val = 0;
+		try {
+			val = fr.readByte();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ((short) (val & 0xff));
+
+	}
+	
+
+	
+	public static void loadSubaction() {
+		if(subactionChooser == null){
+			subactionChooser = new JFileChooser();
+			FileNameExtensionFilter datFilter = new FileNameExtensionFilter(
+					"Subaction Files", ".subact");
+			subactionChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+			subactionChooser.addChoosableFileFilter(datFilter);
+			subactionChooser.setFileFilter(datFilter);
+		}
+		
+		subactionChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+
+		
+		int returnVal = subactionChooser.showOpenDialog(MeleeEdit.frame);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			if(subactionChooser.getSelectedFile() != null){
+				try {
+					RandomAccessFile raf = new RandomAccessFile(subactionChooser.getSelectedFile(), "r");
+					Script.number = 1;
+					Script.scripts.clear();
+					MeleeEdit.scriptInner.removeAll();
+					
+					//-1 means that loopScript should be set to 0(Used after 10 00 00 00)
+					//0 means that a script is NOT inside a loop
+					//1 means that a script is inside a loop
+					int loopScript=0;
+					
+					if (MeleeEdit.selectedSubaction == -1) {
+						MeleeEdit.selectedSubaction = 0;
+					}
+					
+					boolean specialFlag = MeleeEdit.selectedSubaction > SubAction.subActions.length-1;//Used for reading special moves once finished reading normal attacks
+					
+					int offTmp;
+					if (MeleeEdit.selectedMenu == MENU_ATTACKS) {
+						if (MeleeEdit.selectedSubaction >= SubAction.subActions.length+SpecialMovesList.getListForCharacter(MeleeEdit.selected).length) {
+							MeleeEdit.selectedSubaction = SubAction.subActions.length+SpecialMovesList.getListForCharacter(MeleeEdit.selected).length - 1;
+						}
+						offTmp =specialFlag ? SpecialMovesList.getListForCharacter(MeleeEdit.selected)[MeleeEdit.selectedSubaction-SubAction.subActions.length].offset * 6 * 4
+											: SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;
+					} else if (MeleeEdit.selectedMenu == MENU_SPECIAL_MOVES) {
+
+						offTmp = SpecialMovesList.getListForCharacter(MeleeEdit.selected)[MeleeEdit.selectedSubaction].offset * 6 * 4;
+					} else if (MeleeEdit.selectedMenu == MENU_ALL) {
+						offTmp = MeleeEdit.selectedSubaction * 6 * 4;
+					} else {
+						if (MeleeEdit.selectedSubaction >= SubAction.subActions.length) {
+							MeleeEdit.selectedSubaction = SubAction.subActions.length - 1;
+						}
+						offTmp = SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;// defaults
+																									// to
+																									// attacks
+																									// only
+					}
+					
+					
+
+					int pointerLoc = Character.characters[MeleeEdit.selected].subOffset
+							+ 0x20 + 4 * 3 + offTmp;
+
+					setPosition(pointerLoc);
+					int offset = readInt();
+					
+					int id;
+					int bytesDown = 0;
+					
+					raf.seek(0);
+					boolean b = false;
+					while (raf.read() != -1) {
+						if(b){raf.seek(0);b=true;}
+						setPosition(offset + 0x20 + bytesDown);
+						id = raf.readByte();
+						id &= ~0b1;
+						id &= ~0b10;
+						
+						//System.out.println(id);
+
+						setPosition(offset + 0x20 + bytesDown);
+						
+						writeByte(readByte(raf));
+
+						bytesDown += 1;
+
+					}
+
+					MeleeEdit.setScripts();
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}
+	}
+	
+	
+	//Used for the File Explorer menu.
+	//Somewhat buggy at the moment.
+	public static void readScriptsWithinRange(int start, int end) {
+		
+		//if(1==1)return;
+		
+		Script.number = 1;
+		Script.scripts.clear();
+		MeleeEdit.scriptInner.removeAll();
+		
+		//-1 means that loopScript should be set to 0(Used after 10 00 00 00)
+		//0 means that a script is NOT inside a loop
+		//1 means that a script is inside a loop
+		int loopScript=0;
+		
+		if (MeleeEdit.selectedSubaction == -1) {
+			MeleeEdit.selectedSubaction = 0;
+		}
+		
+		boolean specialFlag = MeleeEdit.selectedSubaction > SubAction.subActions.length-1;//Used for reading special moves once finished reading normal attacks
+		
+		
+		int offTmp = start* 6 * 4;
+		
+		end = (end*6*4);
+
+		setPosition(offTmp);
+		int offset = readInt();
+		
+		
+		int id;
+		int bytesDown = 0;
+		
+		System.out.println("Starting search! Start:" + start + " End:"+end);
+		System.out.println("File position:" + f.position() + " Search offset:" + offset);
+		int cnt = 0;
+		
+		while (offset + 0x20 + bytesDown < end) {
+			
+			setPosition(offset + 0x20 + bytesDown);
+			id = readByte();
+			id &= ~0b1;
+			id &= ~0b10;
+			
+			float f = readFloat();
+			
+			System.out.println("Loc:" + (offset+0x20+bytesDown) + " Val:"+f);
+
+			setPosition(offset + 0x20 + bytesDown);
+
+			// System.out.println(e.name + " " + Integer.toHexString(id));
+			bytesDown += 1;
+			cnt ++;
+		}
+		
+		System.out.println("Total scripts read: " + cnt + " FileIO ending position:" + f.position());
+		
+		// for(int i = 0; i<20; i++)
+		// System.out.println(Integer.toHexString(readByte()));
+
+		MeleeEdit.setScripts();
+	}
+	
+	
 }

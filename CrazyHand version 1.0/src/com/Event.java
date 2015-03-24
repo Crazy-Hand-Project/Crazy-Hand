@@ -37,7 +37,6 @@ public class Event {
     	new Event(0x44, 0xC, "Sound Effect"),
     	new Event(0x48, 0x4, "Random Smash SFX"),
     	new Event(0x74, 0x4, "Unknown"),//0x74 for unknown is a placeholder so that if a user selects it there aren't issues
-    	new Event(0x03, 0x8, "Unsure"),//Something weird in Ness's throws.
     };
 
 	public int id, length;
