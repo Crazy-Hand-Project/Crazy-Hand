@@ -653,8 +653,6 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		public Object[][] data = initGrid();
 
 		public Object[][] initGrid() {
-			int off = Character.characters[selected].spOffset;
-			
 			SpecialMoveAttribute[] list = SpecialMovesList.getSpecialAttributesForCharacter(selected);
 			System.out.println("Loading special move attributes");
 			Object[][] tmp = new Object[SpecialMovesList.getSpecialAttributesForCharacter(selected).length][4];

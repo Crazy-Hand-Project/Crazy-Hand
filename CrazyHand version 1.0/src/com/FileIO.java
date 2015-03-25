@@ -87,6 +87,7 @@ public class FileIO {
 				Options.isoPath = fc.getCurrentDirectory().getPath();
 				Options.hasLastIso=true;
 				Options.saveOptions();
+				Options.writeDolphinRunFile();
 			} else {
 				if (loadedISOFile == null)
 					throw new RuntimeException("You must select a ISO file!");
@@ -95,6 +96,8 @@ public class FileIO {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		
 	}
 
 	public static float readFloat() {

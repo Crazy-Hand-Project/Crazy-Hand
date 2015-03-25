@@ -41,7 +41,7 @@ public class Character {
 	};
 
 	public String name,id;
-	public int offset,subOffset,subEnd,spOffset;
+	public int offset,subOffset,subEnd;
 	public ImageIcon characterIcon;
 	public Character(String nm, String i, int off, int sub, int sEnd){
 		name=nm;
@@ -50,9 +50,6 @@ public class Character {
 		subOffset=sub;
 		subEnd=sEnd;
 		String s = "img/icons/"+this.name+".png";
-		System.out.println(s);
 		this.characterIcon = new ImageIcon(s);
-		
-		this.spOffset = 0x37CC;
 	}
 }
