@@ -246,7 +246,9 @@ public class FileIO {
 				else if (e.id == 0x28) {
 					temp = new GraphicScript(e.name, d, offset + 0x20+ bytesDown);
 				}
-				else {
+				else if (e.id == 0x44) {
+					temp = new SoundScript(e.name, d, offset + 0x20 + bytesDown);
+				}else {
 					if(e.id==0x10)
 						loopScript=-1;
 					

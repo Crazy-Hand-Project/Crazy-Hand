@@ -31,7 +31,7 @@ public class SoundScript extends Script {
         	
         	MaskFormatter formatter = null;
             try {
-                formatter = new MaskFormatter("HHHH");
+                formatter = new MaskFormatter("HHHHH");
             } catch (java.text.ParseException exc) {
                 System.err.println("formatter is bad: " + exc.getMessage());
                 System.exit(-1);
@@ -79,7 +79,16 @@ public class SoundScript extends Script {
         
         
         public void updateData(){
-            this.saveBits(44,63,((Number)soundID.getValue()).intValue());
+        	
+        	String dat = (String) (soundID.getValue());
+
+        	data[7]=Integer.valueOf(dat.substring(3),16);
+        	data[6]=Integer.valueOf(dat.substring(1,3),16);
+        	data[5]=Integer.valueOf(dat.substring(0,1),16);
+        	
+        	
+        	//5,6,7
+            //this.saveBits(44,63, Integer.parseInt((String)soundID.getValue(), 16));
 
 
 
