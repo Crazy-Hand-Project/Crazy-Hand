@@ -36,6 +36,10 @@ public class Event {
     	new Event(0x28, 0x14, "Graphic Effect"),
     	new Event(0x44, 0xC, "Sound Effect"),
     	new Event(0x48, 0x4, "Random Smash SFX"),
+    	//new Event(0x4e, 0x4, "B button check?"),
+    	//01 checks if b button is held down, and if it is not continues the script. See young link's arrow start.
+    	//
+    	
     	new Event(0x74, 0x4, "Unknown"),//0x74 for unknown is a placeholder so that if a user selects it there aren't issues
     };
 

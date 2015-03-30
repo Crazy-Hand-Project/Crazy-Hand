@@ -4,6 +4,7 @@ import static com.MeleeEdit.MENU_ALL;
 import static com.MeleeEdit.MENU_ATTACKS;
 import static com.MeleeEdit.MENU_SPECIAL_MOVES;
 import isotool.filesystem.ISO;
+import isotool.filesystem.ISOFile;
 import isotool.filesystem.ISOFileSystem;
 
 import java.io.File;
@@ -16,13 +17,25 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.SpecialMovesList.SpecialMoveAttribute;
-import com.scripts.*;
+import com.SpecialAttributeIndex.SpecialMoveAttribute;
+import com.scripts.BodyStateScript;
+import com.scripts.GraphicScript;
+import com.scripts.HitboxScript;
+import com.scripts.LoopScript;
+import com.scripts.Script;
+import com.scripts.SmashChargeScript;
+import com.scripts.SoundScript;
+import com.scripts.SynchronousScript;
+import com.scripts.ThrowScript;
 
 
 ;
@@ -248,7 +261,8 @@ public class FileIO {
 				}
 				else if (e.id == 0x44) {
 					temp = new SoundScript(e.name, d, offset + 0x20 + bytesDown);
-				}else {
+				}
+				else {
 					if(e.id==0x10)
 						loopScript=-1;
 					
@@ -271,7 +285,7 @@ public class FileIO {
 			System.out.println(e.name + ":" + offset + 0x20 + bytesDown);
 			Script.scripts.add(temp);
 			Script.number++;
-
+			temp.toString();
 			// System.out.println(e.name + " " + Integer.toHexString(id));
 			bytesDown += e.length;
 
@@ -308,7 +322,7 @@ public class FileIO {
 					"rw");
 
 			int numSubactions = SubAction.getNum();
-
+			int names = 0;
 			String[] subactions = new String[numSubactions];
 			int tmp = 0;
 			for (int i = 0; i < numSubactions; i++) {
@@ -340,8 +354,16 @@ public class FileIO {
 					name = "[No Name]";
 				}
 				// System.out.println(name);
+				for(int ic = 0; ic < names; ic ++){
+					if(name.equalsIgnoreCase(subactions[ic])|| subactions[ic].contains("(")){
+						tmp ++;
+					}
+				}
+				if(tmp > 0)
+				name += "(" + tmp + ")";
 				subactions[i] = name;
-
+				names ++;
+				tmp = 0;
 			}
 			file.close();
 			return subactions;
@@ -584,18 +606,18 @@ public class FileIO {
 	
 	
 	
-	public static JFileChooser subactionChooser;
+	public static JFileChooser characterChooser, subactionChooser;
 	
 	//TODO read me.
 	//Saving and loading subactions doesn't function properly at the moment.
 	//The main reason why is for whatever reason the first X(X being 2 or 4 from what I've fiddled with) amount of values either aren't saved to or read from .subact files.
 	//If anyone wants to play around with this, feel free. Tell me if you are though because I plan to fix this ASAP.
 	
-	public static void saveSubaction() {
+	public static void saveSubaction(ArrayList<Script> scripts) {
 		if(subactionChooser == null){
 			subactionChooser = new JFileChooser();
 			FileNameExtensionFilter datFilter = new FileNameExtensionFilter(
-					"Subaction Files", ".subact");
+					"Subaction Files", "subact");
 			subactionChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 			subactionChooser.addChoosableFileFilter(datFilter);
 			subactionChooser.setFileFilter(datFilter);
@@ -613,58 +635,29 @@ public class FileIO {
 				    fi = new File(filePath + ".subact");
 				}
 			
-			RandomAccessFile raf = new RandomAccessFile(fi, "rw");
-			
-			boolean specialFlag = MeleeEdit.selectedSubaction > SubAction.subActions.length-1;//Used for reading special moves once finished reading normal attacks
-			
-			int offTmp;
-			if (MeleeEdit.selectedMenu == MENU_ATTACKS) {
-				if (MeleeEdit.selectedSubaction >= SubAction.subActions.length+SpecialMovesList.getListForCharacter(MeleeEdit.selected).length) {
-					MeleeEdit.selectedSubaction = SubAction.subActions.length+SpecialMovesList.getListForCharacter(MeleeEdit.selected).length - 1;
-				}
-				offTmp =specialFlag ? SpecialMovesList.getListForCharacter(MeleeEdit.selected)[MeleeEdit.selectedSubaction-SubAction.subActions.length].offset * 6 * 4
-									: SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;
-			} else if (MeleeEdit.selectedMenu == MENU_SPECIAL_MOVES) {
-	
-				offTmp = SpecialMovesList.getListForCharacter(MeleeEdit.selected)[MeleeEdit.selectedSubaction].offset * 6 * 4;
-			} else if (MeleeEdit.selectedMenu == MENU_ALL) {
-				offTmp = MeleeEdit.selectedSubaction * 6 * 4;
-			} else {
-				if (MeleeEdit.selectedSubaction >= SubAction.subActions.length) {
-					MeleeEdit.selectedSubaction = SubAction.subActions.length - 1;
-				}
-				offTmp = SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;// defaults
-																							// to
-																							// attacks
-																							// only
+				if(!fi.exists())
+					try {
+						fi.createNewFile();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					PrintWriter out = new PrintWriter(fi.getName());
+					
+					String ln = System.lineSeparator();
+					
+					for(int i = 0; i < scripts.size(); i ++){
+						Script scr = scripts.get(i);
+						out.print(scr.toString());
+						out.print(ln);
+					}
+					
+					
+					out.close();
 			}
-			
-			
-	
-			int pointerLoc = Character.characters[MeleeEdit.selected].subOffset
-					+ 0x20 + 4 * 3 + offTmp;
-			
-			setPosition(pointerLoc);
-			//int offset = readInt();
-			
-			int id;
-			int bytesDown = 0;
-			
-
-			int c=0;
-			raf.seek(0);
-			while (c < Script.scripts.size()) {
-				Script s = Script.scripts.get(c);
-				for(int i = 0; i < s.data.length; i ++){
-					raf.writeByte(((byte) (s.data[i] & 0xff)));
-				}
-				System.out.println(c);
-				c++;
-			}
-			
-
-			}catch(Exception e){
-				e.printStackTrace();
+			catch(Exception e)
+			{
+				
 			}
 		}
 	}
@@ -680,13 +673,11 @@ public class FileIO {
 
 	}
 	
-
-	
 	public static void loadSubaction() {
 		if(subactionChooser == null){
 			subactionChooser = new JFileChooser();
 			FileNameExtensionFilter datFilter = new FileNameExtensionFilter(
-					"Subaction Files", ".subact");
+					"Subaction Files", "subact");
 			subactionChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 			subactionChooser.addChoosableFileFilter(datFilter);
 			subactionChooser.setFileFilter(datFilter);
@@ -700,7 +691,6 @@ public class FileIO {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			if(subactionChooser.getSelectedFile() != null){
 				try {
-					RandomAccessFile raf = new RandomAccessFile(subactionChooser.getSelectedFile(), "r");
 					Script.number = 1;
 					Script.scripts.clear();
 					MeleeEdit.scriptInner.removeAll();
@@ -748,26 +738,110 @@ public class FileIO {
 					
 					int id;
 					int bytesDown = 0;
+					File fi = subactionChooser.getSelectedFile();
+					if(!fi.exists()){System.out.println("Tried to load a file that didn't exist!");return;}
 					
-					raf.seek(0);
-					boolean b = false;
-					while (raf.read() != -1) {
-						if(b){raf.seek(0);b=true;}
+					FileIO.loadedISOFile.reload();
+					loadedISOFile.getISO().seek(offset);
+					
+					Script.number = 1;
+					Script.scripts.clear();
+					MeleeEdit.scriptInner.removeAll();
+					
+					
+					File f = new File("options.cfg");
+					
+					List<String> lines = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
+						
+					
+					for(int y = 0; y < lines.size(); y ++) {
 						setPosition(offset + 0x20 + bytesDown);
-						id = raf.readByte();
+						id = Byte.parseByte(lines.get(y));
 						id &= ~0b1;
 						id &= ~0b10;
 						
-						//System.out.println(id);
+						System.out.println(id);
+						
+						Event e = Event.getEvent(id);
+
 
 						setPosition(offset + 0x20 + bytesDown);
-						
-						writeByte(readByte(raf));
+						int[] d = new int[e.length];
+						for (int i = 0; i < e.length; i++) {
+							d[i] = Integer.parseInt(lines.get(y+i));
+						}
+						Script temp;
 
-						bytesDown += 1;
+						// Ignore this, just a quick way to toggle raw data showing up
+						// instead of scripts.
+						if (!MeleeEdit.restorePane.rawBox.isSelected()) {
+							if (e.id == 0x2c) {
+								temp = new HitboxScript(e.name, d, offset + 0x20
+										+ bytesDown);
+							} else if (e.id == 0x04 || e.id == 0x08) {
+								temp = new SynchronousScript(e.name, d, offset + 0x20 + bytesDown);
+								for(int i = 0; i < d.length; i ++)
+								{
+									System.out.println(d[i]);
+								}
+							} else if (e.id == 0xe0) {
+								temp = new SmashChargeScript(e.name, d, offset + 0x20
+										+ bytesDown);
+							} else if (e.id == 0x88) {
+								temp = new ThrowScript(e.name, d, offset + 0x20 + bytesDown);
+							} else if (e.id == 0x68) {
+								temp = new BodyStateScript(e.name, d, offset + 0x20
+										+ bytesDown);
+							} else if (e.id == 0x0C) {
+								temp = new LoopScript(e.name, d, offset + 0x20 + bytesDown);
+								
+								loopScript=1;
+							}
+						
+							else if (e.id == 0x28) {
+								temp = new GraphicScript(e.name, d, offset + 0x20+ bytesDown);
+							}
+							else if (e.id == 0x44) {
+								temp = new SoundScript(e.name, d, offset + 0x20 + bytesDown);
+							}
+							else {
+								if(e.id==0x10)
+									loopScript=-1;
+								
+								temp = new Script(e.name, d, offset + 0x20 + bytesDown);
+							}
+						}
+
+						else {
+							temp = new Script(e.name, d, offset + 0x20 + bytesDown);
+						}
+						
+						System.out.println("loopscript:"+loopScript);
+						temp.isScriptInsideLoop=loopScript!=0;
+						temp.updateScriptBoxInfo();
+						
+						if(loopScript==-1)loopScript=0;
+						
+						System.out.println("script:"+temp.isScriptInsideLoop);
+						
+						System.out.println(e.name + ":" + offset + 0x20 + bytesDown);
+						Script.scripts.add(temp);
+						Script.number++;
+						temp.toString();
+						// System.out.println(e.name + " " + Integer.toHexString(id));
+						bytesDown += e.length;
 
 					}
 
+					// for(int i = 0; i<20; i++)
+					// System.out.println(Integer.toHexString(readByte()));
+
+					MeleeEdit.setScripts();
+					
+					//loadedISOFile.getISO().write(f.array());
+					
+					//isoFileSystem.replaceFile(isoFileSystem.getCurrentFile(), subData.array());
+					
 					MeleeEdit.setScripts();
 
 				} catch (IOException e) {
@@ -776,6 +850,23 @@ public class FileIO {
 				
 			}
 		}
+	}
+	
+	public static void dumpCharacterData(){
+		File fi = new File("output/test.txt");
+		if(!fi.exists())
+			try {
+				fi.createNewFile();
+				RandomAccessFile raf = new RandomAccessFile(fi, "rw");
+				while(f.hasRemaining())
+				{
+					raf.writeByte(f.get());
+				}
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 	
 	
@@ -841,6 +932,88 @@ public class FileIO {
 
 		MeleeEdit.setScripts();
 	}
+	
+	//TODO
+	public static void saveCharacter(int selected) {
+			characterChooser = new JFileChooser();
+			FileNameExtensionFilter datFilter = new FileNameExtensionFilter(
+					"DAT Files", "dat");
+			characterChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+			characterChooser.addChoosableFileFilter(datFilter);
+			characterChooser.setFileFilter(datFilter);
+		characterChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+
+		
+		int returnVal = characterChooser.showSaveDialog(MeleeEdit.frame);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			if(characterChooser.getSelectedFile() != null){
+				try{
+					File fi = characterChooser.getSelectedFile();
+					
+					String filePath = fi.getAbsolutePath();
+					if(!filePath.endsWith(".dat")) {
+					    fi = new File(filePath + ".dat");
+					}
+					
+					if(!fi.exists()){
+							fi.createNewFile();
+					}
+					
+					RandomAccessFile raf = new RandomAccessFile(fi, "rw");
+					f.position(0);
+					raf.write(f.array());
+					raf.close();
+				}
+				catch(Exception e){}
+			}
+		}
+	}
+	
+	//TODO
+	public static void loadCharacter(int selected) {
+			characterChooser = new JFileChooser();
+			FileNameExtensionFilter datFilter = new FileNameExtensionFilter(
+					"DAT Files", "dat");
+			characterChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+			characterChooser.addChoosableFileFilter(datFilter);
+			characterChooser.setFileFilter(datFilter);
+		characterChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+
+		
+		int returnVal = characterChooser.showOpenDialog(MeleeEdit.frame);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			try{
+				File fi = characterChooser.getSelectedFile();
+				if(!fi.exists()){System.out.println("Tried to load a file that didn't exist!");return;}
+				
+				RandomAccessFile raf = new RandomAccessFile(fi, "r");
+				
+				byte[] characterFileData = new byte[(int)raf.length()];
+				raf.readFully(characterFileData);
+				
+				ByteBuffer charData = ByteBuffer.wrap(characterFileData);
+				charData.position(0);
+				f.position(Character.characters[MeleeEdit.selected].offset);
+				f = charData;
+				
+				//loadedISOFile.getISO().seek(Character.characters[MeleeEdit.selected].offset);
+				//loadedISOFile.getISO().write(f.array());
+				FileIO.loadedISOFile.reload();
+				isoFileSystem.replaceFile(isoFileSystem.getCurrentFile(), charData.array());
+				
+				
+				raf.close();
+				
+			}
+			catch(Exception e){}
+		}
+	}
+	
+	
+	
+	
 	
 	
 }

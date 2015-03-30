@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -22,6 +23,7 @@ import javax.swing.text.MaskFormatter;
 import com.Event;
 import com.FileIO;
 import com.MeleeEdit;
+import com.ScriptEditWindow;
 
 
 
@@ -33,6 +35,7 @@ public class Script extends JPanel{
 	
 	public int[] data;
 	public int location;
+	public int arrayPlacement;//For the script editor
 	public String name;
 	public boolean hexField=true;
 	public JFormattedTextField hex;
@@ -40,6 +43,8 @@ public class Script extends JPanel{
 	public JLabel numTag,offsetTag;
 	public JButton extras;
 	public JComboBox scriptSwitchBar;
+	
+	public int subactionOffset;
 	
 	String[] allScripts=new String[Event.events.length];
 	
@@ -74,7 +79,7 @@ public class Script extends JPanel{
 			tmp = tmp + " ";
 		}
 
-		numTag = new JLabel(" " + number + "   ");// + name + "(Loc:"+Integer.toHexString(this.location)+")"); 
+		numTag = new JLabel(" " + (arrayPlacement+1) + "   ");// + name + "(Loc:"+Integer.toHexString(this.location)+")"); 
 		numTag.setFont(new Font("wut", Font.BOLD, 18));
 		offsetTag = new JLabel("   Offset: 0x" + Integer.toHexString(this.location));
 		offsetTag.setFont(new Font("wut", Font.ITALIC, 12));
@@ -124,42 +129,52 @@ public class Script extends JPanel{
         pan.add(b0);
 		this.add(pan);
 		
+		String hexForm = "";
         
-        if(hexField){
-        	this.add(Box.createVerticalStrut(5));
-        	String hexForm = "";
-            
-            for(int i = 0; i < data.length; i++){
-            	hexForm=hexForm + "HH";
-            	if(i != data.length-1){
-            		hexForm=hexForm + " ";
-            	}
-            }
-            
-            MaskFormatter formatter = createHexadecimalMaskFormatter();
-            hex = new JFormattedTextField(formatter);
-            hex.setValue(tmp);
-            
-            //b.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-            
-            b = Box.createHorizontalBox();
-            b.add(hex);
-            b.add( Box.createHorizontalGlue() );
-            this.add(b);
-            
+        for(int i = 0; i < data.length; i++){
+        	hexForm=hexForm + "HH";
+        	if(i != data.length-1){
+        		hexForm=hexForm + " ";
+        	}
         }
         
+        MaskFormatter formatter = createHexadecimalMaskFormatter();
+        hex = new JFormattedTextField(formatter);
+        hex.setValue(tmp);
+        
+        this.add(Box.createVerticalStrut(5));
+        
+        //b.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        
+        b = Box.createHorizontalBox();
+        
+        
+        if(hexField){
+             b.add(hex);
+             b.add( Box.createHorizontalGlue() );
+        }
+        
+        this.add(b);
+        if(!hexField){
+        	this.remove(b);
+        }
         
 		this.setBackground(new Color(255,255,255));
 		this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.updateScriptBoxInfo();
 	}
+	
+	public boolean linkedToCharacterFile = true;
+	
 	public void save(){
     	updateData();
     	saveData();
 	}
 	public void saveData(){
+		
+		if(!linkedToCharacterFile)return;//Just makes sure that stand-alone scripts aren't saved to any character files that may be open in CrazyHand
+		
     	FileIO.setPosition(location);
 		for(int i = 0; i < data.length; i++)
 			FileIO.writeByte(data[i]);
@@ -172,6 +187,22 @@ public class Script extends JPanel{
 		//}
 		
     }
+	
+	ScriptEditWindow editWindow;
+	public Script setInEditor(ScriptEditWindow w){
+		editWindow = w;
+		return this;
+	}
+	public Script setStandalone(){
+		this.linkedToCharacterFile = false;
+		this.subactionOffset = 0x0;
+		return this;
+	}
+	public Script setLinkedToCharacterSubaction(Character c, int offset){
+		this.linkedToCharacterFile = true;
+		this.subactionOffset = offset;
+		return this;
+	}
 	
 	public boolean isScriptInsideLoop;
 	
@@ -189,6 +220,8 @@ public class Script extends JPanel{
 			this.setBackground(Color.white);
 			this.setToolTipText("");
 		}
+		numTag.setText(" " + (arrayPlacement+1) + "   ");
+		offsetTag.setText("   Offset: 0x" + Integer.toHexString(this.location));
 	}
 	
 	
@@ -240,84 +273,11 @@ public class Script extends JPanel{
     
     public JMenu dropDownMenu;
     public JButton upButton;
-    
-	public void updateNametag() {
-		//this.nameTag.setName(this.nameTag.getName().split("(Loc:")[0]+this.location+")");
-	}
-	
-	public static int getArrayIndexForScriptAtPointer(int p)
-	{
-		for(int i = 0; i < Script.scripts.size(); i ++)
-		{
-			if(Script.scripts.get(i).location==p){
-				return i;
-			}
-		}
-		System.out.println("Could not find script at pointer " + p + "!"+System.lineSeparator()+"Some nasty errors might occur :/");
-			return -1;
-	}
 	
 	public static int toByte(int val)//Taken from FileIO
 	{
 		return ((short) (val & 0xff));
 	}
-	
-	//This is still in-progress.
-	//Script switching works properly, but if a script is smaller than the one it is replacing
-	
-	//EX. 74 00 00 00 replacing 88 99 AA BB CC DD EE FF, two "scripts" will be created.
-	//74 00 00 00 will replace 88 99 AA BB, and then another entry of CC DD EE FF will be present as the leftover data from the first larger script.
-	//In a similar manner, if replacing a smaller script with a larger script, the data from following scripts will be overwritten.
-	
-	//EX. 74 00 00 00 being replaced by 11 22 33 44 55 66 77 88 will overwrite the next four entries of data(99 AA BB CC)
-	//Meaning in its current state, a user can easily make a mistake that could overwrite vital data.
-	//A simple size check for scripts could be passed, but that would be somewhat limiting(Scripts would only able to be replaced by smaller/same size scripts)
-	//I don't plan to release this in its current state for a major release, but I plan to have it finished in time for one.
-	
-	public static Script createBaseScript(int loc, int script){
-		int[] scriptData = new int[0x4];
-		for(int i = 0; i < scriptData.length; i ++)
-		{
-			scriptData[i]=0;
-		}
-		Script result = new Script("Whoops, this isn't supposed to happen!", scriptData, 0x74);//Result ALWAYS needs to be overwritten.
-		
-		Event e = Event.events[script];
-		
-		scriptData = new int[e.length];
-		for(int i = 0; i < scriptData.length; i ++)
-		{
-			scriptData[i]=0;
-		}
-		scriptData[0]=e.id;
-		
-		if (e.id == 0x2c) {
-			result = new HitboxScript(e.name, scriptData, loc);
-		} else if (e.id == 0x4 || e.id == 0x8) {
-			result = new SynchronousScript(e.name, scriptData, loc);
-			result.data[3] = 1;
-		} else if (e.id == 0xe0) {
-			result = new SmashChargeScript(e.name, scriptData, loc);
-		} else if (e.id == 0x88) {
-			result = new ThrowScript(e.name, scriptData, loc);
-		} else if (e.id == 0x68) {
-			result = new BodyStateScript(e.name, scriptData, loc);
-		} else {
-			scriptData[0]=e.id;
-			result = new Script(e.name, scriptData, loc);
-		}
-		
-		result.updateData();
-		result.save();
-		
-			for(int i = 0; i < result.data.length; i ++)
-			{
-				System.out.println(result.data[i]);
-			}
-		
-		return result;
-	}
-	
 	
 	public MaskFormatter createHexadecimalMaskFormatter()
 	{
@@ -341,15 +301,34 @@ public class Script extends JPanel{
         return formatter;
 	}
 	
+	@Override
 	public String toString(){
-		String s = "";
-		for(int i = 0; i < data.length; i ++){
-			s+= data[i];
+		String s = "";//"script:" + this.name;
+		//s += "|location:"+location;
+		//s +="|data:";
+		String dat = hex.getText();
+		dat = dat.replaceAll(" ", "");
+		if(this.hexField){
+			for(int i = 0; i < dat.length(); i ++){
+				if(i > 0 && i % 2 == 0){
+					s+=".";
+				}
+				s+= dat.charAt(i);
+			}
 		}
+		s+="&&";
+		System.out.println(s);
 		return s;
 	}
 	
-	
+	public ArrayList<Script> getArray(){
+		if(editWindow == null){
+			return Script.scripts;
+		}
+		else{
+			return editWindow.getCurrentTab().scriptsInTab;
+		}
+	}
 	
 	
 	class ButtonActionListener implements ActionListener{
@@ -359,12 +338,14 @@ public class Script extends JPanel{
 			
 			if(arg0.getSource() instanceof JButton){
 				if(arg0.getActionCommand()=="scriptUp"){//Tabbed code is non-debug
-						MeleeEdit.changeScripts(getArrayIndexForScriptAtPointer(location), true);
+						ScriptUtils.changeScripts(arrayPlacement, arrayPlacement-1, getArray());
 						updateUI();
+						ScriptUtils.updateScripts(getArray());
 				}
 				else if(arg0.getActionCommand()=="scriptDown"){
-					MeleeEdit.changeScripts(getArrayIndexForScriptAtPointer(location), false);
+					ScriptUtils.changeScripts(arrayPlacement, arrayPlacement+1, getArray());
 					updateUI();
+					ScriptUtils.updateScripts(getArray());
 				}
 				else if(arg0.getActionCommand()=="more"){
 					
@@ -372,8 +353,15 @@ public class Script extends JPanel{
 			}
 			else if(arg0.getSource() instanceof JComboBox){
 				JComboBox cb = (JComboBox) arg0.getSource();
-				Script.scripts.set(Script.getArrayIndexForScriptAtPointer(location), createBaseScript(location, cb.getSelectedIndex()));
-				MeleeEdit.refreshData();
+				Script sc = ScriptUtils.createBaseScript(location, cb.getSelectedIndex());
+				sc.linkedToCharacterFile = linkedToCharacterFile;
+				sc.editWindow = editWindow;
+					sc.save();
+				getArray().set(ScriptUtils.getArrayIndexForScriptAtPointer(location, getArray()), sc);
+				if(linkedToCharacterFile){
+					MeleeEdit.refreshData();
+				}
+				ScriptUtils.updateScripts(getArray());
 			}
 			
 		}

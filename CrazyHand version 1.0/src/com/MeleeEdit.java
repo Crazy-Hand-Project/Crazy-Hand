@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.swing.BorderFactory;
@@ -31,9 +32,10 @@ import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
-import com.SpecialMovesList.SpecialMoveAttribute;
+import com.SpecialAttributeIndex.SpecialMoveAttribute;
 import com.scripts.Script;
 import com.scripts.ScriptComparator;
+import com.scripts.ScriptUtils;
 
 public class MeleeEdit extends JPanel implements ActionListener {
 
@@ -53,14 +55,13 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 	public static JFrame frame;
 	public JButton saveButton;
-	public JMenuItem saveSubactionButton, loadSubactionButton;
+	public JMenuItem saveCharacterButton, loadCharacterButton;
 	public static JTable attributeTable, attributeTable2;
 	public JScrollPane aPane, SApane;
 
 	public JScrollPane scripts;
 	public JComboBox charList;
 	
-	//Playing around with this, gonna see how it looks in the program.
 	public static JMenuBar fileMenu;
 
 	public static JComboBox subactionList;
@@ -189,25 +190,23 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				JMenuItem closeButton = new JMenuItem("Close");
 					closeButton.addActionListener(fl);
 					closeButton.setActionCommand("close");
-				saveSubactionButton = new JMenuItem("Save subaction");
-					saveSubactionButton.addActionListener(fl);
-					saveSubactionButton.setActionCommand("savesubaction");
-					saveSubactionButton.setEnabled(false);
-				loadSubactionButton = new JMenuItem("Load subaction");
-					loadSubactionButton.addActionListener(fl);
-					loadSubactionButton.setActionCommand("loadsubaction");
-					loadSubactionButton.setEnabled(false);
+				saveCharacterButton = new JMenuItem("Save character");
+					saveCharacterButton.addActionListener(fl);
+					saveCharacterButton.setActionCommand("savecharacter");
+					saveCharacterButton.setEnabled(false);
+				loadCharacterButton = new JMenuItem("Load character");
+					loadCharacterButton.addActionListener(fl);
+					loadCharacterButton.setActionCommand("loadcharacter");
+					loadCharacterButton.setEnabled(false);
 				JMenuItem m = new JMenuItem();
 					m.setEnabled(false);
 				
 			menu.add(openButton);
 			menu.add(m);
 			
-			// * I half-assed these functionalities; I'll have them done right soon.
-			/*
-			menu.add(saveSubactionButton);
-			menu.add(loadSubactionButton);
-			*/
+			menu.add(saveCharacterButton);
+			menu.add(loadCharacterButton);
+			
 			menu.add(closeButton);
 			
 				JMenuItem dolphinButton = new JMenuItem("Run loaded ISO in Dolphin");
@@ -224,21 +223,20 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			
 				optionsMenu.setActionCommand("options");
 				optionsMenu.addActionListener(fl);
-			/*
+			
 			JButton helpButton = new JButton("Help");
 			helpButton.setBackground(new Color(0xEBEBEB));
 			helpButton.setBorder(BorderFactory.createEmptyBorder());
-			helpButton.addActionListener(new helpListener());
-			*/
+			helpButton.addActionListener(fl);
+			helpButton.setActionCommand("scriptEditWindow");
 			
 			fileMenu.add(menu);
 			fileMenu.add(Box.createHorizontalStrut(5));
 			fileMenu.add(runMenu);
 			
-			//fileMenu.add(Box.createHorizontalStrut(5));
-			//fileMenu.add(optionsMenu);
-			
-			//fileMenu.add(helpButton);
+			fileMenu.add(Box.createHorizontalStrut(5));
+			fileMenu.add(optionsMenu);
+			fileMenu.add(helpButton);
 		}
 
 		// specialPanel = new JPanel();
@@ -256,6 +254,12 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		// ex.printStackTrace();
 		// }
 
+	}
+	
+	public static ScriptEditWindow scriptEditor = null;
+	
+	public static void openScriptEditor(){
+		scriptEditor = new ScriptEditWindow();
 	}
 	
 	class ComboBoxRenderer extends JLabel implements ListCellRenderer {
@@ -318,11 +322,16 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			else if(e.getActionCommand()=="runDolphin"){
 				Options.openDolphin();
 			}
-			else if(e.getActionCommand()=="savesubaction"){
-				FileIO.saveSubaction();
+			else if(e.getActionCommand()=="savecharacter"){
+				FileIO.saveCharacter(selected);
 			}
-			else if(e.getActionCommand()=="loadsubaction"){
-				FileIO.loadSubaction();
+			else if(e.getActionCommand()=="loadcharacter"){
+				FileIO.loadCharacter(selected);
+			}
+			else if(e.getActionCommand()=="scriptEditWindow"){
+				if(MeleeEdit.scriptEditor == null){
+					MeleeEdit.openScriptEditor();
+				}
 			}
 		}
 		
@@ -332,9 +341,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			HelpWindow w = new HelpWindow();
+			//HelpWindow w = new HelpWindow();
 			
-			w.show();
+			//w.show();
 			
 		}
 		
@@ -430,9 +439,12 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	}
 	
 	public void updateSpecialAttributes() {
-		
 		FileIO.init();
-
+		
+		//***Remove this line if it causes long load times***
+					SpecialMovesList.load();
+		//***See SpecialMovesList.load() for more info***
+		
 		boolean b = false;
 		for(int i = 0; i < this.getComponentCount(); i ++) {
 			if(this.getComponent(i) == SApane){
@@ -489,8 +501,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			JComboBox cb = (JComboBox) e.getSource();
 			selectedMenu = cb.getSelectedIndex();
 			
-			saveSubactionButton.setEnabled(false);
-			loadSubactionButton.setEnabled(false);
+			//saveSubactionButton.setEnabled(false);
+			//loadSubactionButton.setEnabled(false);
 			
 			removeAll();
 			add(comboPane, BorderLayout.PAGE_START);
@@ -529,8 +541,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 			}
 			if (selectedMenu == MENU_ATTACKS) {
-				saveSubactionButton.setEnabled(true);
-				loadSubactionButton.setEnabled(true);
+				saveCharacterButton.setEnabled(true);
+				loadCharacterButton.setEnabled(true);
 				scriptPanel.remove(subactionList2);
 				scriptPanel.remove(scripts);
 				// scriptPanel.remove(specialPanel);
@@ -557,8 +569,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				// //comboPane.add(subactionList);
 			}
 			if (selectedMenu == MENU_ALL) {
-				saveSubactionButton.setEnabled(true);
-				loadSubactionButton.setEnabled(true);
+				saveCharacterButton.setEnabled(true);
+				loadCharacterButton.setEnabled(true);
 				scriptPanel.remove(subactionList);
 				scriptPanel.remove(scripts);
 				// scriptPanel.remove(specialPanel);
@@ -763,94 +775,12 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 	}
 
-	// I won't lie to you guys, this code is a clusterfuck and I'm surprised
-	// it's functional
-	// given that I did the programming equivalent of throwing fish at a wall
-	// until one turned into pasta
-	// But it works and it *is* comprehensible, just confusing and probably not
-	// optimized.
-	public static void changeScripts(int old, boolean movingDown) {
-
-		int n = movingDown ? old : old + 1;
-
-		if (n < 1 || n > Script.scripts.size() - 1) {
-			System.out.println("Moving scripts out of bounds! Values: " + old
-					+ "," + n);
-			return;
-		}
-
-		if (movingDown)
-			old -= 1;
-
-		Script tmp = Script.scripts.get(old);
-		Script tmp2 = Script.scripts.get(n);
-
-		int to = tmp.location;
-		int tn = tmp2.location;
-
-		if (Event.getEvent(tmp.id).length > Event.getEvent(tmp2.id).length) {
-			if (tmp.location > tmp2.location) {
-				to = tn;
-				tn = tn + Event.getEvent(tmp.id).length;
-			} else {
-				tn = to;
-				to = tn + Event.getEvent(tmp2.id).length;
-			}
-		} else if (Event.getEvent(tmp.id).length < Event.getEvent(tmp2.id).length) {
-			if (tmp.location > tmp2.location) {
-				to = tn;
-				tn = to + Event.getEvent(tmp2.id).length;
-			} else {
-				tn = to;
-				to = tn + Event.getEvent(tmp2.id).length;
-			}
-		} else {
-			if (tmp.location > tmp2.location) {
-				to = tn;
-				tn = to + Event.getEvent(tmp.id).length;
-			} else {
-				tn = to;
-				to = tn + Event.getEvent(tmp.id).length;
-			}
-		}
-
-		tmp.location = to;
-		tmp2.location = tn;
-
-		tmp.updateNametag();
-		tmp2.updateNametag();
-
-		tmp.updateData();
-		tmp2.updateData();
-
-		if (tmp.location > tmp2.location) {
-			Script.scripts.set(old, tmp);
-			Script.scripts.set(n, tmp2);
-		} else {
-			Script.scripts.set(old, tmp2);
-			Script.scripts.set(n, tmp);
-		}
-
-		tmp = Script.scripts.get(old);
-		tmp2 = Script.scripts.get(n);
-
-		FileIO.init();
-		for (Script script : Script.scripts) {
-			script.save();
-		}
-
-		FileIO.init();
-		FileIO.readScripts();
-
-		MeleeEdit.scriptInner.updateUI();
-
-	}
-
 	public static void setScripts() {
 		int i = -1;
 
 		scriptInner.removeAll();
-
+		
+		ScriptUtils.updateScripts(Script.scripts);
 		Collections.sort(Script.scripts, new ScriptComparator());
 
 		for (Script script : Script.scripts) {

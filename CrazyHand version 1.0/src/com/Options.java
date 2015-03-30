@@ -173,4 +173,10 @@ public class Options
 		}
 	}
 	
+	//TODO More options for how the GUI looks.
+	//Not a high priority at the moment.
+	class userPreferences {
+		
+	}
+	
 }

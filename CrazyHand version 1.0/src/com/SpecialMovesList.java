@@ -3,28 +3,22 @@ package com;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
-
-import com.SpecialMovesList.SpecialMoveAttribute;
+import com.SpecialAttributeIndex.SpecialMoveAttribute;
 
 public class SpecialMovesList{
 	
 	ArrayList<SubAction> specialMoves = new ArrayList<SubAction>();
 	public static HashMap<Character,SubAction[]> movesToCharacterMap = new HashMap<Character,SubAction[]>();
 	public static HashMap<Character,SpecialMoveAttribute[]> specialAttributesToCharacterMap = new HashMap<Character, SpecialMoveAttribute[]>();
-	//Don't think this is needed.
-	/*
-	public class SpecialMove extends SubAction{
-
-		public SpecialMove(int o, String s){
-			super(o, s);
-		}
-		
-	}
-	*/
+	//Used during debugging for easily swapping out values to explore character files within crazy hand.
+	public static SpecialAttributeIndex attributeInstance;
 	
 	public static void load(){
-		
+		movesToCharacterMap.clear();
+		//***Comment out these lines if they are causing long load times***
+		specialAttributesToCharacterMap.clear();
+		attributeInstance = new SpecialAttributeIndex();
+		//***Comment out these lines if they are causing long load times***
 		SubAction[] none = {new SubAction(0x125,"No special Moves! DO NOT EDIT")};
 		
 		movesToCharacterMap.put(Character.characters[0],bowserSpecialMoves);
@@ -59,11 +53,7 @@ public class SpecialMovesList{
 		movesToCharacterMap.put(Character.characters[29],bowserSpecialMoves);
 		movesToCharacterMap.put(Character.characters[30],none);
 		movesToCharacterMap.put(Character.characters[31],none);
-		movesToCharacterMap.put(Character.characters[32],none);
-		
-		specialAttributesToCharacterMap.put(Character.characters[0], bowserSpecialMoveAttributes);
-		specialAttributesToCharacterMap.put(Character.characters[6], gnwSpecialMoveAttributes);
-		
+		movesToCharacterMap.put(Character.characters[32],none);		
 	}
 	
 	public static SubAction[] placeholder = {
@@ -681,10 +671,10 @@ public class SpecialMovesList{
 		new SubAction(0x132, "(Air)Egg Roll Loop"),
 		new SubAction(0x133, "(Air)Egg Roll Loop(2)"),
 		new SubAction(0x134, "(Air)Egg Roll End"),
-		new SubAction(0x135, "(Ground)Egg Toss"),
-		new SubAction(0x136, "(Air)Egg Toss"),
-		new SubAction(0x137, "(Ground)Ground Pound"),
-		new SubAction(0x139, "(Air)Ground Pound"),
+		new SubAction(0x135, "Up-B"),
+		new SubAction(0x136, "(Ground)Down-B"),
+		new SubAction(0x137, "(Air)Down-B"),
+		new SubAction(0x139, "(Air)Down-B land"),
 		new SubAction(0x138, "Ground Pound Landing"),
 	};
 	
@@ -717,111 +707,9 @@ public class SpecialMovesList{
 		return sb;
 	}
 	
-	//WIP
-	public static SpecialMoveAttribute[] bowserSpecialMoveAttributes = {
-
-		new SpecialMoveAttribute(0x37CC,"????","").setIsInt(),
-		new SpecialMoveAttribute(0x37D0,"????",""),
-		new SpecialMoveAttribute(0x37D4,"????",""),
-		new SpecialMoveAttribute(0x37D8,"Refueling/spacing in gfx?","","Neutral-B"),
-		new SpecialMoveAttribute(0x37DC,"Spacing in fire gfx?","","Neutral-B"),
-		new SpecialMoveAttribute(0x37E0,"GFX scaling","Smaller number makes GFX larger","Neutral-B"),
-		new SpecialMoveAttribute(0x37E4,"Minimum distance?","","Neutral-B"),
-		new SpecialMoveAttribute(0x37E8,"????","","Neutral-B").setIsInt(),
-		new SpecialMoveAttribute(0x37EC,"X offset of Fire","","Neutral-B"),
-		new SpecialMoveAttribute(0x37F0,"Y offset of Fire","","Neutral-B"),
-		new SpecialMoveAttribute(0x37F4,"????","","Neutral-B").setIsInt(),
-		new SpecialMoveAttribute(0x40F8,"Maximum lifespan for flames(in frames)","","Neutral-B"),
-		new SpecialMoveAttribute(0x40FC,"Minimum lifespan for flames(in frames)","","Neutral-B"),
-		new SpecialMoveAttribute(0x4100,"Flame speed?","","Neutral-B"),
-		new SpecialMoveAttribute(0x4104,"Horizontal momentum of flames?","","Neutral-B"),
-		new SpecialMoveAttribute(0x4108,"Default:(125 degrees)","The minimum angle that a spawned flame can go at","Neutral-B"),
-		new SpecialMoveAttribute(0x410C,"Default:(145 degrees)","The maximum angle that a spawned flame can go at","Neutral-B"),
-
-		new SpecialMoveAttribute(0x37F8,"Side B Throw?","Something to do with throwing after grabbing with side B","Side-B"),
-		new SpecialMoveAttribute(0x37FC,"????","","Side-B"),
-		new SpecialMoveAttribute(0x3800,"????","","Side-B"),
-		new SpecialMoveAttribute(0x3804,"????","","Side-B"),
-		new SpecialMoveAttribute(0x3808,"????","","Side-B"),
-		new SpecialMoveAttribute(0x380C,"????","","Side-B"),
-		new SpecialMoveAttribute(0x3810,"Side B grab break out","Higher number breaks out faster","Side-B"),
-		new SpecialMoveAttribute(0x3814,"????","","Side-B"),
-		new SpecialMoveAttribute(0x3818,"????","","Side-B"),
-
-		new SpecialMoveAttribute(0x381C,"Vertical momentum in air","","Up-B"),
-		new SpecialMoveAttribute(0x3820,"Gravity","","Up-B"),
-		new SpecialMoveAttribute(0x3824,"????",""),
-		new SpecialMoveAttribute(0x3828,"Grounded moving speed","","Up-B"),
-		new SpecialMoveAttribute(0x382C,"Momentum preservation on turning?","","Up-B"),
-		new SpecialMoveAttribute(0x3830,"Grounded turning speed","","Up-B"),
-		new SpecialMoveAttribute(0x3834,"Aerial mobility","","Up-B"),
-		new SpecialMoveAttribute(0x3838,"Frames after landing to automatically Up-B again?","","Up-B"),
-		new SpecialMoveAttribute(0x383C,"Something dealing with above","Affects how long you stay in shell?","Up-B"),
-		new SpecialMoveAttribute(0x3840,"Something dealing with above","High values delay the animation somehow?","Up-B"),
-		new SpecialMoveAttribute(0x3844,"Landing lag?","","Up-B"),
-
-		new SpecialMoveAttribute(0x3848,"Vertical aerial momentum preservation on startup?","","Down-B"),
-		new SpecialMoveAttribute(0x384C,"Initial aerial vertical momentum","","Down-B"),
-		new SpecialMoveAttribute(0x3850,"Distance to the ground before impact","Do NOT set to zero. Trust me.", "Down-B"),
-		new SpecialMoveAttribute(0x3854,"????",""),
-		new SpecialMoveAttribute(0x3858,"Gravity","Bowser's new gravity while using Down-B", "Down-B"),
-		new SpecialMoveAttribute(0x385C,"Descent speed","Positive values send you upwards", "Down-B"),
-		new SpecialMoveAttribute(0x3860,"????",""),
-		new SpecialMoveAttribute(0x3864,"????",""),
-	};
 	
-	
-	public static SpecialMoveAttribute[] gnwSpecialMoveAttributes = {
-		new SpecialMoveAttribute(0x37B0,"Frame repeated hit starts from", ""),
-		new SpecialMoveAttribute(0x37B4,"Max number of sausage per rotation", ""),
-		new SpecialMoveAttribute(0x435C,"Size of sausage", ""),
-		new SpecialMoveAttribute(0x439C,"Sausage bounce against wall", ""),
-		new SpecialMoveAttribute(0x43A0,"Duration of sausage(frames)", ""),
-		new SpecialMoveAttribute(0x43A4,"Duration of sausage on ground(frames)", ""),
-		new SpecialMoveAttribute(0x43A8,"Horizontal velocity of sausage 1", ""),
-		new SpecialMoveAttribute(0x43AC,"Vertical velocity of sausage 1", ""),
-		new SpecialMoveAttribute(0x43B0,"Gravity of sausage 1", ""),
-		new SpecialMoveAttribute(0x43B4,"Spin of sausage 1", ""),
-		new SpecialMoveAttribute(0x43B8,"Also spin of sausage 1?", ""),
-	};
-	
-	//WIP
-	public static Attribute[] youngLinkAtts = {
-		//new SpecialMoveAttribute(0x3724, "Arrow property", "Frames until max arrow angle?")
-		
-	};
-	
-	public static class SpecialMoveAttribute{
-		int loc;
-		String name;
-		String info;
-		boolean isInt = false;
-		public String associatedMove;
-		public SpecialMoveAttribute(int i, String n, String s, String m)
-		{
-			this.loc=i;
-			this.name=n;
-			this.info=s;
-			this.associatedMove = m;
-		}
-		
-		public SpecialMoveAttribute(int i, String n, String s)
-		{
-			this(i,n,s,"Undefined");
-		}
-		
-		public SpecialMoveAttribute setIsInt(){
-			this.isInt = true;
-			return this;
-		}
-		
-	}
-
 	public static SpecialMoveAttribute[] getSpecialAttributesForCharacter(int selected) {
 		
-		return specialAttributesToCharacterMap.get(Character.characters[MeleeEdit.selected]);
+		return SpecialMovesList.specialAttributesToCharacterMap.get(Character.characters[MeleeEdit.selected]);
 	}
-	
-	
-	
 }

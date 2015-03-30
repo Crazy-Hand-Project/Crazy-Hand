@@ -18,7 +18,8 @@ import javax.swing.text.MaskFormatter;
 
 public class GraphicScript extends Script {
     	
-	
+	//Just a little note
+	//041D is a really neat-looking graphic effect :)
     	JFormattedTextField graphicID,
     			xPos = new JFormattedTextField(0),
     			yPos = new JFormattedTextField(0),
