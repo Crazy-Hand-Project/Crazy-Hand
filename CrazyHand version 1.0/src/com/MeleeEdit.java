@@ -164,7 +164,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 		// Create the scroll pane and add the table to it.
 		aPane = new JScrollPane(attributeTable);
-		aPane.setPreferredSize(new Dimension(100, 500));
+		aPane.setPreferredSize(new Dimension(700, 500));
 
 		scripts = new JScrollPane(scriptInner);
 		scripts.setPreferredSize(new Dimension(700, 600));
