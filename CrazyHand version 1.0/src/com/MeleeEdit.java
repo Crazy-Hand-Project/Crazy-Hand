@@ -40,14 +40,14 @@ import com.scripts.ScriptUtils;
 public class MeleeEdit extends JPanel implements ActionListener {
 
 	public static final int MENU_ATTRIBUTES = 0, MENU_ATTACKS = 1,
-			MENU_SPECIAL_MOVES = 20, MENU_ALL = 2, MENU_OTHER = 5,
-			MENU_ANIMATION = 3, MENU_SPECIAL_ATTRIBUTES = 4;
+			MENU_SPECIAL_MOVES = 20, MENU_ALL = 2, MENU_OTHER = 6,
+			MENU_ANIMATION = 3, MENU_SPECIAL_ATTRIBUTES = 4, MENU_FRAME_SPEED_MODIFIERS=5;
 
 	public static int selected = 0, selectedSubaction = 0, selectedMenu = 0;
 
 	public static String[] options = { "Attributes",
 			"Subactions (Attacks only)",// "Subactions (Special moves)",
-			"Subactions (All)", "Animation Swapping", "Special Attributes", "Other",
+			"Subactions (All)", "Animation Swapping", "Special Attributes", "Frame Speed Modifiers", "Other",
 	// "Special Moves",
 	// "Frames Speed Modifiers",
 	//
@@ -74,6 +74,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 	public static RestorePanel restorePane;
 	public static AnimationPanel animationPanel;
+	public static FSMPanel fsmPanel;
 
 	public static JPanel scriptInner;
 
@@ -137,6 +138,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		FileIO.init();
 
 		restorePane = new RestorePanel();
+		fsmPanel = new FSMPanel();
 
 		attributeTable = new JTable(new AttributeTable());
 		// attributeTable.setPreferredScrollableViewportSize(new Dimension(700,
@@ -162,7 +164,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 		// Create the scroll pane and add the table to it.
 		aPane = new JScrollPane(attributeTable);
-		aPane.setPreferredSize(new Dimension(700, 500));
+		aPane.setPreferredSize(new Dimension(100, 500));
 
 		scripts = new JScrollPane(scriptInner);
 		scripts.setPreferredSize(new Dimension(700, 600));
@@ -581,6 +583,10 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				// comboPane.add(subactionList);
 
 				updateSubactions();
+			}
+			if (selectedMenu == MENU_FRAME_SPEED_MODIFIERS) {
+				//remove(saveButton);
+				add(fsmPanel, BorderLayout.CENTER);
 			}
 			if (selectedMenu == MENU_OTHER) {
 				remove(saveButton);

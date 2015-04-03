@@ -91,7 +91,7 @@ public class RestorePanel extends JPanel {
 		this.add(randoBtn);
 		this.add(Box.createVerticalStrut(10));
 		this.add(new JLabel(
-				"  Note: Randomization will take approximately 10-20 seconds to complete and there's no visual cue of progress yet."));
+				"  Note: Randomization will take approximately 10-20 seconds to complete and there's no visual cue of progress."));
 
 		this.add(Box.createVerticalStrut(300));
 		this.add(new JLabel("  Hidden message! :O"));
