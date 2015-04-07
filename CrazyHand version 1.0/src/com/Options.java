@@ -51,7 +51,7 @@ public class Options
 	
 	public static boolean hasLastIso = false, hasDolphinPath = false;
 	public static String dolphinPath = "",isoPath = "";
-	public static boolean rawEnabled = false, tabSubactions = false;
+	public static boolean rawEnabled = false;
 	
 	public static void saveOptions()
 	{
@@ -77,7 +77,6 @@ public class Options
 			out.write("optLastISO:" + isoPath+ln);
 			if(hasDolphinPath)
 			out.write("optDolphinPath:"+dolphinPath+ln);
-			out.write("tabSubactions:"+tabSubactions+ln);
 			
 			out.close();
 		} catch (FileNotFoundException e) {
@@ -158,9 +157,7 @@ public class Options
 			}
 			
 			try {
-				File fi = new File("runDolphin.bat");
 				Runtime.getRuntime().exec("cmd /c start runDolphin.bat");
-				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

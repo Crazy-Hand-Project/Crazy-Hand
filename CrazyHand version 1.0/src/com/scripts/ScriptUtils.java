@@ -40,7 +40,7 @@ public class ScriptUtils {
 			offset += Event.getEvent(scripts.get(i).id).length;
 		}
 		if(scripts.get(0).editWindow != null){
-			//scripts.get(0).editWindow.updateScripts();
+			scripts.get(0).editWindow.updateScripts();
 		}
 		System.out.println("Last script pointer:" + Integer.toHexString((start+offset)));
 	}
@@ -149,14 +149,6 @@ public class ScriptUtils {
 			}
 			Script tmp = scripts.get(old);
 			Script tmp2 = scripts.get(n);
-			
-			if(tmp.getArray() != scripts){
-				System.out.println("Error occured while moving scripts! Type:Different arrays" + System.lineSeparator() +
-								   ""
-						          );
-				return;
-			}
-			
 			tmp.arrayPlacement = tmp2.arrayPlacement;
 			tmp2.arrayPlacement = tmp.arrayPlacement;
 
@@ -170,15 +162,12 @@ public class ScriptUtils {
 			}
 			ScriptUtils.updateScripts(scripts);
 			if(scripts.get(0).linkedToCharacterFile){
-				FileIO.init(scripts.get(0).linkedCharacter.getPlaceInArray(), scripts.get(0).subactionOffset);
+				FileIO.init();
 				for (Script script : scripts) {
 					script.save();
 				}
-				FileIO.init(scripts.get(0).linkedCharacter.getPlaceInArray(), scripts.get(0).subactionOffset);
-				FileIO.readScripts(scripts.get(0).getArray());
-				if(scripts.get(0).editWindow != null){
-					scripts.get(0).editWindow.updateScripts();
-				}
+				FileIO.init();
+				FileIO.readScripts();
 				MeleeEdit.scriptInner.updateUI();
 			}
 

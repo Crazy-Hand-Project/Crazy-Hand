@@ -52,12 +52,4 @@ public class Character {
 		String s = "img/icons/"+this.name+".png";
 		this.characterIcon = new ImageIcon(s);
 	}
-	public int getPlaceInArray() {
-		for(int i = 0; i < Character.characters.length; i ++){
-			if(Character.characters[i] == this){
-				return i;
-			}
-		}
-		return 0;
-	}
 }
