@@ -4,7 +4,6 @@ import static com.MeleeEdit.MENU_ALL;
 import static com.MeleeEdit.MENU_ATTACKS;
 import static com.MeleeEdit.MENU_SPECIAL_MOVES;
 import isotool.filesystem.ISO;
-import isotool.filesystem.ISOFile;
 import isotool.filesystem.ISOFileSystem;
 
 import java.io.File;
@@ -20,6 +19,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -50,17 +50,43 @@ public class FileIO {
 	public static ISO loadedISOFile;
 
 	// TEST!
-	public static void init() {
+	public static void init(int character, int pointer) {
 		byte[] isoFileData;
 		isoFileData = loadedISOFile.getFileSystem()
 				.getFileData(
-						"Pl" + Character.characters[MeleeEdit.selected].id
+						"Pl" + Character.characters[character].id
 								+ ".dat");
 
 		f = ByteBuffer.wrap(isoFileData);
+		
+		System.out.println("Pl" + Character.characters[character].id
+								+ ".dat");
+		if(pointer != Integer.MIN_VALUE);
+		System.out.println(pointer);
 
-		f.position(Character.characters[MeleeEdit.selected].offset);
-
+		f.position(Character.characters[character].offset);
+		if(pointer != Integer.MIN_VALUE){
+			int offTmp = 0;
+			
+			ScriptEditWindow editor = MeleeEdit.scriptEditor;
+			
+			if(editor != null){
+				boolean specialFlag = pointer > SubAction.subActions.length-1;
+	
+				offTmp =specialFlag ? SpecialMovesList.getListForCharacter(pointer)[pointer-SubAction.subActions.length].offset * 6 * 4
+									: SubAction.subActions[pointer].offset * 6 * 4;
+				
+				f.position(offTmp);
+			}
+		}
+	}
+	
+	public static void init(int character) {
+		init(character, Integer.MIN_VALUE);
+	}
+	
+	public static void init() {
+		init(MeleeEdit.selected);
 	}
 
 	/*
@@ -143,10 +169,16 @@ public class FileIO {
 	public static void setPosition(int pos) {
 		f.position(pos);
 	}
+	
+	public static void readScripts(){
+		readScripts(Script.scripts);
+	}
 
-	public static void readScripts() {
+	public static void readScripts(ArrayList<Script> scripts) {
 		Script.number = 1;
-		Script.scripts.clear();
+		
+		ScriptEditWindow editor = MeleeEdit.scriptEditor;
+		scripts.clear();
 		MeleeEdit.scriptInner.removeAll();
 		
 		//-1 means that loopScript should be set to 0(Used after 10 00 00 00)
@@ -168,7 +200,6 @@ public class FileIO {
 			offTmp =specialFlag ? SpecialMovesList.getListForCharacter(MeleeEdit.selected)[MeleeEdit.selectedSubaction-SubAction.subActions.length].offset * 6 * 4
 								: SubAction.subActions[MeleeEdit.selectedSubaction].offset * 6 * 4;
 		} else if (MeleeEdit.selectedMenu == MENU_SPECIAL_MOVES) {
-
 			offTmp = SpecialMovesList.getListForCharacter(MeleeEdit.selected)[MeleeEdit.selectedSubaction].offset * 6 * 4;
 		} else if (MeleeEdit.selectedMenu == MENU_ALL) {
 			offTmp = MeleeEdit.selectedSubaction * 6 * 4;
@@ -182,7 +213,14 @@ public class FileIO {
 																						// only
 		}
 		
-		
+		if(editor != null){
+			
+			specialFlag = editor.getCurrentTab().subactionLocation > SubAction.subActions.length-1;
+
+			offTmp =specialFlag ? SpecialMovesList.getListForCharacter(editor.getCurrentTab().linkedCharacter.getPlaceInArray())[editor.getCurrentTab().subactionLocation-SubAction.subActions.length].offset * 6 * 4
+								: SubAction.subActions[editor.getCurrentTab().subactionLocation].offset * 6 * 4;
+			//offTmp = editor.getCurrentTab().subactionLocation;
+		}
 
 		int pointerLoc = Character.characters[MeleeEdit.selected].subOffset
 				+ 0x20 + 4 * 3 + offTmp;
@@ -192,6 +230,8 @@ public class FileIO {
 
 		// System.out.println("Pointer location: " +
 		// Integer.toHexString(pointerLoc));
+		
+		
 		setPosition(pointerLoc);
 		int offset = readInt();
 		// System.out.println("Pointer: " + Integer.toHexString(offset));
@@ -215,7 +255,7 @@ public class FileIO {
 																							   // more
 																							   // bytes
 					if (bytesDown == 0) {
-						Script.scripts.add(new Script("NO DATA FOUND",
+						scripts.add(new Script("NO DATA FOUND",
 								new int[4], 4));
 					}
 						break;
@@ -283,9 +323,12 @@ public class FileIO {
 			System.out.println("script:"+temp.isScriptInsideLoop);
 			
 			System.out.println(e.name + ":" + offset + 0x20 + bytesDown);
-			Script.scripts.add(temp);
+			scripts.add(temp);
 			Script.number++;
 			temp.toString();
+			temp.setLinkedToCharacterSubaction(Character.characters[MeleeEdit.selected], pointerLoc);
+			
+			if(editor != null)temp.editWindow = editor;
 			// System.out.println(e.name + " " + Integer.toHexString(id));
 			bytesDown += e.length;
 
@@ -324,6 +367,7 @@ public class FileIO {
 			int numSubactions = SubAction.getNum();
 			int names = 0;
 			String[] subactions = new String[numSubactions];
+			HashMap<String, Integer> occurances = new HashMap<String, Integer>();
 			int tmp = 0;
 			for (int i = 0; i < numSubactions; i++) {
 				int offTmp = i * 6 * 4;
@@ -353,14 +397,18 @@ public class FileIO {
 				if (name == "") {
 					name = "[No Name]";
 				}
-				// System.out.println(name);
-				for(int ic = 0; ic < names; ic ++){
-					if(name.equalsIgnoreCase(subactions[ic])|| subactions[ic].contains("(")){
-						tmp ++;
-					}
+				
+				int number = -1;
+				
+				if(!occurances.containsKey(name)){
+					occurances.put(name, 0);
+					number = 0;
+				}else{
+					number = occurances.get(name);
+					occurances.put(name, number+1);
 				}
-				if(tmp > 0)
-				name += "(" + tmp + ")";
+				
+			
 				subactions[i] = name;
 				names ++;
 				tmp = 0;
@@ -609,10 +657,23 @@ public class FileIO {
 	public static JFileChooser characterChooser, subactionChooser;
 	
 	//TODO read me.
-	//Saving and loading subactions doesn't function properly at the moment.
-	//The main reason why is for whatever reason the first X(X being 2 or 4 from what I've fiddled with) amount of values either aren't saved to or read from .subact files.
-	//If anyone wants to play around with this, feel free. Tell me if you are though because I plan to fix this ASAP.
-	
+	//This was inspired by a post I saw on smashboards recently
+	//http://smashboards.com/threads/sd-remix-20xx.396699/
+	//Different mods that edit characters/dol conflict with each other due to the fact that the files overwrite each other.
+	//Consider adding a feature that saves only CHANGED values in a character/dol file that crazy hand can read, then make the appropriate changes to said file.
+	//I.E saving all character changes as a .CHC(CrazyHandChange) file would work as follows:
+	//
+	//1. Crazy Hand creates a ByteBuffer/byte array for the selected character file located in def/
+	//2. Crazy Hand creates a ByteBuffer/byte array for the selected character file inside the currently loaded ISO
+	//3. Crazy Hand compares each byte within both buffers/arrays, and adds any differing values(Along with their location within the file) to an "output" string.
+	//4. Crazy Hand saves the "output" string as a .CHC file.
+	//
+	//The same principle applies to .DOL edits, which are the edits that would most commonly use .CHC instead of .subact
+	//Benefits of this include:
+	//
+	//Maximized compatibility for multiple .DOL edits -- The only conflict would be when both .CHC files edit the same section of .DOL(I.E both edit pointer 0x12345 to different values), in which case the most recently loaded one would overwrite the others.
+	//Convenient packaging and importing of multiple edited subactions(Can already be done with multiple .subact files, but it's always a nice option)
+	//
 	public static void saveSubaction(ArrayList<Script> scripts) {
 		if(subactionChooser == null){
 			subactionChooser = new JFileChooser();
