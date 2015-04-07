@@ -20,6 +20,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.text.MaskFormatter;
 
+import com.Character;
 import com.Event;
 import com.FileIO;
 import com.MeleeEdit;
@@ -44,7 +45,8 @@ public class Script extends JPanel{
 	public JButton extras;
 	public JComboBox scriptSwitchBar;
 	
-	public int subactionOffset;
+	public int subactionOffset;//Not sure if this will be needed yet. Leaving it in for the time being.
+	public Character linkedCharacter;//Not sure about this one either. We'll see.
 	
 	String[] allScripts=new String[Event.events.length];
 	
@@ -173,7 +175,7 @@ public class Script extends JPanel{
 	}
 	public void saveData(){
 		
-		if(!linkedToCharacterFile)return;//Just makes sure that stand-alone scripts aren't saved to any character files that may be open in CrazyHand
+		if(!linkedToCharacterFile){System.out.println("Tried to save an unlinked script!");return;}//Just makes sure that stand-alone scripts aren't saved to any character files that may be open in CrazyHand
 		
     	FileIO.setPosition(location);
 		for(int i = 0; i < data.length; i++)
@@ -188,17 +190,19 @@ public class Script extends JPanel{
 		
     }
 	
-	ScriptEditWindow editWindow;
+	public ScriptEditWindow editWindow;
 	public Script setInEditor(ScriptEditWindow w){
 		editWindow = w;
 		return this;
 	}
-	public Script setStandalone(){
-		this.linkedToCharacterFile = false;
+	public Script setStandalone(boolean b){
+		this.linkedToCharacterFile = b;
+		if(b)
 		this.subactionOffset = 0x0;
 		return this;
 	}
 	public Script setLinkedToCharacterSubaction(Character c, int offset){
+		this.linkedCharacter = c;
 		this.linkedToCharacterFile = true;
 		this.subactionOffset = offset;
 		return this;
@@ -323,6 +327,7 @@ public class Script extends JPanel{
 	
 	public ArrayList<Script> getArray(){
 		if(editWindow == null){
+			System.out.println("mmhm");
 			return Script.scripts;
 		}
 		else{
@@ -337,7 +342,7 @@ public class Script extends JPanel{
 		public void actionPerformed(ActionEvent arg0) {
 			
 			if(arg0.getSource() instanceof JButton){
-				if(arg0.getActionCommand()=="scriptUp"){//Tabbed code is non-debug
+				if(arg0.getActionCommand()=="scriptUp"){
 						ScriptUtils.changeScripts(arrayPlacement, arrayPlacement-1, getArray());
 						updateUI();
 						ScriptUtils.updateScripts(getArray());
@@ -359,9 +364,10 @@ public class Script extends JPanel{
 					sc.save();
 				getArray().set(ScriptUtils.getArrayIndexForScriptAtPointer(location, getArray()), sc);
 				if(linkedToCharacterFile){
-					MeleeEdit.refreshData();
+					MeleeEdit.refreshData(linkedCharacter.getPlaceInArray(), subactionOffset, getArray());
 				}
 				ScriptUtils.updateScripts(getArray());
+				
 			}
 			
 		}
