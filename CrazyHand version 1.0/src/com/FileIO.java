@@ -86,6 +86,17 @@ public class FileIO {
 	public static void init() {
 		init(MeleeEdit.selected);
 	}
+	public static void initDOL() {
+		byte[] isoFileData;
+		isoFileData = loadedISOFile.getFileSystem()
+				.getFileData(
+						"Start.dol");
+
+		f = ByteBuffer.wrap(isoFileData);
+
+		f.position(Character.characters[MeleeEdit.selected].offset);
+
+	}
 
 	/*
 	 * public static void init(int k) {// initializes character of index "k"

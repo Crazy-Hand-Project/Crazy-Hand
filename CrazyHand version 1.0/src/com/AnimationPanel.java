@@ -1,15 +1,19 @@
 package com;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 public class AnimationPanel extends JPanel{
 	public static String[] anims,animNames;
@@ -48,11 +52,25 @@ public class AnimationPanel extends JPanel{
         	
         	if(pointer != 0){
         		nodes.add(new AnimationNode(pointerLoc,pointer,FileIO.readInt(),i));
+        		
         	}
-        	for(AnimationNode n: nodes){
-        		j.add(n);
-        	}
+        	
+        	
+
+        	
+        	
+        	
+        	
+        	
 		}
+		for(AnimationNode n: nodes){
+    		j.add(n);
+    		JSeparator sep = new JSeparator(SwingConstants.HORIZONTAL);
+			//sep.setBackground(Color.BLUE);
+			j.add(sep);
+    		
+    		
+    	}
 		JScrollPane an = new JScrollPane(j);
 		an.getVerticalScrollBar().setUnitIncrement(10);
         an.setPreferredSize(new Dimension(700,500));

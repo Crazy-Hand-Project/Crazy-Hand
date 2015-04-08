@@ -135,10 +135,13 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		saveButton.setActionCommand("save");
 		saveButton.addActionListener(new SaveListener());
 
+		
+		fsmPanel = new FSMPanel();
+		
 		FileIO.init();
 
 		restorePane = new RestorePanel();
-		fsmPanel = new FSMPanel();
+		
 
 		attributeTable = new JTable(new AttributeTable());
 		// attributeTable.setPreferredScrollableViewportSize(new Dimension(700,
