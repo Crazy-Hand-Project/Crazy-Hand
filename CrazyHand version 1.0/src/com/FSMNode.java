@@ -19,15 +19,18 @@ import javax.swing.text.MaskFormatter;
 
 public class FSMNode extends JPanel{
 	JComboBox character,action;
-	JFormattedTextField value;
+	JFormattedTextField value,frame;
 	JTextField val;
-	public static String[] dummy = { "l", "k", "o"};
+	int[] data;
 	public FSMNode(int[] b, float modifier){
 		super();
 		character = new JComboBox(FSMPanel.characterNames);
 		action = new JComboBox(FSMPanel.actionNames);
 		
-		
+		data = new int[b.length];
+		for(int i = 0; i < data.length; i++){
+			data[i]=b[i];
+		}
 		for(int i = 0; i < FSMPanel.characters.length; i++){
 			if(b[0]==FSMPanel.characters[i].value){
 				character.setSelectedIndex(i);
@@ -44,6 +47,10 @@ public class FSMNode extends JPanel{
 		 value = new JFormattedTextField(new DecimalFormat("##.####"));
 		 value.setValue(modifier);
 		 value.setPreferredSize(new Dimension(80,5));
+		 
+		 frame = new JFormattedTextField(new DecimalFormat("###"));
+		 frame.setValue(b[1]);
+		 frame.setPreferredSize(new Dimension(80,5));
 		
 		
 		//JLabel nameTag = new JLabel("boobs"); 
@@ -58,19 +65,45 @@ public class FSMNode extends JPanel{
         t.add(new JSeparator(SwingConstants.VERTICAL));
         t.add(Box.createHorizontalStrut(15));
         
-        t.add(action);
+        
+        t.add(new JLabel("Starting Frame: "));
+        t.add(frame);
        
         t.add(Box.createHorizontalStrut(15));
         t.add(new JSeparator(SwingConstants.VERTICAL));
         t.add(Box.createHorizontalStrut(15));
         
+        t.add(action);
+        
+        t.add(Box.createHorizontalStrut(15));
+        t.add(new JSeparator(SwingConstants.VERTICAL));
+        t.add(Box.createHorizontalStrut(15));
+
+        t.add(new JLabel("Multiplier: "));
         t.add(value);
 
 		this.add(t);
 		
 	}
 	
-	public void save(){
+	public void save(int location){
+		//FileIO.writeByte(data[i]);
+		data[0] = FSMPanel.characters[character.getSelectedIndex()].value;
+
+		data[1] = ((Number)frame.getValue()).intValue();
+		
+		
+		if(action.getSelectedIndex() !=0)
+			BitWork.saveBits(20,31,FSMPanel.actions[action.getSelectedIndex()].value,data);
+		
+		
+		
+		FileIO.writeByte(data[0]);
+		FileIO.writeByte(data[1]);
+		FileIO.writeByte(data[2]);
+		FileIO.writeByte(data[3]);
+		FileIO.writeFloat(((Number)value.getValue()).floatValue());
+		
 	}
 	
 	

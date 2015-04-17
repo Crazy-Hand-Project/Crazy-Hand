@@ -402,6 +402,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 					n.save();
 				}
 			}
+			if(selectedMenu == MENU_FRAME_SPEED_MODIFIERS){
+				fsmPanel.save();
+			}
 
 			try {
 				FileIO.isoFileSystem

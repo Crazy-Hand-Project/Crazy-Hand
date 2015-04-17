@@ -168,6 +168,9 @@ public class FileIO {
 	public static void writeInt(int b) {
 		f.putInt(b);
 	}
+	public static void writeFloat(float b) {
+		f.putFloat(b);
+	}
 
 	public static int readInt() {
 		int val = 0;

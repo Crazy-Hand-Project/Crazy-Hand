@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -103,6 +104,7 @@ public class FSMPanel extends JPanel {
 		
 	};
 	public static String[] actionNames = new String[actions.length];
+	public ArrayList<FSMNode> nodes = new ArrayList<FSMNode>();
 
 	public FSMPanel() {
 		super();
@@ -117,6 +119,7 @@ public class FSMPanel extends JPanel {
 	}
 	
 	public void refresh(){
+		nodes.clear();
 		JPanel j = new JPanel();
 		j.setLayout(new BoxLayout(j, BoxLayout.PAGE_AXIS));
 		
@@ -147,12 +150,14 @@ public class FSMPanel extends JPanel {
 			
 			float flt = FileIO.readFloat();
 			
-			j.add(new FSMNode(b,flt));
-
-
-			j.add(new JSeparator(SwingConstants.HORIZONTAL));
+			nodes.add(new FSMNode(b,flt));
 			
 			System.out.println(b[0]);
+			
+		}
+		for(FSMNode n: nodes){
+			j.add(n);
+			j.add(new JSeparator(SwingConstants.HORIZONTAL));
 			
 		}
 
@@ -160,6 +165,14 @@ public class FSMPanel extends JPanel {
 		an.getVerticalScrollBar().setUnitIncrement(10);
         an.setPreferredSize(new Dimension(700,500));
 		this.add(an);
+	}
+	public void save(){
+		FileIO.initDOL();
+		FileIO.setPosition(0x4089b0);
+		
+		for(FSMNode n: nodes){
+			n.save(0);
+		}
 	}
 	
 	
