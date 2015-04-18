@@ -368,12 +368,15 @@ public class FileIO {
 
 		}
 	}
+	public static String[] getDefaultSubactions(){
+		return getDefaultSubactions(MeleeEdit.selected);
+	}
 
-	public static String[] getDefaultSubactions() {
+	public static String[] getDefaultSubactions(int charID) {
 		RandomAccessFile file = null;
 		try {
 			file = new RandomAccessFile("def/102/Pl"
-					+ Character.characters[MeleeEdit.selected].id + ".dat",
+					+ Character.characters[charID].id + ".dat",
 					"rw");
 
 			int numSubactions = SubAction.getNum();
@@ -383,7 +386,7 @@ public class FileIO {
 			int tmp = 0;
 			for (int i = 0; i < numSubactions; i++) {
 				int offTmp = i * 6 * 4;
-				int pointerLoc = Character.characters[MeleeEdit.selected].subOffset
+				int pointerLoc = Character.characters[charID].subOffset
 						+ 0x20 + 4 * 0 + offTmp;
 				file.seek(pointerLoc);
 				int pointer = file.readInt();

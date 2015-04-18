@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -105,6 +106,8 @@ public class FSMPanel extends JPanel {
 	};
 	public static String[] actionNames = new String[actions.length];
 	public ArrayList<FSMNode> nodes = new ArrayList<FSMNode>();
+	public JPanel j;//a temporary panel
+	public JButton addNew;
 
 	public FSMPanel() {
 		super();
@@ -120,8 +123,7 @@ public class FSMPanel extends JPanel {
 	
 	public void refresh(){
 		nodes.clear();
-		JPanel j = new JPanel();
-		j.setLayout(new BoxLayout(j, BoxLayout.PAGE_AXIS));
+		
 		
 		
 		for(int i = 0; i < characters.length; i++){
@@ -155,27 +157,99 @@ public class FSMPanel extends JPanel {
 			System.out.println(b[0]);
 			
 		}
+		update();
+		
+	}
+	
+	public void update(){
+		
+		this.removeAll();
+		
+		j = new JPanel();
+		j.setLayout(new BoxLayout(j, BoxLayout.PAGE_AXIS));
+		
+		for(int i = 0; i < nodes.size(); i++)
+		{
+			if(nodes.get(i).active == false)
+			{
+				nodes.remove(i);
+				i--;
+				
+			}
+		}
+		
 		for(FSMNode n: nodes){
+			n.reconstitute();
 			j.add(n);
 			j.add(new JSeparator(SwingConstants.HORIZONTAL));
 			
 		}
 
+		
 		JScrollPane an = new JScrollPane(j);
 		an.getVerticalScrollBar().setUnitIncrement(10);
         an.setPreferredSize(new Dimension(700,500));
+        
+        addNew = new JButton("Add New Modifier");
+        addNew.addActionListener(new AddListener());
+        
+        this.add(addNew);
 		this.add(an);
+		
+		MeleeEdit.frame.pack();
 	}
+	
+	
+	
 	public void save(){
+		Collections.sort(nodes);
+		
 		FileIO.initDOL();
 		FileIO.setPosition(0x4089b0);
-		
+		int i = 0;
 		for(FSMNode n: nodes){
 			n.save(0);
+			i++;
+		}
+		while(i<150){
+			for(int k = 0; k < 8; k++)
+				FileIO.writeByte(0);
+			i++;
+		}
+		
+		update();
+		
+		injectCode();
+	}
+	public void injectCode(){
+
+		FileIO.setPosition(0x6FF18);
+		FileIO.writeByte(0x48);
+		FileIO.writeByte(0x39);
+		FileIO.writeByte(0x85);
+		FileIO.writeByte(0x78);
+		
+		String code = "7F63DB788BE3006C3FA0804563BD30841FFF0E907FFDFA14809F00008BFF00082C0400134182001C2C04001240A200202C1F000140A2001838800013480000102C1F000140A2000838800012C03E0894FC20081ED822000080A2000480C3007080E3007460E780003FE0804063FFB9A887BF00082C1D00004182006057BC463E2C1C00FF418200147C1C20004182000C418100484BFFFFDC57BC863E7C1C280041A1FFD057BC043E7C1C30004182000C7C1C38004082FFBC839F00042C1CFFFF41820018C03F00043FE0800663FFF1907FE803A64E800021BB6100144BC679B00000000000000000000000000000000000000000000000000000000000000000";
+		
+		FileIO.setPosition(0x4088B0);
+		for(int i = 0; i < code.length(); i+=2){
+			String tmp = new StringBuilder().append("").append(code.charAt(i)).append(code.charAt(i+1)).toString();
+			int byt = Integer.decode("0x" + tmp);
+			//System.out.println(byt);
+			FileIO.writeByte(byt);
+		}
+		
+	}
+	class AddListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			int[] b = {0,0,0x80,0x2c};
+			nodes.add(new FSMNode(b,1.f));
+			
+			update();
 		}
 	}
-	
-	
 	
 	
 	
