@@ -581,6 +581,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				updateSubactions();
 			}
 			if (selectedMenu == MENU_FRAME_SPEED_MODIFIERS) {
+				//fsmPanel = new FSMPanel();
+				//fsmPanel.update();
 				//remove(saveButton);
 				add(fsmPanel, BorderLayout.CENTER);
 			}

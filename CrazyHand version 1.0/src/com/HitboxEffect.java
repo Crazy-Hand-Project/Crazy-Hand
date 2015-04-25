@@ -9,10 +9,10 @@ public class HitboxEffect {
 		new HitboxEffect(0x0C, "Slash"),
 		new HitboxEffect(0x10, "Coin"),
 		new HitboxEffect(0x14, "Ice"),
-		new HitboxEffect(0x18, "Sleep"),
-		new HitboxEffect(0x1C, "Sleep"),
-		new HitboxEffect(0x20, "Grounded"),
-		new HitboxEffect(0x24, "Grounded"),
+		new HitboxEffect(0x18, "Sleep (103 frames)"),
+		new HitboxEffect(0x1C, "Sleep (412 frames)"),
+		new HitboxEffect(0x20, "Unknown"),
+		new HitboxEffect(0x24, "Grounded (97 frames)"),
 		new HitboxEffect(0x28, "Cape"),
 		new HitboxEffect(0x2C, "Empty (doesn't hit)"),
 		new HitboxEffect(0x30, "Disabled"),
@@ -20,6 +20,7 @@ public class HitboxEffect {
 		new HitboxEffect(0x38, "Screw Attack"),
 		new HitboxEffect(0x3C, "Poison/Flower"),
 		new HitboxEffect(0x40, "Nothing (no graphic)"),
+		//new HitboxEffect(0x44, "Random"),
 	};
 
 	public int id;

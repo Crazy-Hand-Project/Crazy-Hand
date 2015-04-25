@@ -49,6 +49,8 @@ public class SubAction {
 	public static int getNum(){//returns total number of subactions for selected character
 		return (Character.characters[MeleeEdit.selected].subEnd-Character.characters[MeleeEdit.selected].subOffset)/4/6;
 	}
+	
+	
 	public static int getNum(int k){
 		return (Character.characters[k].subEnd-Character.characters[k].subOffset)/4/6;
 	}

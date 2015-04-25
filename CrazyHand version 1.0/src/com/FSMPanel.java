@@ -197,11 +197,15 @@ public class FSMPanel extends JPanel {
 		this.add(an);
 		
 		MeleeEdit.frame.pack();
+		
+		FileIO.loadedISOFile.close();
 	}
 	
 	
 	
 	public void save(){
+		FileIO.initDOL();
+		
 		Collections.sort(nodes);
 		
 		FileIO.initDOL();
@@ -217,9 +221,10 @@ public class FSMPanel extends JPanel {
 			i++;
 		}
 		
+		injectCode();
 		update();
 		
-		injectCode();
+		
 	}
 	public void injectCode(){
 

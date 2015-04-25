@@ -375,11 +375,12 @@ public class FileIO {
 	public static String[] getDefaultSubactions(int charID) {
 		RandomAccessFile file = null;
 		try {
+			//charID = 0;
 			file = new RandomAccessFile("def/102/Pl"
 					+ Character.characters[charID].id + ".dat",
 					"rw");
 
-			int numSubactions = SubAction.getNum();
+			int numSubactions = SubAction.getNum(charID);
 			int names = 0;
 			String[] subactions = new String[numSubactions];
 			HashMap<String, Integer> occurances = new HashMap<String, Integer>();

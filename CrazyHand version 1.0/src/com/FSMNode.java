@@ -69,10 +69,13 @@ public class FSMNode extends JPanel implements Comparable<FSMNode>{
 		}
 		else{
 			int id = 0;
+			boolean hold = false;
 			for(int i = 0; i < Character.characters.length; i++){
 				if(b[0] == Character.characters[i].characterID){
 					id=i;
+					hold=true;
 				}
+				System.out.println(hold);
 			}
 			String[] tmp = FileIO.getDefaultSubactions(id);
 			actionBox.removeAll();
@@ -166,11 +169,13 @@ public class FSMNode extends JPanel implements Comparable<FSMNode>{
 		}
 	}
 	public void reconstitute(){
+		FileIO.loadedISOFile.close();
+		
 		if(actionSubaction==0)
 			return;
 		
 		
-		System.out.println("YAY");
+		//System.out.println("YAY");
 		int id = 0;
 		for(int i = 0; i < Character.characters.length; i++){
 			if(character.getSelectedIndex() == Character.characters[i].characterID){
@@ -184,7 +189,7 @@ public class FSMNode extends JPanel implements Comparable<FSMNode>{
 			actionBox.addItem(tmp[i]);
 
 			
-			System.out.println("WOW" + i);
+			//System.out.println("WOW" + i);
 		}
 		actionBox.setSelectedIndex(BitWork.setBits(20,31,data));
 		MeleeEdit.frame.pack();
