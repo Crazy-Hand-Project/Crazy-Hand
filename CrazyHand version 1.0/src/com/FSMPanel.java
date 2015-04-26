@@ -18,6 +18,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
@@ -115,7 +116,7 @@ public class FSMPanel extends JPanel {
 		refresh();
 		
 
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 
 		this.setPreferredSize(new Dimension(700, 500));
@@ -154,7 +155,7 @@ public class FSMPanel extends JPanel {
 			
 			nodes.add(new FSMNode(b,flt));
 			
-			System.out.println(b[0]);
+			//System.out.println(b[0]);
 			
 		}
 		update();
@@ -193,27 +194,37 @@ public class FSMPanel extends JPanel {
         addNew = new JButton("Add New Modifier");
         addNew.addActionListener(new AddListener());
         
+        //JScrollBar sb = an.getVerticalScrollBar();
+        //sb.setValue(10000000);
+        //System.out.println(an.getVerticalScrollBar().getMaximum());
+        //System.out.println(an.getVerticalScrollBar().getValue());
+        
         this.add(addNew);
+        this.add(Box.createVerticalStrut(10));
 		this.add(an);
+		
+		
 		
 		MeleeEdit.frame.pack();
 		
-		FileIO.loadedISOFile.close();
+		//FileIO.loadedISOFile.close();
 	}
 	
 	
 	
 	public void save(){
-		FileIO.initDOL();
 		
 		Collections.sort(nodes);
 		
 		FileIO.initDOL();
+		System.out.println("po1");
 		FileIO.setPosition(0x4089b0);
+		System.out.println("po2");
 		int i = 0;
 		for(FSMNode n: nodes){
 			n.save(0);
 			i++;
+			System.out.println("po3");
 		}
 		while(i<150){
 			for(int k = 0; k < 8; k++)

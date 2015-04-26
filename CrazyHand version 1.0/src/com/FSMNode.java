@@ -75,7 +75,7 @@ public class FSMNode extends JPanel implements Comparable<FSMNode>{
 					id=i;
 					hold=true;
 				}
-				System.out.println(hold);
+				//System.out.println(hold);
 			}
 			String[] tmp = FileIO.getDefaultSubactions(id);
 			actionBox.removeAll();
@@ -102,36 +102,38 @@ public class FSMNode extends JPanel implements Comparable<FSMNode>{
 
         t.add(character);
         
-        t.add(Box.createHorizontalStrut(10));
+        int space = 10;
+        t.add(Box.createHorizontalStrut(space));
         t.add(new JSeparator(SwingConstants.VERTICAL));
-        t.add(Box.createHorizontalStrut(10));
+        t.add(Box.createHorizontalStrut(space));
         
         
         t.add(new JLabel("Starting Frame: "));
         t.add(frame);
        
-        t.add(Box.createHorizontalStrut(10));
+        t.add(Box.createHorizontalStrut(space));
         t.add(new JSeparator(SwingConstants.VERTICAL));
-        t.add(Box.createHorizontalStrut(10));
+        t.add(Box.createHorizontalStrut(space));
         
         t.add(actionBox);
         
-        t.add(Box.createHorizontalStrut(10));
+        t.add(Box.createHorizontalStrut(space));
         t.add(new JSeparator(SwingConstants.VERTICAL));
-        t.add(Box.createHorizontalStrut(10));
+        t.add(Box.createHorizontalStrut(space));
 
         t.add(new JLabel("Multiplier: "));
         t.add(value);
         
-        t.add(Box.createHorizontalStrut(10));
+        t.add(Box.createHorizontalStrut(space));
         t.add(new JSeparator(SwingConstants.VERTICAL));
-        t.add(Box.createHorizontalStrut(10));
+        t.add(Box.createHorizontalStrut(space));
         
         t.add(deleteButton);
 
 		this.add(t);
 		
-		//this.setPreferredSize(new Dimension(700,40));
+		this.setPreferredSize(new Dimension(670,60));
+		//character.setPreferredSize(new Dimension(100,30));
 		
 	}
 	
@@ -150,12 +152,13 @@ public class FSMNode extends JPanel implements Comparable<FSMNode>{
 		}
 		
 		
-		
+		System.out.println("po4");
 		FileIO.writeByte(data[0]);
 		FileIO.writeByte(data[1]);
 		FileIO.writeByte(data[2]);
 		FileIO.writeByte(data[3]);
 		FileIO.writeFloat(((Number)value.getValue()).floatValue());
+		System.out.println("po5");
 		
 	}
 	
@@ -165,11 +168,10 @@ public class FSMNode extends JPanel implements Comparable<FSMNode>{
 		public void actionPerformed(ActionEvent arg0) {
 			active=false;
 			MeleeEdit.fsmPanel.update();
-			System.out.println(character.getSelectedIndex());
+			//System.out.println(character.getSelectedIndex());
 		}
 	}
 	public void reconstitute(){
-		FileIO.loadedISOFile.close();
 		
 		if(actionSubaction==0)
 			return;
