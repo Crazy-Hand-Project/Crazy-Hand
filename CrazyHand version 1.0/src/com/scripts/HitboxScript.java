@@ -1,6 +1,7 @@
 package com.scripts;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -33,10 +34,12 @@ public class HitboxScript extends Script {
     			xOff = new JFormattedTextField(0),
     			sound = new JFormattedTextField(0),
     			hurtboxInteraction = new JFormattedTextField(0),
-    			boneAttachment = new JFormattedTextField(0);
+    			boneAttachment = new JFormattedTextField(0),
+    			hitboxId = new JFormattedTextField(0),
+    			hitboxInteraction = new JFormattedTextField(0);
     	
     	public JComboBox<String> Attribute;
-
+    	
         public HitboxScript(String n, int[] d, int l){
         	super(n,d,l);
         	
@@ -56,6 +59,8 @@ public class HitboxScript extends Script {
             for(int i = 0; i < 5; i++){
             	tmp3[i]="Option " + (i+1);
             }
+            
+            
 
             
             //int t = data[3];
@@ -97,8 +102,14 @@ public class HitboxScript extends Script {
             shieldDamage.setValue(this.setBits(143,149));
             sound.setValue(this.setBits(150,157));
             hurtboxInteraction.setValue(this.setBits(158,159));
-        	
-            int elem = this.setBits(137,143);
+            
+
+            hitboxInteraction.setValue(this.setBits(126,127));
+        	hitboxId.setValue(this.setBits(6,8));
+            
+        	System.out.println(this.setBits(121, 124));
+            
+        	int elem = this.setBits(137,143);
             elem= bit(elem,0,0);
             elem= bit(elem,1,0);
 
@@ -215,6 +226,26 @@ public class HitboxScript extends Script {
             tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
             tempPanel.add(Box.createHorizontalStrut(5));
             
+            tempPanel.add(new JLabel("Hitbox Interaction: "));
+            tempPanel.add(hitboxInteraction);
+            tempPanel.add(Box.createHorizontalStrut(5));
+            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
+            tempPanel.add(Box.createHorizontalStrut(5));
+            this.add(Box.createVerticalStrut(5));
+            this.add(tempPanel);
+            this.add(Box.createVerticalStrut(5));
+            
+            tempPanel= new JPanel();
+            tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.LINE_AXIS));
+            
+            hitboxId.setPreferredSize(new Dimension(25,hitboxId.getPreferredSize().height));
+            hitboxId.setMaximumSize(hitboxId.getPreferredSize());
+            hitboxId.setMinimumSize(hitboxId.getPreferredSize());
+            tempPanel.add(new JLabel("Hitbox ID: "));
+            tempPanel.add(hitboxId);
+            tempPanel.add(Box.createHorizontalStrut(5));
+            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
+            tempPanel.add(Box.createHorizontalStrut(5));
             
             
             this.add(Box.createVerticalStrut(5));
@@ -237,8 +268,9 @@ public class HitboxScript extends Script {
         	//data[3]= ((Number)damage.getValue()).intValue();
         	this.saveBits(23,31,((Number)damage.getValue()).intValue());
         	this.saveBits(32,47,((Number)size.getValue()).intValue());
-
-        	
+        	this.saveBits(6, 8, ((Number)hitboxId.getValue()).intValue());
+        	//System.out.println("HITBOXID:"+((Number)hitboxId.getValue()).intValue());
+        	//System.out.println("HITTBOXINT:"+((Number)hitboxInteraction.getValue()).intValue());
         	
         	
             int tmp = ((Number)zOff.getValue()).intValue();
@@ -258,7 +290,9 @@ public class HitboxScript extends Script {
             	tmp+=65536;
             }
             this.saveBits(80,95,tmp);
-         
+            
+        	//this.saveBits(125,127,((Number)hitboxInteraction.getValue()).intValue());
+            //System.out.println("HITTBOXINT:"+((Number)hitboxInteraction.getValue()).intValue());
             
             this.saveBits(96,104,((Number)angle.getValue()).intValue());
             this.saveBits(105,113,((Number)knockbackGrowth.getValue()).intValue());

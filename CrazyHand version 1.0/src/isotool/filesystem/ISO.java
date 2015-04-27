@@ -13,6 +13,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+import javax.swing.JOptionPane;
+
+import com.MeleeEdit;
+import com.Options;
+
 /**
  * Represents a GameCube ISO.
  * 
@@ -42,6 +47,25 @@ public class ISO {
 	 * @throws FileNotFoundException
 	 */
 	public void reload() throws FileNotFoundException {
+		
+		if(Options.dolphinInstance != null && Options.dolphinInstance.isAlive()){
+			String ln = System.lineSeparator();
+
+		    JOptionPane optionPane = new JOptionPane(
+				    JOptionPane.ERROR_MESSAGE,
+				    JOptionPane.OK_CANCEL_OPTION);
+			int res = optionPane.showConfirmDialog(MeleeEdit.frame, "Changes to the ISO cannot be made while it is running in Dolphin. Click \"OK\" to close it now, then hit \"save\" again.", "ISO is open in Dolphin", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
+			
+			if(res!=JOptionPane.OK_OPTION){
+				return;
+			}
+			else
+			{
+				Options.destroyDolphinInstance();
+				return;
+			}
+		}
+		
 		if (!isOpen())
 			isoFile = new RandomAccessFile(chosenISOFile, "rw");
 	}

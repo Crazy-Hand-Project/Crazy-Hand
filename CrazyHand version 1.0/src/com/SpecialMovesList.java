@@ -19,7 +19,7 @@ public class SpecialMovesList{
 		specialAttributesToCharacterMap.clear();
 		attributeInstance = new SpecialAttributeIndex();
 		//***Comment out these lines if they are causing long load times***
-		SubAction[] none = {new SubAction(0x125,"No special Moves! DO NOT EDIT")};
+		SubAction[] none = {};
 		
 		movesToCharacterMap.put(Character.characters[0],bowserSpecialMoves);
 		movesToCharacterMap.put(Character.characters[1],ganonfalconSpecialMoves);

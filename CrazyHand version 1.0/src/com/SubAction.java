@@ -55,14 +55,5 @@ public class SubAction {
 		return (Character.characters[k].subEnd-Character.characters[k].subOffset)/4/6;
 	}
 	
-	
-		//Made in the last version(Pre-crazy hand) to make the names of moves a little prettier in the GUI
-		//Currently used for convienience with special move names
-		//Can also be used later down the line for supporting multiple languages
-		public String getLocalizedName()
-		{
-			return name.replaceAll("b'", "");
-		}
-	
 
 }

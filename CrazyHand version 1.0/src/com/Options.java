@@ -1,16 +1,28 @@
 package com;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
+import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.scripts.ScriptUtils;
 
 public class Options
 {
@@ -37,11 +49,9 @@ public class Options
 					hasDolphinPath = true;
 					dolphinPath = o.split("optDolphinPath:")[1];
 				}
-				System.out.println(o);
 			}
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -61,7 +71,6 @@ public class Options
 			try {
 				f.createNewFile();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			
@@ -81,7 +90,6 @@ public class Options
 			
 			out.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -97,19 +105,19 @@ public class Options
 		  -b, --batch             	Exit Dolphin with emulator
 		  -V, --video_backend=<str>  	Specify a video plugin
 		  -A, --audio_emulation=<str>  	Low level (LLE) or high level (HLE) audio
-	 */
-	
-	//Currently only writes a functional file for Windows.
-	//I need to find a couple people with mac/linux willing to test the program
-	//so I can make run files for their OS.
+		  
+		  
+		  
+		  
+		//Don't think we'll be needing this function anymore.
 	public static void writeDolphinRunFile(){
+		
 		File f = new File("runDolphin.bat");
 		
 		if(!f.exists())
 			try {
 				f.createNewFile();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			
@@ -127,17 +135,32 @@ public class Options
 			
 			out.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	
+	*/
 	
 	public static void openDolphin()
 	{
-		String OS = System.getProperty("os.name");
-		if(OS.startsWith("Windows")) {
+		if(dolphinInstance != null && dolphinInstance.isAlive()){
+		String ln = System.lineSeparator();
+
+	    JOptionPane optionPane = new JOptionPane(
+			    JOptionPane.QUESTION_MESSAGE,
+			    JOptionPane.OK_CANCEL_OPTION);
+		int res = optionPane.showConfirmDialog(MeleeEdit.frame, "There is already an instance of Dolphin running! Would you like to close it now?", "Dolphin is already running", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+		
+		if(res!=JOptionPane.OK_OPTION){
+			return;
+		}
+	}
+		
+		if(Options.dolphinInstance != null && Options.dolphinInstance.isAlive()){
+			destroyDolphinInstance();
+		}
+		
+		
 			if(!Options.hasDolphinPath) {
 				FileNameExtensionFilter exeFilter = new FileNameExtensionFilter(
 						"EXE Files", "exe");
@@ -146,34 +169,42 @@ public class Options
 				fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
 				fc.addChoosableFileFilter(exeFilter);
 				fc.setFileFilter(exeFilter);
-
+				
+				
 				int returnVal = fc.showOpenDialog(MeleeEdit.frame);
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					Options.dolphinPath=fc.getCurrentDirectory().getPath();
 					Options.hasDolphinPath=true;
-					Options.writeDolphinRunFile();
 					Options.saveOptions();
 				}
 			}
 			
-			try {
-				File fi = new File("runDolphin.bat");
-				Runtime.getRuntime().exec("cmd /c start runDolphin.bat");
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			File fi = new File(dolphinPath);
+			String[] prg = {dolphinPath+"\\Dolphin.exe",
+							"/e" + FileIO.loadedISOFile.getChosenISOFile().getPath()
+						   };
+			ProcessBuilder pb = new ProcessBuilder(prg);
+			
+			if(fi.exists()){
+				try {
+					dolphinInstance = pb.start();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			
 		}
-		else {
-			try {
-				Runtime.getRuntime().exec("cmd /c start runDolphin.bat");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+	}
+	
+	public static void destroyDolphinInstance(){
+		Options.dolphinInstance.destroy();
+		 Options.dolphinInstance = null;
+	}
+	
+	public static Process dolphinInstance;
+	
+	public static boolean isOSWindows(){
+		return System.getProperty("os.name").startsWith("Windows");
 	}
 	
 	//TODO More options for how the GUI looks.

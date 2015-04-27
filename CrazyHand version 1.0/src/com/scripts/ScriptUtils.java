@@ -2,6 +2,8 @@ package com.scripts;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import com.Event;
 import com.FileIO;
 import com.MeleeEdit;
@@ -55,6 +57,17 @@ public class ScriptUtils {
 		
 		return result;
 	}
+	
+	public static int getHighestPointerInScriptList(ArrayList<Script> scripts){
+		int result = Integer.MIN_VALUE+1;
+		for(int i = 0; i < scripts.size(); i ++){
+			if(scripts.get(i).location > result){
+				result = scripts.get(i).location;
+			}
+		}
+		
+		return result;
+	}
 
 
 	public static int getArrayIndexForScriptAtPlace(Script arg0)
@@ -87,6 +100,7 @@ public class ScriptUtils {
 	//I don't plan to release this in its current state for a major release, but I plan to have it finished in time for one.
 	
 	public static Script createBaseScript(int loc, int script){
+		
 		int[] scriptData = new int[0x4];
 		for(int i = 0; i < scriptData.length; i ++)
 		{
@@ -94,7 +108,63 @@ public class ScriptUtils {
 		}
 		Script result = new Script("Whoops, this isn't supposed to happen!", scriptData, 0x74);//Result ALWAYS needs to be overwritten.
 		
+		ArrayList<Script> effectedScripts = new ArrayList<Script>();
 		Event e = Event.events[script];
+		curSubStart = getLowestPointerInScriptList(result.getArray());
+		 curSubEnd = getHighestPointerInScriptList(result.getArray());
+		int differingSize = e.length - Event.getEvent(result.getArray().get(ScriptUtils.getArrayIndexForScriptAtPointer(loc, result.getArray())).id).length;
+		
+		if(differingSize>0){
+			System.out.println("Differing sizes in replace; Script is bigger than the previous one!");
+			int space = e.length-Event.getEvent(result.getArray().get(ScriptUtils.getArrayIndexForScriptAtPointer(loc, result.getArray())).id).length;
+			int placement = result.arrayPlacement+1;
+			int effectedBytes = 0;
+			//While there's still more scripts to find
+			while(space > 0){
+				Script sc = result.getArray().get(placement);
+				space -= Event.getEvent(sc.id).length;
+				effectedScripts.add(sc);
+				placement ++;
+			}
+			
+			String effects = "";
+			for(int i = 0; i < effectedScripts.size(); i ++){
+				effects += effectedScripts.get(i).name;
+				effects += "(Offset: 0x"+ Integer.toHexString(effectedScripts.get(i).location) +")";
+				effects += "\n";
+				effectedBytes += Event.getEvent(effectedScripts.get(i).id).length;
+				
+			}
+			
+			JOptionPane optionPane = new JOptionPane(
+				    JOptionPane.QUESTION_MESSAGE,
+				    JOptionPane.OK_CANCEL_OPTION);
+			
+			
+			
+			String debugWarning="BE WARNED; If there are four pairs of zeroes in a row (00 00 00 00) within"+"\n"+
+					"the subaction's data, Crazy Hand will think that is the end of the subaction."+"\n"+
+					"This is a known bug and is being worked on."+"\n";
+			
+			int res = optionPane.showConfirmDialog(result, e.name + " is " + differingSize + " bytes larger than the script it is replacing!\n"+
+				    										"If you choose to continue, the following scripts in this subaction will be overwritten/effected!\n\n"+
+				    										effects+"\n"+
+				    										"Hit \"OK\" if you wish to continue.", "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+			
+			if(res!=JOptionPane.OK_OPTION){
+				return result.getArray().get(ScriptUtils.getArrayIndexForScriptAtPointer(loc, result.getArray()));
+			}
+			
+			System.out.println("effb:"+effectedBytes);
+			
+		}
+		
+		if(differingSize<0){
+			System.out.println("Differing sizes in replace; Script is smaller than the previous one!");
+			ScriptUtils.fixScriptsAfterSwap(result.getArray());
+		}
+		
+		System.out.println("EFSCRSIZE:"+effectedScripts.size());
 		
 		scriptData = new int[e.length];
 		for(int i = 0; i < scriptData.length; i ++)
@@ -118,14 +188,74 @@ public class ScriptUtils {
 			scriptData[0]=e.id;
 			result = new Script(e.name, scriptData, loc);
 		}
-		
-			for(int i = 0; i < result.data.length; i ++)
-			{
-				System.out.println(result.data[i]);
-			}
-		
+		//ScriptUtils.fixScriptsAfterSwap(result.getArray());
 		return result;
 	}
+	
+	public static int curSubStart;
+	public static int curSubEnd;
+	
+	public static void fixScriptsAfterSwap(ArrayList<Script> scripts){
+		FileIO.init();
+		for(Script script: scripts){
+			script.saveData();
+		}
+		FileIO.init();
+		int bytesDown = curSubStart;
+		int id = 0;
+		int scriptSize = 0;
+		int scriptParsed = 0;
+		boolean flag = false;
+		Event e=null;
+		System.out.println("Checking for zeroes. Start: 0x" + Integer.toHexString(curSubStart) + " End: 0x" + Integer.toHexString(curSubEnd));
+		while(bytesDown < curSubEnd){
+			
+			FileIO.setPosition(bytesDown);
+			id = FileIO.readByte();
+			id &= ~0b1;
+			id &= ~0b10;
+			if(scriptParsed>=scriptSize){
+				e = Event.getEvent(id);
+				scriptParsed=0;
+				scriptSize=e.length;
+			}
+				if (FileIO.readByte() == 0 && FileIO.readByte() == 0 && FileIO.readByte() == 0 && FileIO.readByte() == 0) {// check
+																							   // three
+																							   // times
+																							   // for
+																							   // three
+																							   // more
+																							   // bytes
+					scriptParsed+=3;
+					System.out.println("Found four zeroes in a script!");
+					if((scriptParsed >= scriptSize &&id==0)){
+						System.out.println("Zeroes not attached to any script at pointer 0x" + Integer.toHexString(bytesDown+3) + " ID:"+ Integer.toHexString(id));
+						FileIO.setPosition(bytesDown+3);
+						FileIO.writeByte(0xCC);
+						FileIO.writeByte(0x00);
+						FileIO.writeByte(0x00);
+						FileIO.writeByte(0x00);
+						flag = true;
+						FileIO.readScripts();
+						FileIO.init();
+					}
+					else
+					scriptParsed-=3;
+					
+				}
+			FileIO.setPosition(bytesDown);
+			scriptParsed++;
+			bytesDown++;
+		}
+		
+		if(flag){
+			ScriptUtils.fixScriptsAfterSwap(scripts);
+		}
+		else
+		System.out.println("Finished checking for zeroes at index 0x" + Integer.toHexString(bytesDown));
+		
+	}
+	
 	
 	public static int getArrayIndexForScriptAtPointer(int p, ArrayList<Script> scripts)
 	{
@@ -170,11 +300,11 @@ public class ScriptUtils {
 			}
 			ScriptUtils.updateScripts(scripts);
 			if(scripts.get(0).linkedToCharacterFile){
-				FileIO.init(scripts.get(0).linkedCharacter.getPlaceInArray(), scripts.get(0).subactionOffset);
+				FileIO.init(scripts.get(0).linkedCharacter.getPlaceInArray());
 				for (Script script : scripts) {
 					script.save();
 				}
-				FileIO.init(scripts.get(0).linkedCharacter.getPlaceInArray(), scripts.get(0).subactionOffset);
+				FileIO.init(scripts.get(0).linkedCharacter.getPlaceInArray());
 				FileIO.readScripts(scripts.get(0).getArray());
 				if(scripts.get(0).editWindow != null){
 					scripts.get(0).editWindow.updateScripts();

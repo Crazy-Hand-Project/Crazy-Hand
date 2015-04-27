@@ -24,6 +24,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -47,7 +48,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 	public static String[] options = { "Attributes",
 			"Subactions (Attacks only)",// "Subactions (Special moves)",
-			"Subactions (All)", "Animation Swapping", "Special Attributes", "Frame Speed Modifiers","Other",
+			"Subactions (All)", "Animation Swapping", "Character specific Attributes", "Frame Speed Modifiers","Other",
 	// "Special Moves",
 	// "Frames Speed Modifiers",
 	//
@@ -67,6 +68,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	public static JComboBox subactionList;
 
 	public static JComboBox subactionList2;
+	
+	public static int loggedSubactionSelection=0;
 
 	public JComboBox specialList;
 	public JComboBox optionList;
@@ -75,6 +78,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	public static RestorePanel restorePane;
 	public static AnimationPanel animationPanel;
 	public static FSMPanel fsmPanel;
+	
+	public static ScriptEditWindow scriptEditor = null;
 
 	public static JPanel scriptInner;
 
@@ -136,7 +141,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		saveButton.addActionListener(new SaveListener());
 
 		
-		fsmPanel = new FSMPanel();
+		//fsmPanel = new FSMPanel();
 		
 		FileIO.init();
 
@@ -186,7 +191,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			JMenu menu = new JMenu("File");
 			JMenu runMenu = new JMenu("Run");
 			JMenu optionsMenu = new JMenu("Options");
-			JMenu subactionEditorMenu = new JMenu("Subaction editor");
+			//Close to complete, but not ready at this time.
+			//JMenu subactionEditorMenu = new JMenu("Subaction editor");
 			
 			fileListener fl = new fileListener();
 			
@@ -205,7 +211,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				JMenuItem m = new JMenuItem();
 					m.setEnabled(false);
 					
-					
+					/*
 					JMenuItem editorButton = new JMenuItem("Open subaction editor");
 						editorButton.setOpaque(false);
 						editorButton.setBackground(new Color(0xEBEBEB));
@@ -218,7 +224,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 						newTabButton.setEnabled(false);
 					subactionEditorMenu.add(editorButton);
 					subactionEditorMenu.add(newTabButton);
-				
+				*/
 			menu.add(openButton);
 			menu.add(saveCharacterButton);
 			menu.add(loadCharacterButton);
@@ -226,10 +232,14 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			menu.add(closeButton);
 			
 				JMenuItem dolphinButton = new JMenuItem("Run loaded ISO in Dolphin");
-				if(!System.getProperty("os.name").startsWith("Windows")){
+				//Pretty sure running dolphin will work for all OS's now.
+				
+				/*
+				if(!Options.isOSWindows()){
 					dolphinButton.setToolTipText("This currently only works for windows!");
 					dolphinButton.setEnabled(false);
 				}
+				*/
 				dolphinButton.addActionListener(fl);
 				dolphinButton.setActionCommand("runDolphin");
 				
@@ -248,7 +258,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			
 			//fileMenu.add(Box.createHorizontalStrut(5));
 			//fileMenu.add(optionsMenu);
-			//fileMenu.add(Box.createHorizontalStrut(5));
+			fileMenu.add(Box.createHorizontalStrut(5));
 			//fileMenu.add(subactionEditorMenu);
 		}
 
@@ -268,8 +278,6 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		// }
 
 	}
-	
-	public static ScriptEditWindow scriptEditor = null;
 	
 	public static void openScriptEditor(){
 		scriptEditor = new ScriptEditWindow();
@@ -350,7 +358,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				if(MeleeEdit.scriptEditor == null){
 					MeleeEdit.openScriptEditor();
 				}
-				MeleeEdit.scriptEditor.createNewTab(MeleeEdit.selected, MeleeEdit.selectedSubaction);
+				MeleeEdit.scriptEditor.createNewTab(MeleeEdit.selected, MeleeEdit.selectedSubaction, MeleeEdit.selectedSubaction);
 				String att = selectedMenu == MENU_ATTACKS ? (String)subactionList.getSelectedItem() : (String)subactionList2.getSelectedItem();
 				MeleeEdit.scriptEditor.currentTab = MeleeEdit.scriptEditor.tabs.size()-1;
 				MeleeEdit.scriptEditor.getCurrentTab().scriptName = Character.characters[selected].name + ":" + att;
@@ -402,6 +410,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 					n.save();
 				}
 			}
+			
 			if(selectedMenu == MENU_FRAME_SPEED_MODIFIERS){
 				fsmPanel.save();
 			}
@@ -527,26 +536,16 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			JComboBox cb = (JComboBox) e.getSource();
 			selectedMenu = cb.getSelectedIndex();
 			
-			newTabButton.setEnabled(false);
+			//newTabButton.setEnabled(false);
 			//loadSubactionButton.setEnabled(false);
 			
 			removeAll();
 			add(comboPane, BorderLayout.PAGE_START);
 			add(saveButton, BorderLayout.PAGE_END);
 			
+			MeleeEdit.loggedSubactionSelection = MeleeEdit.selectedMenu == MeleeEdit.MENU_ATTACKS ? MeleeEdit.subactionList.getSelectedIndex() : MeleeEdit.subactionList2.getSelectedIndex();
+			
 			if(selectedMenu == MENU_SPECIAL_ATTRIBUTES) {
-				/*
-				FileIO.init();
-				FileIO.readScriptsWithinRange(0x00003624/6/4, 0x000037A8/6/4);
-				
-				scriptPanel.remove(subactionList2);
-				scriptPanel.remove(scripts);
-				scriptPanel.add(subactionList);
-				scriptPanel.add(scripts);
-
-				add(scriptPanel, BorderLayout.CENTER);
-				*/
-				
 				if(SpecialMovesList.getSpecialAttributesForCharacter(selected) != null){
 					updateSpecialAttributes();
 				}
@@ -576,15 +575,46 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				add(scriptPanel, BorderLayout.CENTER);
 				// comboPane.add(subactionList);
 				
-				newTabButton.setEnabled(true);
+				//newTabButton.setEnabled(true);
 
 				updateSubactions();
+				
+				if(MeleeEdit.loggedSubactionSelection>MeleeEdit.subactionList.getItemCount()){
+					MeleeEdit.loggedSubactionSelection = 0;
+				}
+				
+				MeleeEdit.subactionList.setSelectedIndex(MeleeEdit.loggedSubactionSelection);
 			}
+			
+			//TODO Maybe we should move the FSM button to the "other" pane until we can sort it out for universal ISO use?
 			if (selectedMenu == MENU_FRAME_SPEED_MODIFIERS) {
-				//fsmPanel = new FSMPanel();
-				//fsmPanel.update();
 				//remove(saveButton);
-				add(fsmPanel, BorderLayout.CENTER);
+				
+				JOptionPane optionPane = new JOptionPane(
+					    JOptionPane.QUESTION_MESSAGE,
+					    JOptionPane.OK_CANCEL_OPTION);
+				
+				
+				
+				String debugWarning="BE WARNED; If there are four pairs of zeroes in a row (00 00 00 00) within"+"\n"+
+						"the subaction's data, Crazy Hand will think that is the end of the subaction."+"\n"+
+						"This is a known bug and is being worked on."+"\n";
+				
+				int res = optionPane.showConfirmDialog(MeleeEdit.frame, "This feature is ONLY available for use with a 20XX modded ISO.\n"+
+																"Using a non-20XX ISO will cause Crazy Hand to crash, and may corrupt some important data on the ISO.\n"+
+					    										"Only hit \"OK\" if you are using a 20XX iso.", "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+				
+				if(res==JOptionPane.OK_OPTION){
+					if(fsmPanel==null){
+						fsmPanel = new FSMPanel();
+					}
+					add(fsmPanel, BorderLayout.CENTER);
+				}
+				else{
+					MeleeEdit.selectedMenu=MENU_ATTRIBUTES;
+					cb.setSelectedIndex(MeleeEdit.MENU_ATTRIBUTES);
+					actionPerformed(new ActionEvent(e.getSource(), e.getID(), e.getActionCommand()));
+				}
 			}
 			if (selectedMenu == MENU_ALL) {
 				scriptPanel.remove(subactionList);
@@ -596,9 +626,15 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				add(scriptPanel, BorderLayout.CENTER);
 				// comboPane.add(subactionList);
 				
-				newTabButton.setEnabled(true);
+				//newTabButton.setEnabled(true);
 
 				updateSubactions();
+				
+				if(MeleeEdit.loggedSubactionSelection>MeleeEdit.subactionList2.getItemCount()){
+					MeleeEdit.loggedSubactionSelection = 0;
+				}
+				
+				MeleeEdit.subactionList2.setSelectedIndex(MeleeEdit.loggedSubactionSelection);
 			}
 			if (selectedMenu == MENU_OTHER) {
 				remove(saveButton);
@@ -620,7 +656,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			JComboBox cb = (JComboBox) e.getSource();
 
 			selectedSubaction = cb.getSelectedIndex();
-
+			FileIO.init();
 			FileIO.readScripts();
 		}
 	}
@@ -835,7 +871,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		// currently this is only used for when restoring characters to defaults
 		// It refreshes the subactions values, etc to reflect the change to
 		// default
-		FileIO.init(c, pointer);
+		FileIO.init(c);
 		FileIO.readScripts(scripts);
 		FileIO.setPosition(Character.characters[MeleeEdit.selected].offset);
 		for (int i = 0; i < Attribute.attributes.length; i++) {

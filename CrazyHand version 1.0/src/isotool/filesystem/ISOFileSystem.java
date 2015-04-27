@@ -221,6 +221,7 @@ public class ISOFileSystem {
 
 			return true;
 		}
+		System.out.println("File replace failed! iso size:" + data.length + " replace size:" + data.length);
 		return false;
 
 	}

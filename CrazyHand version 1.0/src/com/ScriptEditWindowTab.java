@@ -55,7 +55,7 @@ public class ScriptEditWindowTab extends JPanel {
 		
 		
 		
-			this.addScriptAt(0x0, ScriptUtils.createBaseScript(0x0, Event.getEventPlacementFromName(Event.getEvent(0x0C).name)));
+		this.addScriptAt(0x0, new Script("No data found!", new int[]{0,0,0,0},0));
 	}
 	
 	public void updateName(){
@@ -81,11 +81,13 @@ public class ScriptEditWindowTab extends JPanel {
 	Character linkedCharacter = null;
 	
 	int subactionLocation = 0x0;
+	int selectedSubactionIndex = 0;
 	
-	public ScriptEditWindowTab setLinkedToSubaction(int loc, Character c){
+	public ScriptEditWindowTab setLinkedToSubaction(int loc, Character c, int subactionIndex){
 		this.linkedCharacter = c;
 		this.linkedToCharacter = true;
 		this.subactionLocation = loc;
+		this.selectedSubactionIndex = subactionIndex;
 		updateScripts();
 		return this;
 	}
@@ -133,7 +135,8 @@ public class ScriptEditWindowTab extends JPanel {
 	public void updateScripts(){
 		//ScriptUtils.updateScripts(scriptsInTab);
 		if(linkedToCharacter){
-			FileIO.init(linkedCharacter.getPlaceInArray(), subactionLocation);
+			System.out.println("Linked to " + Character.characters[linkedCharacter.getPlaceInArray()].name);
+			FileIO.init(linkedCharacter.getPlaceInArray());
 			boolean flag = true;
 			for(int i = 0; i < scriptsInTab.size(); i ++){
 				Script scr = scriptsInTab.get(i);
@@ -141,13 +144,16 @@ public class ScriptEditWindowTab extends JPanel {
 					flag = false;
 				}
 			}
-			FileIO.readScripts(scriptsInTab);
+			FileIO.readScripts(scriptsInTab, linkedCharacter.getPlaceInArray(), selectedSubactionIndex);
 			for (Script script : scriptsInTab) {
-				script.save();
+				//script.save();
 			}
 			
 			if(!flag){
-				FileIO.readScripts(scriptsInTab);
+				
+				if(text!=null)
+				System.out.println("Tab " +text.getText() + " has a script not linked to a character");
+				FileIO.readScripts(scriptsInTab, linkedCharacter.getPlaceInArray(), selectedSubactionIndex);
 				//scriptsInTab = cloneScriptArray(Script.scripts);
 				for(int i = 0; i < scriptsInTab.size(); i ++){
 					//if(!scriptsInTab.get(i).linkedToCharacterFile){
@@ -168,8 +174,8 @@ public class ScriptEditWindowTab extends JPanel {
 			
 			
 
-			FileIO.init(linkedCharacter.getPlaceInArray(), subactionLocation);
-			FileIO.readScripts(scriptsInTab);
+			FileIO.init(linkedCharacter.getPlaceInArray());
+			FileIO.readScripts(scriptsInTab,linkedCharacter.getPlaceInArray(), subactionLocation);
 			
 		}
 		

@@ -113,10 +113,10 @@ public class ScriptEditWindow extends JFrame implements ActionListener {
 	}
 	
 	public void updateScripts(){
-		//getCurrentTab().refresh();
+		getCurrentTab().refresh();
 		ScriptUtils.updateScripts(getCurrentTab().scriptsInTab);
 		if(getCurrentTab().linkedToCharacter){
-			FileIO.init(getCurrentTab().linkedCharacter.getPlaceInArray(), getCurrentTab().subactionLocation);
+			FileIO.init(getCurrentTab().linkedCharacter.getPlaceInArray());
 		}
 		scriptInner.removeAll();
 		int start = ScriptUtils.getLowestPointerInScriptList(getCurrentTab().scriptsInTab);
@@ -196,7 +196,7 @@ public class ScriptEditWindow extends JFrame implements ActionListener {
 		
 		if(cmd.startsWith("addscript_")){
 			String[] spl = cmd.split("addscript_");
-			this.tabs.get(currentTab).addScriptAt(size+0x4, ScriptUtils.createBaseScript(size+0x4, Integer.parseInt(spl[1])));
+			//this.tabs.get(currentTab).addScriptAt(size+0x4, ScriptUtils.createBaseScript(size+0x4, Integer.parseInt(spl[1])));
 			updateScripts();
 		}
 		if(cmd.startsWith("tab_")){
@@ -208,13 +208,13 @@ public class ScriptEditWindow extends JFrame implements ActionListener {
 			if(getCurrentTab().linkedToCharacter){
 				int id = getCurrentTab().linkedCharacter.getPlaceInArray();
 				int pointer = getCurrentTab().subactionLocation;
-				FileIO.init(id, pointer);
+				FileIO.init(id);
 				for (Script script : getCurrentTab().scriptsInTab) {
 					script.save();
 				}
 	
-				FileIO.init(id, pointer);
-				FileIO.readScripts(getCurrentTab().scriptsInTab);
+				FileIO.init(id);
+				FileIO.readScripts(getCurrentTab().scriptsInTab, getCurrentTab().linkedCharacter.getPlaceInArray(), getCurrentTab().selectedSubactionIndex);
 				updateScripts();
 			}
 			else{
@@ -262,7 +262,7 @@ public class ScriptEditWindow extends JFrame implements ActionListener {
 	}
 
 
-	public void createNewTab(int selected, int selectedSubaction) {
+	public void createNewTab(int selected, int selectedSubaction, int subactionIndex) {
 		for(ScriptEditWindowTab tab : tabs){
 			if(tab.linkedToCharacter && tab.subactionLocation==selectedSubaction){
 				System.out.println("Tried to load an already loaded tab for a subaction!");
@@ -272,7 +272,7 @@ public class ScriptEditWindow extends JFrame implements ActionListener {
 		}
 		
 		ScriptEditWindowTab tab = new ScriptEditWindowTab(this, this.tabs.size());
-		tab.setLinkedToSubaction(selectedSubaction, Character.characters[selected]);
+		tab.setLinkedToSubaction(selectedSubaction, Character.characters[selected], subactionIndex);
 		
 		tab.updateScripts();
 		ScriptUtils.updateScripts(getCurrentTab().scriptsInTab);
@@ -285,6 +285,7 @@ public class ScriptEditWindow extends JFrame implements ActionListener {
 		this.update(getGraphics());
 		tabList.add(Box.createHorizontalGlue());
 		tabList.updateUI();
+		
 		pack();
 	}
 	

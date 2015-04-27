@@ -170,8 +170,12 @@ public class Script extends JPanel{
 	public boolean linkedToCharacterFile = true;
 	
 	public void save(){
+		if(linkedToCharacterFile&&linkedCharacter!=null){
+			FileIO.init(linkedCharacter.getPlaceInArray());
+		}
     	updateData();
     	saveData();
+    	FileIO.init();
 	}
 	public void saveData(){
 		
@@ -321,13 +325,12 @@ public class Script extends JPanel{
 			}
 		}
 		s+="&&";
-		System.out.println(s);
+		//System.out.println(s);
 		return s;
 	}
 	
 	public ArrayList<Script> getArray(){
 		if(editWindow == null){
-			System.out.println("mmhm");
 			return Script.scripts;
 		}
 		else{
@@ -335,6 +338,8 @@ public class Script extends JPanel{
 		}
 	}
 	
+	
+
 	
 	class ButtonActionListener implements ActionListener{
 
@@ -361,13 +366,23 @@ public class Script extends JPanel{
 				Script sc = ScriptUtils.createBaseScript(location, cb.getSelectedIndex());
 				sc.linkedToCharacterFile = linkedToCharacterFile;
 				sc.editWindow = editWindow;
-					sc.save();
+				sc.save();
 				getArray().set(ScriptUtils.getArrayIndexForScriptAtPointer(location, getArray()), sc);
 				if(linkedToCharacterFile){
 					MeleeEdit.refreshData(linkedCharacter.getPlaceInArray(), subactionOffset, getArray());
 				}
-				ScriptUtils.updateScripts(getArray());
 				
+				ScriptUtils.fixScriptsAfterSwap(getArray());
+				
+				ScriptUtils.updateScripts(getArray());
+				//FileIO.readScripts();
+				FileIO.init();
+				for (Script script : Script.scripts) {
+					script.save();
+				}
+
+				FileIO.init();
+				FileIO.readScripts();
 			}
 			
 		}

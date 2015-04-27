@@ -37,9 +37,9 @@ public class AnimationNode extends JPanel{
 		nameTag.setFont(new Font("wut", Font.BOLD, 14));
 		
 		Box  t = Box.createHorizontalBox();
-		t.add( Box.createHorizontalGlue() );
         //t.setLayout(new BoxLayout(t, BoxLayout.LINE_AXIS));
         t.add(nameTag);
+        t.add(Box.createHorizontalGlue());
         t.add(choice);
         //t.add(new JLabel("Value: " + Integer.toString(pointerValue)));
         t.add( Box.createHorizontalGlue() );
