@@ -217,14 +217,14 @@ public class FSMPanel extends JPanel {
 		Collections.sort(nodes);
 		
 		FileIO.initDOL();
-		//System.out.println("po1");
+		System.out.println("po1");
 		FileIO.setPosition(0x4089b0);
-		//System.out.println("po2");
+		System.out.println("po2");
 		int i = 0;
 		for(FSMNode n: nodes){
 			n.save(0);
 			i++;
-			//System.out.println("po3");
+			System.out.println("po3");
 		}
 		while(i<150){
 			for(int k = 0; k < 8; k++)

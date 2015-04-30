@@ -388,4 +388,20 @@ public class Script extends JPanel{
 		}
 	}
 	
+	
+	public void setAsGarbageData(){
+		setAsGarbageData(0,data.length);
+	}
+	//Start and end are specified in case a need for this method to only overwrite part of a script arises in the future.	
+	public void setAsGarbageData(int start, int end) {
+		for(int i = start; i < end; i ++){
+			if(i % 4 == 0){
+				data[i]=0xCC;
+			}else
+				data[i]=0x00;
+		}
+		System.out.println("Overwriting script at 0x"+Integer.toHexString(location)+" with CC 00 00 00 per 4 bytes");
+		saveData();
+	}
+	
 }

@@ -1,28 +1,20 @@
 package com;
 
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-import javax.swing.Box;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import com.scripts.ScriptUtils;
 
 public class Options
 {
@@ -87,9 +79,34 @@ public class Options
 			if(hasDolphinPath)
 			out.write("optDolphinPath:"+dolphinPath+ln);
 			out.write("tabSubactions:"+tabSubactions+ln);
-			
 			out.close();
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void writeRandomSeed(Long newSeed)
+	{
+		File f = new File("randomSeeds.txt");
+		
+		if(!f.exists())
+			try {
+				f.createNewFile();
+				System.out.println("si senor is new");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		try {
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("randomSeeds.txt", true)));
+			//List<String> lines = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
+			String ln = System.lineSeparator();
+			
+			Date d = Calendar.getInstance().getTime();
+
+			out.write(newSeed + " (Created:"+d.toGMTString()+")"+ln);
+			out.close();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -211,6 +228,32 @@ public class Options
 	//Not a high priority at the moment.
 	class userPreferences {
 		
+	}
+	
+	//Was used for writing byte-by-byte differences after character loading
+	//Might recycle this in the future.
+	public static void writeDebug(String s) {
+		File f = new File("debug.txt");
+		
+		if(!f.exists())
+			try {
+				f.createNewFile();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		try {
+			PrintWriter out = new PrintWriter("debug.txt");
+			
+			String ln = System.lineSeparator();
+			
+			Date d = Calendar.getInstance().getTime();
+			System.out.println(d.toGMTString());
+			out.write(s);
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

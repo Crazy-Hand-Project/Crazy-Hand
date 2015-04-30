@@ -412,7 +412,6 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			}
 			
 			if(selectedMenu == MENU_FRAME_SPEED_MODIFIERS){
-				
 				fsmPanel.save();
 			}
 
@@ -606,9 +605,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 					    										"Only hit \"OK\" if you are using a 20XX iso.", "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 				
 				if(res==JOptionPane.OK_OPTION){
-					//if(fsmPanel==null){
+					if(fsmPanel==null){
 						fsmPanel = new FSMPanel();
-					//}
+					}
 					add(fsmPanel, BorderLayout.CENTER);
 				}
 				else{
@@ -639,6 +638,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			}
 			if (selectedMenu == MENU_OTHER) {
 				remove(saveButton);
+				//restorePane = new RestorePanel();
 				add(restorePane, BorderLayout.CENTER);
 			}
 			if (selectedMenu == MENU_ANIMATION) {

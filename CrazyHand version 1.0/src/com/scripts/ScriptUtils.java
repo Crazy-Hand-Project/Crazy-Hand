@@ -117,7 +117,7 @@ public class ScriptUtils {
 		if(differingSize>0){
 			System.out.println("Differing sizes in replace; Script is bigger than the previous one!");
 			int space = e.length-Event.getEvent(result.getArray().get(ScriptUtils.getArrayIndexForScriptAtPointer(loc, result.getArray())).id).length;
-			int placement = result.arrayPlacement+1;
+			int placement = ScriptUtils.getArrayIndexForScriptAtPointer(loc, result.getArray())+1;
 			int effectedBytes = 0;
 			//While there's still more scripts to find
 			while(space > 0){
@@ -156,12 +156,22 @@ public class ScriptUtils {
 			}
 			
 			System.out.println("effb:"+effectedBytes);
-			
+			for(Script garbage : effectedScripts){
+				garbage.setAsGarbageData();
+			}
 		}
 		
 		if(differingSize<0){
 			System.out.println("Differing sizes in replace; Script is smaller than the previous one!");
-			ScriptUtils.fixScriptsAfterSwap(result.getArray());
+			Script replaced = result.getArray().get(ScriptUtils.getArrayIndexForScriptAtPointer(loc,result.getArray()));
+			
+			int leftoverBytes = Math.abs(differingSize);
+			
+			System.out.println(Event.getEvent(replaced.id).name+"(size:"+replaced.data.length+") Replaced by:"+e.name+"(size:"+e.length+")"+"Left over:("+leftoverBytes+")");
+			replaced.setAsGarbageData();
+			
+			
+			//ScriptUtils.fixScriptsAfterSwap(result.getArray());
 		}
 		
 		System.out.println("EFSCRSIZE:"+effectedScripts.size());

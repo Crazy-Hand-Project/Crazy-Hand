@@ -1,5 +1,6 @@
 package com;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,36 +8,44 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.Format;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JTextField;
+import javax.swing.text.MaskFormatter;
 
 public class RestorePanel extends JPanel {
 	public JButton btn102, btn102All, btn101, btn101All, btn100, btn100All,
 			btnPAL, btnPALAll, randoBtn;
 	public JCheckBox rawBox;
+	
+	public JTextField randomSeed;
 
 	public RestorePanel() {
 		super();
-		this.add(Box.createVerticalStrut(15));
+		Box horizontalBox = Box.createHorizontalBox();
+		Box verticalBox = Box.createVerticalBox();
+		
+		verticalBox.add(Box.createVerticalStrut(15));
 
 		btn102 = new JButton("Restore This Character to v1.02 Defaults");
 		btn102.setActionCommand("Restore");
 		btn102.addActionListener(new L102());
-		this.add(btn102);
-		this.add(Box.createVerticalStrut(15));
+		verticalBox.add(btn102);
+		verticalBox.add(Box.createVerticalStrut(15));
 
 		btn102All = new JButton("Restore ALL Characters to v1.02 Defaults");
 		btn102All.setActionCommand("Restore");
 		btn102All.addActionListener(new L102All());
-		this.add(btn102All);
-		this.add(Box.createVerticalStrut(15));
+		verticalBox.add(btn102All);
+		verticalBox.add(Box.createVerticalStrut(15));
 
 		btn101 = new JButton("Restore This Character to v1.01 Defaults");
 		btn101.setActionCommand("Restore");
@@ -71,32 +80,86 @@ public class RestorePanel extends JPanel {
 		rawBox = new JCheckBox("Use raw data for subactions");
 		// rawBox.setMnemonic(KeyEvent.VK_C);
 		rawBox.setSelected(false);
-		this.add(rawBox);
+		verticalBox.add(rawBox);
 
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-
-		//randoBtn = new JButton("Randomize ALL Characters");
-		//randoBtn.setActionCommand("Restore");
-		//randoBtn.addActionListener(new LRando());
 		
+		LRando randLstner = new LRando();
+		
+		randoBtn = new JButton("Randomize ALL Characters");
+		randoBtn.setActionCommand("Restore");
+		randoBtn.addActionListener(randLstner);
+		
+		randomSeed = new JTextField();
+		randomSeed.setEditable(true);
+		
+		randomSeed.setPreferredSize(new Dimension(100,randomSeed.getPreferredSize().height));
+		randomSeed.setMaximumSize(randomSeed.getPreferredSize());
+		//randomSeed.setMinimumSize(randomSeed.getPreferredSize());
 		/*
 		openISOBtn = new JButton("Open Another ISO...");
 		openISOBtn.addActionListener(new OpenISOAction());
 		this.add(openISOBtn);
 		*/
+		//this.add(Box.createHorizontalGlue());
 		
-
-
-
-		//this.add(randoBtn);
-		//this.add(Box.createVerticalStrut(10));
-		//this.add(new JLabel(
-		//		"  Note: Randomization will take approximately 10-20 seconds to complete and there's no visual cue of progress"));
-
+		//randoBtn.add(Box.createHorizontalGlue());
+		
+		
+		verticalBox.add(Box.createVerticalStrut(10));
+		horizontalBox.add(verticalBox);
+		this.add(horizontalBox);
+		//this.add(b);
+		Box b = Box.createHorizontalBox();
+		b.add(randoBtn);
+		
+		b.add(Box.createHorizontalGlue());
+		this.add(b);
+		
+		this.add(Box.createVerticalStrut(10));
+		Box tmp = Box.createHorizontalBox();
+		JLabel label = new JLabel(
+				"  Note: Randomization will take approximately 10-20 seconds to complete and there's no visual cue of progress");
+		tmp.add(label);
+		tmp.add(Box.createHorizontalGlue());
+		this.add(tmp);
+		
+		this.add(Box.createVerticalStrut(5));
+		Box bx = Box.createHorizontalBox();
+		bx.add(new JLabel("Randomizer seed: "));
+		bx.add(randomSeed);
+		//bx.add(new JLabel("(Numbers only!)"));
+		bx.add(Box.createHorizontalStrut(5));
+		JButton randomseedbutton = new JButton("?");
+		randomseedbutton.setActionCommand("RandomSeedHelp");
+		randomseedbutton.addActionListener(randLstner);
+		//bx.add(randomseedbutton);
+		bx.add(Box.createHorizontalGlue());
+		
+		//horizontalBox.add(verticalBox);
+		
+		this.add(bx);
+		
 		this.add(Box.createVerticalStrut(300));
 		this.add(new JLabel("  Hidden message! :O"));
 
-		this.setPreferredSize(new Dimension(700, 200));
+		this.setPreferredSize(new Dimension(700, 300));
+	}
+
+	public long getRandomSeed(){
+		String res = "";
+		for(int i = 0; i < MeleeEdit.restorePane.randomSeed.getText().length(); i ++){
+			char c = MeleeEdit.restorePane.randomSeed.getText().toLowerCase().charAt(i);
+			res += java.lang.Character.getNumericValue(c);
+		}
+		
+		String test = ""+res;
+		
+		if(test.length()>(""+Long.MAX_VALUE).length()){
+			test = test.substring(0, (""+Long.MAX_VALUE).length());
+			res = test;
+		}
+		return Long.parseLong(res);
 	}
 	
 	
@@ -176,9 +239,19 @@ class L102All implements ActionListener {
 
 class LRando implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
-
-		FileIO.randoTize();
-
+		String cmd = e.getActionCommand();
+		if(cmd=="Restore"){
+			FileIO.randoTize();
+		}
+		if(cmd=="RandomSeedHelp"){
+			JOptionPane optionPane = new JOptionPane(
+				    JOptionPane.PLAIN_MESSAGE,
+				    JOptionPane.PLAIN_MESSAGE);
+			String msg = "";
+			
+			JOptionPane.showMessageDialog((Component) e.getSource(), msg, "Random seed", JOptionPane.PLAIN_MESSAGE);
+			
+		}
 	}
 
 }

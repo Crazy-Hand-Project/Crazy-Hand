@@ -152,13 +152,13 @@ public class FSMNode extends JPanel implements Comparable<FSMNode>{
 		}
 		
 		
-		//System.out.println("po4");
+		System.out.println("po4");
 		FileIO.writeByte(data[0]);
 		FileIO.writeByte(data[1]);
 		FileIO.writeByte(data[2]);
 		FileIO.writeByte(data[3]);
 		FileIO.writeFloat(((Number)value.getValue()).floatValue());
-		//System.out.println("po5");
+		System.out.println("po5");
 		
 	}
 	

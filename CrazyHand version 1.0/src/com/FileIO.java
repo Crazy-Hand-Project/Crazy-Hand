@@ -442,22 +442,46 @@ public class FileIO {
 	}
 
 	public static void randoTize() {
+		boolean hasSeed = false;
+		if(MeleeEdit.restorePane.randomSeed.getText().length()>0){
+			long seed;
+			
+			seed = MeleeEdit.restorePane.getRandomSeed();
+			//System.out.println(MeleeEdit.restorePane.randomSeed.getText());
+			System.out.println("Character randomization seed:"+seed);
+			
+			rand = new Random(seed);
+			hasSeed = true;
+		}else
+		{
+			rand = new Random();
+				Options.writeRandomSeed(SeedGetter.getSeed(rand));
+			
+		}
+		
+		//if(1==1)return;
+		
+		int maxIts = Character.characters.length
+				* (SubAction.subActions.length + Attribute.attributes.length);
+		int its = 0;
 
 		int ints[] = { 14, 34, 58, 59, 60, 61, 62 };
 		int dos[] = { 2, 6, 10, 14, 15, 16, 19, 20, 23, 24, 25, 26, 29, 34, 35,
 				36, 42, 43, 58, 59, 60, 61, 62, 65, 66 };
 		for (int i = 0; i < Character.characters.length - 1; i++) {
-			System.out.println("Yo dog" + i);
-			init(i);
+			byte[] isoFileData;
+			isoFileData = loadedISOFile.getFileSystem().getFileData(
+					"Pl" + Character.characters[i].id + ".dat");
+
+			f = ByteBuffer.wrap(isoFileData);
 			for (int k = 0; k < Attribute.attributes.length; k++) {
-				System.out.println("Yo diiigggg");
 				boolean hold = false;
 				for (int p = 0; p < dos.length; p++) {
 					if (dos[p] == k)
 						hold = true;
 				}
 				if (Attribute.attributes[k].name != "????" && hold) {
-					setPosition(Character.characters[i].offset + k * 4);
+					f.position(Character.characters[i].offset + k * 4);
 					// float tmp = f.readFloat();
 					// 35
 					float tmp = (float) Attribute.avg[k];
@@ -474,14 +498,13 @@ public class FileIO {
 						}
 					}
 
-					setPosition(Character.characters[i].offset + k * 4);
-					writeFloat(tmp);
-					System.out.println("Yo dawg");
-
+					f.position(Character.characters[i].offset + k * 4);
+					f.putFloat(tmp);
+					its++;
+					// System.out.println(its / (float) maxIts * 100 + "%");
 				}
 			}
 			for (int k = 0; k < SubAction.subActions.length; k++) {
-				System.out.println("Yo dragger");
 				// /MeleeEdit.selected=i;
 				// MeleeEdit.selectedSubaction=k;
 				// MeleeEdit.selectedMenu=1;
@@ -495,19 +518,35 @@ public class FileIO {
 					}
 
 				}
-
+				its++;
+				// System.out.println(its / (float) maxIts * 100 + "%");
 			}
+			try {
+				FileIO.loadedISOFile.reload();
+				FileIO.isoFileSystem
+						.replaceFile(FileIO.isoFileSystem.getCurrentFile(),
+								FileIO.f.array());
+
+				System.out.println("Saved: "
+						+ FileIO.isoFileSystem.getCurrentFile().getName());
+
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+			its++;
+			// System.out.println(its / (float) maxIts * 100 + "%");
 		}
 
 		FileIO.loadedISOFile.close();
-
 	}
 
 	public static void randoScripts(int sub, int chara) {
 		Script.scripts.clear();
 
-		int offTmp = SubAction.subActions[sub].offset * 6 * 4;
-		int pointerLoc = Character.characters[chara].subOffset + 0x20 + 4 * 3 + offTmp;
+		int offTmp = convertSubactionMenuSelection(chara, sub, true);
+		int pointerLoc = Character.characters[chara].subOffset + 0x20 + 4 * 3
+				+ offTmp;
 
 		setPosition(pointerLoc);
 		int offset = readInt();
@@ -516,7 +555,6 @@ public class FileIO {
 		int bytesDown = 0;
 
 		while (true) {
-			
 			setPosition(offset + 0x20 + bytesDown);
 			id = readByte();
 			id &= ~0b1;
@@ -531,6 +569,7 @@ public class FileIO {
 				}
 				break;
 			}
+
 			setPosition(offset + 0x20 + bytesDown);
 			int[] d = new int[e.length];
 			for (int i = 0; i < e.length; i++) {
@@ -634,6 +673,7 @@ public class FileIO {
 	//
 	public static void saveCharacter(int selected) {
 			characterChooser = new JFileChooser();
+			System.out.println("SAVE:"+selected);
 			FileNameExtensionFilter datFilter = new FileNameExtensionFilter(
 					"DAT Files", "dat");
 			characterChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
@@ -670,6 +710,7 @@ public class FileIO {
 
 	public static void loadCharacter(int selected) {
 			characterChooser = new JFileChooser();
+			System.out.println("LOAD:"+selected);
 			FileNameExtensionFilter datFilter = new FileNameExtensionFilter(
 					"DAT Files", "dat");
 			characterChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
@@ -682,6 +723,7 @@ public class FileIO {
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			try{
+				FileIO.init();
 				File fi = characterChooser.getSelectedFile();
 				if(!fi.exists()){System.out.println("Tried to load a file that didn't exist!");return;}
 				
@@ -692,16 +734,39 @@ public class FileIO {
 				
 				ByteBuffer charData = ByteBuffer.wrap(characterFileData);
 				charData.position(0);
-				f.position(Character.characters[MeleeEdit.selected].offset);
+				f.position(Character.characters[selected].offset);
 				f = charData;
+				/*Used for checking if there were ANY differences between the two files
+				 * Only used for debugging purposes and is not needed.
+				String diffs = "";
+				int place = 0;
+				System.out.println("Starting file comparison");
+				while(charData.hasRemaining()){
+					byte b1 = charData.get();
+					byte b2 = f.get();
+					if(b1!=b2){
+						diffs += ("@"+place+":"+b1+":"+b2+"\n");
+					}
+					place ++;
+				}
+				System.out.println("Finished file comparison");
+				FileIO.init();
+				charData.position(0);
+				System.out.println("Starting to write debug");
+				Options.writeDebug(diffs);
+				System.out.println("Finished writing debug");
+				*/
 				
-				//loadedISOFile.getISO().seek(Character.characters[MeleeEdit.selected].offset);
-				//loadedISOFile.getISO().write(f.array());
 				FileIO.loadedISOFile.reload();
 				isoFileSystem.replaceFile(isoFileSystem.getCurrentFile(), charData.array());
 				
 				
+				FileIO.loadedISOFile.close();
 				raf.close();
+				//isoFileSystem.clearCachedISOFiles();
+				
+				FileIO.loadedISOFile.reload();
+				FileIO.init();
 				
 			}
 			catch(Exception e){}
