@@ -75,9 +75,9 @@ public class RestorePanel extends JPanel {
 
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-		randoBtn = new JButton("Randomize ALL Characters");
-		randoBtn.setActionCommand("Restore");
-		randoBtn.addActionListener(new LRando());
+		//randoBtn = new JButton("Randomize ALL Characters");
+		//randoBtn.setActionCommand("Restore");
+		//randoBtn.addActionListener(new LRando());
 		
 		/*
 		openISOBtn = new JButton("Open Another ISO...");
@@ -88,10 +88,10 @@ public class RestorePanel extends JPanel {
 
 
 
-		this.add(randoBtn);
-		this.add(Box.createVerticalStrut(10));
-		this.add(new JLabel(
-				"  Note: Randomization will take approximately 10-20 seconds to complete and there's no visual cue of progress"));
+		//this.add(randoBtn);
+		//this.add(Box.createVerticalStrut(10));
+		//this.add(new JLabel(
+		//		"  Note: Randomization will take approximately 10-20 seconds to complete and there's no visual cue of progress"));
 
 		this.add(Box.createVerticalStrut(300));
 		this.add(new JLabel("  Hidden message! :O"));

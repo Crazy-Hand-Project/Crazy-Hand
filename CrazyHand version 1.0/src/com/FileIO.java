@@ -442,27 +442,22 @@ public class FileIO {
 	}
 
 	public static void randoTize() {
-		int maxIts = Character.characters.length
-				* (SubAction.subActions.length + Attribute.attributes.length);
-		int its = 0;
 
 		int ints[] = { 14, 34, 58, 59, 60, 61, 62 };
 		int dos[] = { 2, 6, 10, 14, 15, 16, 19, 20, 23, 24, 25, 26, 29, 34, 35,
 				36, 42, 43, 58, 59, 60, 61, 62, 65, 66 };
 		for (int i = 0; i < Character.characters.length - 1; i++) {
-			byte[] isoFileData;
-			isoFileData = loadedISOFile.getFileSystem().getFileData(
-					"Pl" + Character.characters[i].id + ".dat");
-
-			f = ByteBuffer.wrap(isoFileData);
+			System.out.println("Yo dog" + i);
+			init(i);
 			for (int k = 0; k < Attribute.attributes.length; k++) {
+				System.out.println("Yo diiigggg");
 				boolean hold = false;
 				for (int p = 0; p < dos.length; p++) {
 					if (dos[p] == k)
 						hold = true;
 				}
 				if (Attribute.attributes[k].name != "????" && hold) {
-					f.position(Character.characters[i].offset + k * 4);
+					setPosition(Character.characters[i].offset + k * 4);
 					// float tmp = f.readFloat();
 					// 35
 					float tmp = (float) Attribute.avg[k];
@@ -479,13 +474,14 @@ public class FileIO {
 						}
 					}
 
-					f.position(Character.characters[i].offset + k * 4);
-					f.putFloat(tmp);
-					its++;
-					// System.out.println(its / (float) maxIts * 100 + "%");
+					setPosition(Character.characters[i].offset + k * 4);
+					writeFloat(tmp);
+					System.out.println("Yo dawg");
+
 				}
 			}
 			for (int k = 0; k < SubAction.subActions.length; k++) {
+				System.out.println("Yo dragger");
 				// /MeleeEdit.selected=i;
 				// MeleeEdit.selectedSubaction=k;
 				// MeleeEdit.selectedMenu=1;
@@ -499,24 +495,8 @@ public class FileIO {
 					}
 
 				}
-				its++;
-				// System.out.println(its / (float) maxIts * 100 + "%");
+
 			}
-			try {
-				FileIO.loadedISOFile.reload();
-				FileIO.isoFileSystem
-						.replaceFile(FileIO.isoFileSystem.getCurrentFile(),
-								FileIO.f.array());
-
-				System.out.println("Saved: "
-						+ FileIO.isoFileSystem.getCurrentFile().getName());
-
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-
-			its++;
-			// System.out.println(its / (float) maxIts * 100 + "%");
 		}
 
 		FileIO.loadedISOFile.close();
@@ -527,8 +507,7 @@ public class FileIO {
 		Script.scripts.clear();
 
 		int offTmp = SubAction.subActions[sub].offset * 6 * 4;
-		int pointerLoc = Character.characters[chara].subOffset + 0x20 + 4 * 3
-				+ offTmp;
+		int pointerLoc = Character.characters[chara].subOffset + 0x20 + 4 * 3 + offTmp;
 
 		setPosition(pointerLoc);
 		int offset = readInt();
@@ -537,6 +516,7 @@ public class FileIO {
 		int bytesDown = 0;
 
 		while (true) {
+			
 			setPosition(offset + 0x20 + bytesDown);
 			id = readByte();
 			id &= ~0b1;
@@ -551,7 +531,6 @@ public class FileIO {
 				}
 				break;
 			}
-
 			setPosition(offset + 0x20 + bytesDown);
 			int[] d = new int[e.length];
 			for (int i = 0; i < e.length; i++) {
