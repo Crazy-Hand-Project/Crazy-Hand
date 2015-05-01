@@ -220,17 +220,6 @@ public class HitboxScript extends Script {
             tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
             tempPanel.add(Box.createHorizontalStrut(5));
             
-            tempPanel.add(new JLabel("Hurtbox Interaction: "));
-            tempPanel.add(hurtboxInteraction);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-            tempPanel.add(new JLabel("Hitbox Interaction: "));
-            tempPanel.add(hitboxInteraction);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
             this.add(Box.createVerticalStrut(5));
             this.add(tempPanel);
             this.add(Box.createVerticalStrut(5));
@@ -238,9 +227,27 @@ public class HitboxScript extends Script {
             tempPanel= new JPanel();
             tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.LINE_AXIS));
             
-            hitboxId.setPreferredSize(new Dimension(25,hitboxId.getPreferredSize().height));
-            hitboxId.setMaximumSize(hitboxId.getPreferredSize());
-            hitboxId.setMinimumSize(hitboxId.getPreferredSize());
+            
+            
+            tempPanel.add(new JLabel("Hurtbox Interaction: "));
+            tempPanel.add(hurtboxInteraction);
+            tempPanel.add(Box.createHorizontalStrut(5));
+            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
+            tempPanel.add(Box.createHorizontalStrut(5));
+            
+           
+            
+            
+            tempPanel.add(new JLabel("Hitbox Interaction: "));
+            tempPanel.add(hitboxInteraction);
+            tempPanel.add(Box.createHorizontalStrut(5));
+            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
+            tempPanel.add(Box.createHorizontalStrut(5));
+            
+            
+            //hitboxId.setPreferredSize(new Dimension(25,hitboxId.getPreferredSize().height));
+            //hitboxId.setMaximumSize(hitboxId.getPreferredSize());
+            //hitboxId.setMinimumSize(hitboxId.getPreferredSize());
             tempPanel.add(new JLabel("Hitbox ID: "));
             tempPanel.add(hitboxId);
             tempPanel.add(Box.createHorizontalStrut(5));

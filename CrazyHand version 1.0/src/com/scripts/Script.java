@@ -83,7 +83,7 @@ public class Script extends JPanel{
 
 		numTag = new JLabel(" " + (arrayPlacement+1) + "   ");// + name + "(Loc:"+Integer.toHexString(this.location)+")"); 
 		numTag.setFont(new Font("wut", Font.BOLD, 18));
-		offsetTag = new JLabel("   Offset: 0x" + Integer.toHexString(this.location));
+		offsetTag = new JLabel("         Offset: 0x" + Integer.toHexString(this.location));
 		offsetTag.setFont(new Font("wut", Font.ITALIC, 12));
 				
 		
@@ -92,11 +92,11 @@ public class Script extends JPanel{
 		Box b0 = Box.createHorizontalBox();
 		
 		
-		JButton upButton = new JButton("^");
+		JButton upButton = new JButton("Up");
 		upButton.setToolTipText("Move this script up");
 		upButton.setActionCommand("scriptUp");
 		
-		JButton downButton = new JButton("v");
+		JButton downButton = new JButton("Down");
 		downButton.setToolTipText("Move this script down");
 		downButton.setActionCommand("scriptDown");
 		
@@ -112,7 +112,7 @@ public class Script extends JPanel{
         pan.setLayout(new BoxLayout(pan, BoxLayout.X_AXIS));
 		Box  b = Box.createHorizontalBox();
         b.add(numTag);
-        b.add( Box.createHorizontalGlue() );
+        //b.add( Box.createHorizontalGlue() );
         
         for(int i = 0; i < Event.events.length; i ++){
         	allScripts[i]=Event.events[i].name+"  ["+Event.events[i].length+" bytes]";
@@ -123,6 +123,7 @@ public class Script extends JPanel{
         scriptSwitchBar.addActionListener(bac);
         scriptSwitchBar.setToolTipText("Change the kind of script this is.");
         scriptSwitchBar.setFont(new Font("wut", Font.BOLD, 14));
+        //scriptSwitchBar.getEditor().getEditorComponent().setBackground(Color.WHITE);
         b.add(scriptSwitchBar);
          
         b.add(offsetTag);

@@ -116,6 +116,7 @@ public class FSMNode extends JPanel implements Comparable<FSMNode>{
         t.add(Box.createHorizontalStrut(space));
         
         t.add(actionBox);
+        actionBox.setPreferredSize(new Dimension(150,30));
         
         t.add(Box.createHorizontalStrut(space));
         t.add(new JSeparator(SwingConstants.VERTICAL));
