@@ -882,6 +882,6 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	}
 
 	public static void updateTitle(String isoPath) {
-		frame.setTitle("Crazy Hand " + Config.VERSION + " [" + isoPath + "]");
+		frame.setTitle("Crazy Hand v" + Config.VERSION + " [" + isoPath + "]");
 	}
 }

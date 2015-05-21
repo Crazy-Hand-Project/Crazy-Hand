@@ -39,6 +39,7 @@ public class Event {
     	new Event(0x3C, 0x4, "Terminate Specific Collision"),
     	new Event(0x6C, 0x4, "Set All Bones State"),
     	new Event(0x70, 0x4, "Set Specific Bone State"),
+    	new Event(0xE8, 0x10, "Unknown"),
     	
     	//new Event(0x4e, 0x4, "B button check?"),
     	//01 checks if b button is held down, and if it is not continues the script. See young link's arrow start.
