@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
+import com.FileIO;
+
 
 public class SynchronousScript extends Script {
     	
@@ -41,8 +43,11 @@ public class SynchronousScript extends Script {
             
         }
         
+        public void scramble(){
+        	data[3]=FileIO.randInt(data[3]/2,data[3]*2-((data[3]*2)/2));
+        }
+        
         public void updateData(){
-        	
         	data[3]=((Number)frames.getValue()).intValue();
         }
     }

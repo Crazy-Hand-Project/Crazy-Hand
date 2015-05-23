@@ -1,8 +1,5 @@
 package com;
 
-import static com.MeleeEdit.MENU_ALL;
-import static com.MeleeEdit.MENU_ATTACKS;
-import static com.MeleeEdit.MENU_SPECIAL_MOVES;
 import isotool.filesystem.ISO;
 import isotool.filesystem.ISOFileSystem;
 
@@ -16,15 +13,10 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.SpecialAttributeIndex.SpecialMoveAttribute;
@@ -33,6 +25,7 @@ import com.scripts.GraphicScript;
 import com.scripts.HitboxScript;
 import com.scripts.LoopScript;
 import com.scripts.Script;
+import com.scripts.SelfDamageScript;
 import com.scripts.SmashChargeScript;
 import com.scripts.SoundScript;
 import com.scripts.SynchronousScript;
@@ -183,7 +176,7 @@ public class FileIO {
 		int result;
 		
 		if (subaction == -1) {
-			subaction = 0;System.out.println("ye");
+			subaction = 0;
 		}
 		
 		boolean specialFlag = subaction > SubAction.subActions.length-1;//Used for reading special moves once finished reading normal attacks
@@ -443,6 +436,7 @@ public class FileIO {
 
 	public static void randoTize() {
 		boolean hasSeed = false;
+		randomizingScripts = true;
 		if(MeleeEdit.restorePane.randomSeed.getText().length()>0){
 			long seed;
 			
@@ -458,8 +452,6 @@ public class FileIO {
 				Options.writeRandomSeed(SeedGetter.getSeed(rand));
 			
 		}
-		
-		//if(1==1)return;
 		
 		int maxIts = Character.characters.length
 				* (SubAction.subActions.length + Attribute.attributes.length);
@@ -504,6 +496,8 @@ public class FileIO {
 					// System.out.println(its / (float) maxIts * 100 + "%");
 				}
 			}
+			System.out.println("Starting hitbox rando for character "+Character.characters[i].name);
+			SubAction[] subactions = SubAction.subActions;
 			for (int k = 0; k < SubAction.subActions.length; k++) {
 				// /MeleeEdit.selected=i;
 				// MeleeEdit.selectedSubaction=k;
@@ -512,13 +506,15 @@ public class FileIO {
 				randoScripts(k, i);
 
 				for (Script s : Script.scripts) {
-					if (s.id == 0x2c) {
+					if (s.id == 0x2C || s.id==0x0C || s.id == 0x04) {
 						s.scramble();
 						s.save();
+						s=null;
 					}
 
 				}
 				its++;
+				//System.gc();
 				// System.out.println(its / (float) maxIts * 100 + "%");
 			}
 			try {
@@ -529,28 +525,30 @@ public class FileIO {
 
 				System.out.println("Saved: "
 						+ FileIO.isoFileSystem.getCurrentFile().getName());
-
+				FileIO.loadedISOFile.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-
+			//System.gc();
 			its++;
 			// System.out.println(its / (float) maxIts * 100 + "%");
 		}
-
+		randomizingScripts = false;
 		FileIO.loadedISOFile.close();
 	}
 
 	public static void randoScripts(int sub, int chara) {
 		Script.scripts.clear();
 
-		int offTmp = convertSubactionMenuSelection(chara, sub, true);
-		int pointerLoc = Character.characters[chara].subOffset + 0x20 + 4 * 3
-				+ offTmp;
+		int offTmp = SubAction.subActions[sub].offset * 6 * 4;
+		int pointerLoc = Character.characters[chara].subOffset
+				+ 0x20 + 4 * 3 + offTmp;
 
 		setPosition(pointerLoc);
 		int offset = readInt();
-
+		
+		//System.out.println("|offset|"+Integer.toHexString(offset)+"|pos+offtmp|"+Integer.toHexString(pointerLoc)+"|offtmp|"+Integer.toHexString(offTmp)+"|char|"+Character.characters[chara].name);
+		
 		int id;
 		int bytesDown = 0;
 
@@ -587,13 +585,17 @@ public class FileIO {
 			} else {
 				temp = new Script(e.name, d, offset + 0x20 + bytesDown);
 			}
+			//temp.setLinkedToCharacterSubaction(Character.characters[chara], pointerLoc);
 			Script.scripts.add(temp);
 
 			bytesDown += e.length;
 
 		}
+		//ScriptUtils.updateScripts(Script.scripts);
 	}
-
+	
+	public static boolean randomizingScripts=false;
+	
 	static Random rand = new Random();
 
 	public static int randInt(int min, int max) {
@@ -657,7 +659,7 @@ public class FileIO {
 	//This was inspired by a post I saw on smashboards recently
 	//http://smashboards.com/threads/sd-remix-20xx.396699/
 	//Different mods that edit characters/dol conflict with each other due to the fact that the files overwrite each other.
-	//Consider adding a feature that saves only CHANGED values in a character/dol file that crazy hand can read, then make the appropriate changes to said file.
+	//Consider adding a feature that saves only CHANGED values in a chacter/dol file that crazy hand can read, then make the appropriate changes to said file.
 	//I.E saving all character changes as a .CHC(CrazyHandChange) file would work as follows:
 	//
 	//1. Crazy Hand creates a ByteBuffer/byte array for the selected character file located in def/

@@ -92,7 +92,6 @@ public class Options
 		if(!f.exists())
 			try {
 				f.createNewFile();
-				System.out.println("si senor is new");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

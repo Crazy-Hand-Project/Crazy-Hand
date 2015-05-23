@@ -194,6 +194,10 @@ public class ScriptUtils {
 			result = new ThrowScript(e.name, scriptData, loc);
 		} else if (e.id == 0x68) {
 			result = new BodyStateScript(e.name, scriptData, loc);
+		} else if (e.id == 0x44||e.id==0x40) {
+			scriptData[10]=0x7F;
+			scriptData[11]=0x40;
+			result = new SoundScript(e.name, scriptData, loc);
 		} else {
 			scriptData[0]=e.id;
 			result = new Script(e.name, scriptData, loc);

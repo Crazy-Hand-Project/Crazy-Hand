@@ -8,6 +8,8 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.text.MaskFormatter;
 
+import com.FileIO;
+
 public class LoopScript extends Script {
 	
 	JFormattedTextField repeatAmount = new JFormattedTextField(0),
@@ -67,6 +69,10 @@ public class LoopScript extends Script {
         
         repeatAmount.setValue(data[3]);
 //        repeatFrames.setValue(data[7]);
+	}
+	
+	public void scramble(){
+		data[3]=FileIO.randInt(1,data[3]*2-((data[3]*2)/2));
 	}
 	
 	public void updateData(){

@@ -22,26 +22,47 @@ import com.HitboxEffect;
 public class HitboxScript extends Script {
     	
 	
-    	JFormattedTextField baseKnockback = new JFormattedTextField(0),
-    			knockbackGrowth = new JFormattedTextField(0),
-    			weightKnockback = new JFormattedTextField(0),
-    			damage = new JFormattedTextField(0),
-    			shieldDamage = new JFormattedTextField(0),
-    			size = new JFormattedTextField(0),
-    			angle = new JFormattedTextField(0),
-    			zOff = new JFormattedTextField(0),
-    			yOff = new JFormattedTextField(0),
-    			xOff = new JFormattedTextField(0),
-    			sound = new JFormattedTextField(0),
-    			hurtboxInteraction = new JFormattedTextField(0),
-    			boneAttachment = new JFormattedTextField(0),
-    			hitboxId = new JFormattedTextField(0),
-    			hitboxInteraction = new JFormattedTextField(0);
+    	JFormattedTextField baseKnockback ,
+    			knockbackGrowth ,
+    			weightKnockback ,
+    			damage ,
+    			shieldDamage ,
+    			size ,
+    			angle ,
+    			zOff ,
+    			yOff ,
+    			xOff ,
+    			sound ,
+    			hurtboxInteraction ,
+    			boneAttachment ,
+    			hitboxId ,
+    			hitboxInteraction ;
     	
     	public JComboBox<String> Attribute;
     	
         public HitboxScript(String n, int[] d, int l){
         	super(n,d,l);
+        	
+        	//Prevents memory waste
+        	if(FileIO.randomizingScripts){
+        		return;
+        	}
+        	
+        			baseKnockback = new JFormattedTextField(0);
+        			knockbackGrowth = new JFormattedTextField(0);
+        			weightKnockback = new JFormattedTextField(0);
+        			damage = new JFormattedTextField(0);
+        			shieldDamage = new JFormattedTextField(0);
+        			size = new JFormattedTextField(0);
+        			angle = new JFormattedTextField(0);
+        			zOff = new JFormattedTextField(0);
+        			yOff = new JFormattedTextField(0);
+        			xOff = new JFormattedTextField(0);
+        			sound = new JFormattedTextField(0);
+        			hurtboxInteraction = new JFormattedTextField(0);
+        			boneAttachment = new JFormattedTextField(0);
+        			hitboxId = new JFormattedTextField(0);
+        			hitboxInteraction = new JFormattedTextField(0);
         	
         	this.removeAll();
         	hexField=false;
@@ -107,7 +128,7 @@ public class HitboxScript extends Script {
             hitboxInteraction.setValue(this.setBits(126,127));
         	hitboxId.setValue(this.setBits(6,8));
             
-        	System.out.println(this.setBits(121, 124));
+        	//System.out.println(this.setBits(121, 124));
             
         	int elem = this.setBits(137,143);
             elem= bit(elem,0,0);
@@ -272,13 +293,15 @@ public class HitboxScript extends Script {
         
         
         public void updateData(){
-        	//data[3]= ((Number)damage.getValue()).intValue();
+        	
+        	//Prevents memory waste
+        	if(FileIO.randomizingScripts){
+        		return;
+        	}
+        	
         	this.saveBits(23,31,((Number)damage.getValue()).intValue());
         	this.saveBits(32,47,((Number)size.getValue()).intValue());
         	this.saveBits(6, 8, ((Number)hitboxId.getValue()).intValue());
-        	//System.out.println("HITBOXID:"+((Number)hitboxId.getValue()).intValue());
-        	//System.out.println("HITTBOXINT:"+((Number)hitboxInteraction.getValue()).intValue());
-        	
         	
             int tmp = ((Number)zOff.getValue()).intValue();
             if(getBit(tmp,15)==1){
@@ -298,9 +321,8 @@ public class HitboxScript extends Script {
             }
             this.saveBits(80,95,tmp);
             
-        	//this.saveBits(125,127,((Number)hitboxInteraction.getValue()).intValue());
-            //System.out.println("HITTBOXINT:"+((Number)hitboxInteraction.getValue()).intValue());
-            
+        	this.saveBits(125,127,((Number)hitboxInteraction.getValue()).intValue());
+        	
             this.saveBits(96,104,((Number)angle.getValue()).intValue());
             this.saveBits(105,113,((Number)knockbackGrowth.getValue()).intValue());
             this.saveBits(114,122,((Number)weightKnockback.getValue()).intValue());
@@ -321,6 +343,7 @@ public class HitboxScript extends Script {
   		
         }
         public void scramble(){
+        	//System.out.println("Scrambling hitbox @0x" + Integer.toHexString(location));
         	int min=50, max=200;
         	//baseKnockback.setValue((int)(((Number)baseKnockback.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
         	//knockbackGrowth.setValue((int)(((Number)knockbackGrowth.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
@@ -334,15 +357,56 @@ public class HitboxScript extends Script {
         	//yOff.setValue((int)(((Number)yOff.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
 
         	
-        	baseKnockback.setValue(FileIO.randInt(0, 20));
-        	knockbackGrowth.setValue(FileIO.randInt(0, 140));
+        	int baseknockback=(FileIO.randInt(0, 20));
+        	int knockbackgrowth=(FileIO.randInt(0, 140));
         	//weightKnockback.setValue(0));
-        	damage.setValue(FileIO.randInt(0,25));
-        	shieldDamage.setValue(FileIO.randInt(0, 20));
-        	size.setValue(FileIO.randInt(0,3000));
-        	angle.setValue(FileIO.randInt(0, 360));
-        	zOff.setValue(FileIO.randInt(0,1500)*FileIO.sign());
-        	xOff.setValue(FileIO.randInt(0,1500)*FileIO.sign());
-        	yOff.setValue(FileIO.randInt(0,1500)*FileIO.sign());
+        	int damage=(FileIO.randInt(0,25));
+        	int shielddamage=(FileIO.randInt(0, 20));
+        	int size=(FileIO.randInt(0,3000));
+        	int angle=(FileIO.randInt(0, 360));
+        	int zOff=(FileIO.randInt(0,1500)*FileIO.sign());
+        	int xOff=(FileIO.randInt(0,1500)*FileIO.sign());
+        	int yOff=(FileIO.randInt(0,1500)*FileIO.sign());
+        	
+        	
+        	this.saveBits(23,31,damage);
+        	this.saveBits(32,47,size);
+        	
+            int tmp = (zOff);
+            if(getBit(tmp,15)==1){
+            	tmp+=65536;
+            }
+            this.saveBits(48,63,tmp);
+            
+            tmp = (yOff);
+            if(getBit(tmp,15)==1){
+            	tmp+=65536;
+            }
+            this.saveBits(64,79,tmp);
+            
+            tmp = (xOff);
+            if(getBit(tmp,15)==1){
+            	tmp+=65536;
+            }
+            this.saveBits(80,95,tmp);
+            
+            this.saveBits(96,104,angle);
+            this.saveBits(105,113,knockbackgrowth);
+            this.saveBits(128,136,baseknockback);
+            this.saveBits(143,149,shielddamage);
+            //this.saveBits(114,122,weightKnockback);
+            //this.saveBits(14,20,boneAttachment);
+            //this.saveBits(150,157,sound);
+            //this.saveBits(158,159,hurtboxInteraction);
+
+            
+            /*
+        	int bit0=getBit(data[17],0),bit1=getBit(data[17],1);
+
+        	int el = HitboxEffect.hitboxEffect[ Attribute.getSelectedIndex()].id;
+        	el=bit(el,0,bit0);
+        	el=bit(el,1,bit1);
+        	this.saveBits(137,143,el);
+        	*/
     	}
     }

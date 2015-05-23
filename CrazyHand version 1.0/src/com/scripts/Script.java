@@ -112,25 +112,27 @@ public class Script extends JPanel{
         pan.setLayout(new BoxLayout(pan, BoxLayout.X_AXIS));
 		Box  b = Box.createHorizontalBox();
         b.add(numTag);
-        //b.add( Box.createHorizontalGlue() );
         
-        for(int i = 0; i < Event.events.length; i ++){
-        	allScripts[i]=Event.events[i].name+"  ["+Event.events[i].length+" bytes]";
+        //Minimizing the amount of objects loaded into each script.
+        if(!FileIO.randomizingScripts){
+	        for(int i = 0; i < Event.events.length; i ++){
+	        	allScripts[i]=Event.events[i].name+"  ["+Event.events[i].length+" bytes]";
+	        }
+	        
+	        scriptSwitchBar = new JComboBox(allScripts);
+	        scriptSwitchBar.setSelectedIndex(Event.getEventPlacementFromName(Event.getEvent(this.id).name));
+	        scriptSwitchBar.addActionListener(bac);
+	        scriptSwitchBar.setToolTipText("Change the kind of script this is.");
+	        scriptSwitchBar.setFont(new Font("wut", Font.BOLD, 14));
+	        //scriptSwitchBar.getEditor().getEditorComponent().setBackground(Color.WHITE);
+	        b.add(scriptSwitchBar);
+	         
+	        b.add(offsetTag);
+	        b.add( Box.createHorizontalGlue() );
+	        pan.add(b);
+	        pan.add(b0);
+			this.add(pan);
         }
-        
-        scriptSwitchBar = new JComboBox(allScripts);
-        scriptSwitchBar.setSelectedIndex(Event.getEventPlacementFromName(Event.getEvent(this.id).name));
-        scriptSwitchBar.addActionListener(bac);
-        scriptSwitchBar.setToolTipText("Change the kind of script this is.");
-        scriptSwitchBar.setFont(new Font("wut", Font.BOLD, 14));
-        //scriptSwitchBar.getEditor().getEditorComponent().setBackground(Color.WHITE);
-        b.add(scriptSwitchBar);
-         
-        b.add(offsetTag);
-        b.add( Box.createHorizontalGlue() );
-        pan.add(b);
-        pan.add(b0);
-		this.add(pan);
 		
 		String hexForm = "";
         
@@ -172,11 +174,11 @@ public class Script extends JPanel{
 	
 	public void save(){
 		if(linkedToCharacterFile&&linkedCharacter!=null){
-			FileIO.init(linkedCharacter.getPlaceInArray());
+			//FileIO.init(linkedCharacter.getPlaceInArray());
 		}
     	updateData();
     	saveData();
-    	FileIO.init();
+    	//FileIO.init();
 	}
 	public void saveData(){
 		

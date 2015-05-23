@@ -23,7 +23,7 @@ public class Event {
 		new Event(0xD0, 0x4, "Continuation control?"),
     	new Event(0x5C, 0x4, "Allow Interrupt (IASA)"),
     	new Event(0x4C, 0x4, "Autocancel"),
-    	new Event(0x50, 0x4, "Release Grabbed Character"),//Formerly Reverse Direction
+    	new Event(0x50, 0x4, "Reverse Direction?"),//Formerly Reverse Direction, Then Release Grabbed character, now back to Reverse Direction. 50 00 00 00 seems to do one or the other depending on unknown circumstances.
     	new Event(0x04, 0x4, "Synchronous Timer"),
     	new Event(0x08, 0x4, "Asynchronous Timer"),
     	new Event(0x0C, 0x4, "Set Loop"),
@@ -39,7 +39,7 @@ public class Event {
     	new Event(0x3C, 0x4, "Terminate Specific Collision"),
     	new Event(0x6C, 0x4, "Set All Bones State"),
     	new Event(0x70, 0x4, "Set Specific Bone State"),
-    	new Event(0xE8, 0x10, "Unknown"),
+    	new Event(0xE8, 0x10, "TBD"),//Set to TBD instead of Unknown so that there aren't conflicts in drop-down menus with the script labeled Unknown with value 0x74
     	
     	//new Event(0x4e, 0x4, "B button check?"),
     	//01 checks if b button is held down, and if it is not continues the script. See young link's arrow start.

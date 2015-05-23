@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -34,6 +35,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
 import com.SpecialAttributeIndex.SpecialMoveAttribute;
+import com.dolEditing.DOLPatch;
 import com.scripts.Script;
 import com.scripts.ScriptComparator;
 import com.scripts.ScriptUtils;
@@ -191,6 +193,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			JMenu menu = new JMenu("File");
 			JMenu runMenu = new JMenu("Run");
 			JMenu optionsMenu = new JMenu("Options");
+			JMenu isoPatchMenu = new JMenu("ISO patches");
 			//Close to complete, but not ready at this time.
 			//JMenu subactionEditorMenu = new JMenu("Subaction editor");
 			
@@ -232,37 +235,56 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			menu.add(closeButton);
 			
 				JMenuItem dolphinButton = new JMenuItem("Run loaded ISO in Dolphin");
-				//Pretty sure running dolphin will work for all OS's now.
-				
-				/*
-				if(!Options.isOSWindows()){
-					dolphinButton.setToolTipText("This currently only works for windows!");
-					dolphinButton.setEnabled(false);
-				}
-				*/
 				dolphinButton.addActionListener(fl);
 				dolphinButton.setActionCommand("runDolphin");
 				
 			runMenu.add(dolphinButton);
 			
 			
-			
 				optionsMenu.setActionCommand("options");
 				optionsMenu.addActionListener(fl);
-			
-			
-			
+				
+				ArrayList<Field>temp = new ArrayList<Field>();
+				Field[] dolpatchclassfields = DOLPatch.class.getFields();
+				for(Field field : dolpatchclassfields){
+					try {
+						if(field.getName().startsWith("dolPatch")&&field.get(null) instanceof DOLPatch){
+							temp.add(field);
+						}
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				if(!temp.isEmpty()){
+					System.out.println("Fields:"+temp.size());
+					for(Field fld : temp){
+						try {
+							DOLPatch patch = (DOLPatch)fld.get(null);
+							JMenuItem patchMenuItem = new JMenuItem(patch.name);
+							patchMenuItem.setActionCommand("patchISO"+fld.getName());
+							patchMenuItem.addActionListener(fl);
+							
+							isoPatchMenu.add(patchMenuItem);
+						} catch (IllegalArgumentException
+								| IllegalAccessException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				
 			fileMenu.add(menu);
 			fileMenu.add(Box.createHorizontalStrut(5));
 			fileMenu.add(runMenu);
-			
-			//fileMenu.add(Box.createHorizontalStrut(5));
-			//fileMenu.add(optionsMenu);
 			fileMenu.add(Box.createHorizontalStrut(5));
-			//fileMenu.add(subactionEditorMenu);
+			
+			//Commented out for now since it's still in-progress and I need to push a bugfix release.
+			//Nevermind I want to show it off and this patch is fully functional.
+			fileMenu.add(isoPatchMenu);
+			
+			fileMenu.add(Box.createHorizontalStrut(5));
 		}
 
-		// specialPanel = new JPanel();
 		add(comboPane, BorderLayout.PAGE_START);
 		add(aPane, BorderLayout.CENTER);
 		add(saveButton, BorderLayout.PAGE_END);
@@ -326,7 +348,48 @@ public class MeleeEdit extends JPanel implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(e.getActionCommand()=="openISO"){
+			String cmd = e.getActionCommand();
+			if(cmd.startsWith("patchISO")){
+				try {
+					System.out.println(cmd);
+					DOLPatch patchSelected = (DOLPatch)DOLPatch.class.getField(cmd.split("patchISO")[1]).get(null);
+					if(patchSelected==null){
+						System.out.println("Error finding DOL patch " + cmd + "! Entry is null!");
+					}
+					else{
+						JOptionPane optionPane = new JOptionPane(
+							    JOptionPane.QUESTION_MESSAGE,
+							    JOptionPane.OK_CANCEL_OPTION);
+						
+						optionPane.setOptions(new String[]{
+								"Apply",
+								"Remove",
+								"Cancel"
+						});
+						int res = optionPane.showOptionDialog(MeleeEdit.frame, "Would you like to apply this patch, or remove it?", "DOL Patcher", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, optionPane.getOptions(), optionPane.getOptions()[0]);
+						
+						//Apply
+						if(res==JOptionPane.OK_OPTION){
+							patchSelected.applyPatch();
+						}
+						//Remove
+						else if(res==JOptionPane.NO_OPTION){
+							patchSelected.undoPatch();
+						}
+						//Cancel
+						else{
+							
+						}
+						
+						
+					}
+				} catch (IllegalArgumentException | IllegalAccessException
+						| NoSuchFieldException | SecurityException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			else if(e.getActionCommand()=="openISO"){
 				FileIO.loadISOFile();
 			}
 			else if(e.getActionCommand()=="close"){
