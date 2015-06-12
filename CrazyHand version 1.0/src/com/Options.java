@@ -47,8 +47,46 @@ public class Options
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public static void loadCodeList()
+	{
+		File f = new File("codes.txt");
 		
+		try {
+			List<String> lines = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
+			for(int i = 0; i < lines.size(); i ++)
+			{
+				String o = lines.get(i);
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
+	}
+	
+	public static void saveCodeList(String codes)
+	{
+		File f = new File("codes.txt");
+		
+		if(!f.exists())
+			try {
+				f.createNewFile();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		try {
+			PrintWriter out = new PrintWriter("codes.txt");
+			
+			String ln = System.lineSeparator();
+			
+			out.write(codes);
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static boolean hasLastIso = false, hasDolphinPath = false;
@@ -176,6 +214,9 @@ public class Options
 			destroyDolphinInstance();
 		}
 		
+		if(FileIO.loadedISOFile.isOpen()){
+			FileIO.loadedISOFile.close();
+		}
 		
 			if(!Options.hasDolphinPath) {
 				FileNameExtensionFilter exeFilter = new FileNameExtensionFilter(

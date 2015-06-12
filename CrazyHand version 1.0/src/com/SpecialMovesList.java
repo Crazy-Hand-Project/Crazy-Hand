@@ -32,7 +32,7 @@ public class SpecialMovesList{
 		movesToCharacterMap.put(Character.characters[8],popoNanaSpecialMoves);
 		movesToCharacterMap.put(Character.characters[9],popoNanaSpecialMoves);
 		movesToCharacterMap.put(Character.characters[10],jigglypuffSpecialMoves);
-		movesToCharacterMap.put(Character.characters[11],placeholder);
+		movesToCharacterMap.put(Character.characters[11],none);
 		movesToCharacterMap.put(Character.characters[12],luigiSpecialMoves);
 		movesToCharacterMap.put(Character.characters[13],linkSpecialMoves);
 		movesToCharacterMap.put(Character.characters[14],marioSpecialMoves);
@@ -532,6 +532,10 @@ public class SpecialMovesList{
 	};
 	
 	public static SubAction[] nessSpecialMoves = {
+		new SubAction(0x127, "U-Smash Yo-Yo?(1)"),
+		new SubAction(0x128, "U-Smash Yo-Yo?(2)"),
+		new SubAction(0x129, "D-Smash Yo-Yo?(1)"),
+		new SubAction(0x12A, "D-Smash Yo-Yo?(2)"),
 		new SubAction(0x12B, "(Ground)Neutral-B Start"),
 		new SubAction(0x12C, "(Ground)Neutral-B Hold"),
 		new SubAction(0x12D, "(Ground)Neutral-B Hold(2)"),

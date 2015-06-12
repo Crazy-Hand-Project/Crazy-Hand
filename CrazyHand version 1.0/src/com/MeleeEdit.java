@@ -35,28 +35,33 @@ import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
 import com.SpecialAttributeIndex.SpecialMoveAttribute;
-import com.dolEditing.DOLPatch;
+import com.dolManagement.DOLPatch;
+import com.dolManagement.DOLPatchManager;
 import com.scripts.Script;
 import com.scripts.ScriptComparator;
 import com.scripts.ScriptUtils;
 
 public class MeleeEdit extends JPanel implements ActionListener {
 
-	public static final int MENU_ATTRIBUTES = 0, MENU_ATTACKS = 1,
-			MENU_SPECIAL_MOVES = 20, MENU_ALL = 2, MENU_OTHER = 6,
-			MENU_ANIMATION = 3, MENU_SPECIAL_ATTRIBUTES = 4, MENU_FRAME_SPEED_MODIFIERS=5;
+	public static final int
+			MENU_ATTRIBUTES = 0, MENU_SPECIAL_ATTRIBUTES = 1,
+			MENU_ATTACKS = 2, MENU_ALL = 3,
+			MENU_PROJECTILE_EDIT_CHARACTER = 4,
+			MENU_ANIMATION = 5, MENU_FRAME_SPEED_MODIFIERS = 6,
+			MENU_OTHER=7;
 
 	public static int selected = 0, selectedSubaction = 0, selectedMenu = 0;
 
-	public static String[] options = { "Attributes",
-			"Subactions (Attacks only)",// "Subactions (Special moves)",
-			"Subactions (All)", "Animation Swapping", "Character specific Attributes", "Frame Speed Modifiers","Other",
-	// "Special Moves",
-	// "Frames Speed Modifiers",
-	//
+	public static String[] options = {
+		"Attributes","Character specific Attributes",
+		"Subactions (Attacks only)", "Subactions (All)",
+		"Projectiles",
+		"Animation Swapping", "Frame Speed Modifiers",
+		"Other",
+		
 	};
 
-	public static JFrame frame;
+	public static JFrame frame, geckoManagerFrame;
 	public JButton saveButton;
 	public JMenuItem saveCharacterButton, loadCharacterButton, newTabButton;
 	public static JTable attributeTable, attributeTable2;
@@ -80,6 +85,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	public static RestorePanel restorePane;
 	public static AnimationPanel animationPanel;
 	public static FSMPanel fsmPanel;
+	public static ProjectileEditPane projectilePanel;
+	public static DOLPatchManager patchManager;
 	
 	public static ScriptEditWindow scriptEditor = null;
 
@@ -146,9 +153,12 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		//fsmPanel = new FSMPanel();
 		
 		FileIO.init();
+		
+		projectilePanel = new ProjectileEditPane();
 
 		restorePane = new RestorePanel();
 		
+		patchManager = new DOLPatchManager();
 
 		attributeTable = new JTable(new AttributeTable());
 		// attributeTable.setPreferredScrollableViewportSize(new Dimension(700,
@@ -165,7 +175,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		
 		scriptInner = new JPanel();
 		scriptInner.setLayout(new BoxLayout(scriptInner, BoxLayout.PAGE_AXIS));
-
+		FileIO.init();
 		FileIO.readScripts();
 
 		// j.setPreferredSize(new Dimension(300,400);
@@ -256,6 +266,12 @@ public class MeleeEdit extends JPanel implements ActionListener {
 					}
 				}
 				
+				JMenuItem managerbtn = new JMenuItem("Gecko code manager");
+				managerbtn.setActionCommand("codemgr");
+				managerbtn.addActionListener(fl);
+				
+				isoPatchMenu.add(managerbtn);
+				
 				if(!temp.isEmpty()){
 					System.out.println("Fields:"+temp.size());
 					for(Field fld : temp){
@@ -298,7 +314,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		// } catch (IOException ex) {
 		// ex.printStackTrace();
 		// }
-
+		FileIO.init();
 	}
 	
 	public static void openScriptEditor(){
@@ -389,6 +405,27 @@ public class MeleeEdit extends JPanel implements ActionListener {
 					e1.printStackTrace();
 				}
 			}
+			else if(cmd=="codemgr"){
+				if(geckoManagerFrame==null){
+					geckoManagerFrame = new JFrame();
+					
+					Dimension dim = new Dimension(800,600);
+					geckoManagerFrame.setPreferredSize(dim);
+					geckoManagerFrame.setMaximumSize(dim);
+					geckoManagerFrame.setMinimumSize(dim);
+					geckoManagerFrame.setVisible(true);
+					
+					geckoManagerFrame.setDefaultCloseOperation(geckoManagerFrame.DISPOSE_ON_CLOSE);
+					DOLPatchManager pann = new DOLPatchManager();
+					geckoManagerFrame.add(pann);
+					geckoManagerFrame.setTitle("Gecko code manager");
+				}
+				else{
+					System.out.println("dickweed");
+					geckoManagerFrame.dispose();
+					geckoManagerFrame=null;
+				}
+			}
 			else if(e.getActionCommand()=="openISO"){
 				FileIO.loadISOFile();
 			}
@@ -466,6 +503,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				FileIO.init();
 				FileIO.readScripts();
 				frame.pack();
+				
 			}
 			if (selectedMenu == MENU_ANIMATION) {
 				// FileIO.init();
@@ -476,6 +514,10 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			
 			if(selectedMenu == MENU_FRAME_SPEED_MODIFIERS){
 				fsmPanel.save();
+			}
+			
+			if(selectedMenu == MENU_PROJECTILE_EDIT_CHARACTER){
+				projectilePanel.save();
 			}
 
 			try {
@@ -490,9 +532,17 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			FileIO.loadedISOFile.close();
 
 			System.out.println("Save Complete!");
-
+			
+			/*
+			// * Ignore this, just an easy way to convert large chunks of hexadecimal bytes into a copy-pastable format for int arrays.
+			// * 
+				String res = "";
+				String hex = "0x";
+				hex += "20 41 54 20 43 55 52 53 4F 52 20 20 20 20 20 28 41 29 00 00 4D 45 4D 20 44 55 4D 50 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 28 58 29 00 00 44 55 4D 50 20 43 50 55 20 43 4F 4E 54 45 58 54 20 20 20 20 20 20 20 20 20 20 00 00 53 50 52 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 00 00 51 55 49 54 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 00 00 80 40 B9 38 80 40 B9 54 80 40 B9 70 80 40 B9 8C 80 40 B9 A8 80 40 B9 C4 80 40 B9 E0 80 40 B9 FC 80 40 BA 18 00 00 00 00 00 00 00 00 00 00 00 00 80 39 4F 48 80 39 5D 88 80 40 BA 34 00 00 00 00 2B 2D 20 4D 45 4D 4F 52 59 20 44 55 4D 50 20 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2B 00 00 7C 25 30 38 58 3D 25 30 38 58 3A 25 30 38 58 3A 25 30 38 58 3A 25 30 38 58 7C 00 00 2B 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2B 00 00 00 00 00 00 80 39 61 30 80 39 61 88 80 39 62 A8 00 00 00 00 80 39 67 14 80 39 67 20 80 39 67 2C 80 39 67 38 80 39 67 44 80 39 67 50 80 39 67 5C 41 44 44 52 45 53 53 20 2D 20 31 30 68 20 20 20 20 20 20 28 55 50 29 00 41 44 44 52 45 53 53 20 2B 20 31 30 68 20 20 20 20 28 44 4F 57 4E 29 00 41 44 44 52 45 53 53 20 2D 20 34 30 68 20 20 20 20 28 4C 45 46 54 29 00 41 44 44 52 45 53 53 20 2B 20 34 30 68 20 20 20 28 52 49 47 48 54 29 00 4E 45 57 20 41 44 44 52 45 53 53 20 20 20 20 20 20 20 20 20 28 41 29 00 44 55 4D 50 20 54 4F 20 43 4F 4E 53 4F 4C 45 20 20 20 20 20 28 58 29 00 43 4C 4F 53 45 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 28 42 29 00 80 40 BB 20 80 40 BB 38 80 40 BB 50 80 40 BB 68 80 40 BB 80 80 40 BB 98 80 40 BB B0 00 00 00 00 00 00 00 00 00 00 00 00 80 39 4F 48 80 39 66 A0 80 40 BB C8 00 00 00 00 2B 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2B 00 00 00 00 7C 20 49 4E 50 55 54 20 41 44 44 52 45 53 53 20 3A 20 38 25 30 37 58 20 7C 00 00 00 00 00 00 00 80 39 68 68 80 39 68 84 80 39 6A 20 00 00 00 00 00 00 00 00 00 00 00 00 80 39 6C EC 80 39 6C F8 80 39 6D 04 80 39 6D 10 80 39 6D 1C 80 39 6D 28 80 39 6D 34 44 45 43 52 45 4D 45 4E 54 20 4E 55 4D 20 41 54 20 43 55 52 53 4F 52 20 20 20 28 55 50 29 00 00 49 4E 43 52 45 4D 45 4E 54 20 4E 55 4D 20 41 54 20 43 55 52 53 4F 52 20 28 44 4F 57 4E 29 00 00 4D 4F 56 45 20 43 55 52 53 4F 52 20 54 4F 20 4C 45 46 54 20 20 20 20 20 28 4C 45 46 54 29 00 00 4D 4F 56 45 20 43 55 52 53 4F 52 20 54 4F 20 52 49 47 48 54 20 20 20 28 52 49 47 48 54 29 00 00 4D 45 4D 4F 52 59 20 44 55 4D 50 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 28 41 29 00 00 43 4C 45 41 52 20 4E 55 4D 20 41 54 20 43 55 52 53 4F 52 20 20 20 20 20 20 20 20 28 58 29 00 00 43 4C 4F 53 45 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 28 42 29 00 00 80 40 BC 74 80 40 BC 94 80 40 BC B4 80 40 BC D4 80 40 BC F4 80 40 BD 14 80 40 BD 34 00 00 00 00 00 00 00 00 00 00 00 00 80 39 4F 48 80 39 6C 78 80 40 BD 54 00 00 00 00 2B 2D 20 44 42 41 54 20 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2B 00 00 00 2B 2D 20 49 42 41 54 20 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2B 00 00 00 7C 20 25 64 20 42 4C 20 78 78 78 78 78 78 78 78 78 78 78 20 20 25 63 25 63 20 25 63 25 63 25 63 25 63 20 25 73 20 7C 00 7C 20 20 20 42 45 50 49 20 25 30 38 58 20 42 52 50 4E 20 25 30 38 58 20 7C 00 00 00 2B 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2B 00 00 00 2B 2D 20 53";
+				res=hex.replaceAll(" ", ",0x");
+				System.out.println(res);
+			*/
 		}
-
 	}
 
 	class CharListener implements ActionListener {
@@ -663,9 +713,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 						"the subaction's data, Crazy Hand will think that is the end of the subaction."+"\n"+
 						"This is a known bug and is being worked on."+"\n";
 				
-				int res = optionPane.showConfirmDialog(MeleeEdit.frame, "This feature is ONLY available for use with a 20XX modded ISO.\n"+
-																"Using a non-20XX ISO will cause Crazy Hand to crash, and may corrupt some important data on the ISO.\n"+
-					    										"Only hit \"OK\" if you are using a 20XX iso.", "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+				int res = optionPane.showConfirmDialog(MeleeEdit.frame, "This feature is ONLY available with an ISO that has the FSM patch applied to it.\n"+
+																"Using an ISO without the FSM patch will cause Crazy Hand to crash, and may corrupt some important data on the ISO.\n"+
+					    										"Only hit \"OK\" if this ISO has the FSM patch or is a \"20XX Hack Pack\" iso.", "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 				
 				if(res==JOptionPane.OK_OPTION){
 					if(fsmPanel==null){
@@ -708,6 +758,15 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				add(animationPanel, BorderLayout.CENTER);
 
 				updateAnimations();
+			}
+			
+			if(selectedMenu == MENU_PROJECTILE_EDIT_CHARACTER){
+				projectilePanel = new ProjectileEditPane();
+				add(projectilePanel);
+				//remove(saveButton);
+			}
+			else{
+				//add(saveButton);
 			}
 
 			frame.pack();

@@ -381,7 +381,9 @@ public class FileIO {
 					name = "[No Name]";
 				}
 				
-			
+				//TODO
+				name+="("+i+")";
+				
 				subactions[i] = name;
 			}
 			file.close();
