@@ -421,7 +421,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 					geckoManagerFrame.setTitle("Gecko code manager");
 				}
 				else{
-					System.out.println("dickweed");
+					System.out.println("nope");
 					geckoManagerFrame.dispose();
 					geckoManagerFrame=null;
 				}
@@ -538,10 +538,10 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			// * 
 				String res = "";
 				String hex = "0x";
-				hex += "20 41 54 20 43 55 52 53 4F 52 20 20 20 20 20 28 41 29 00 00 4D 45 4D 20 44 55 4D 50 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 28 58 29 00 00 44 55 4D 50 20 43 50 55 20 43 4F 4E 54 45 58 54 20 20 20 20 20 20 20 20 20 20 00 00 53 50 52 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 00 00 51 55 49 54 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 00 00 80 40 B9 38 80 40 B9 54 80 40 B9 70 80 40 B9 8C 80 40 B9 A8 80 40 B9 C4 80 40 B9 E0 80 40 B9 FC 80 40 BA 18 00 00 00 00 00 00 00 00 00 00 00 00 80 39 4F 48 80 39 5D 88 80 40 BA 34 00 00 00 00 2B 2D 20 4D 45 4D 4F 52 59 20 44 55 4D 50 20 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2B 00 00 7C 25 30 38 58 3D 25 30 38 58 3A 25 30 38 58 3A 25 30 38 58 3A 25 30 38 58 7C 00 00 2B 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2B 00 00 00 00 00 00 80 39 61 30 80 39 61 88 80 39 62 A8 00 00 00 00 80 39 67 14 80 39 67 20 80 39 67 2C 80 39 67 38 80 39 67 44 80 39 67 50 80 39 67 5C 41 44 44 52 45 53 53 20 2D 20 31 30 68 20 20 20 20 20 20 28 55 50 29 00 41 44 44 52 45 53 53 20 2B 20 31 30 68 20 20 20 20 28 44 4F 57 4E 29 00 41 44 44 52 45 53 53 20 2D 20 34 30 68 20 20 20 20 28 4C 45 46 54 29 00 41 44 44 52 45 53 53 20 2B 20 34 30 68 20 20 20 28 52 49 47 48 54 29 00 4E 45 57 20 41 44 44 52 45 53 53 20 20 20 20 20 20 20 20 20 28 41 29 00 44 55 4D 50 20 54 4F 20 43 4F 4E 53 4F 4C 45 20 20 20 20 20 28 58 29 00 43 4C 4F 53 45 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 28 42 29 00 80 40 BB 20 80 40 BB 38 80 40 BB 50 80 40 BB 68 80 40 BB 80 80 40 BB 98 80 40 BB B0 00 00 00 00 00 00 00 00 00 00 00 00 80 39 4F 48 80 39 66 A0 80 40 BB C8 00 00 00 00 2B 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2B 00 00 00 00 7C 20 49 4E 50 55 54 20 41 44 44 52 45 53 53 20 3A 20 38 25 30 37 58 20 7C 00 00 00 00 00 00 00 80 39 68 68 80 39 68 84 80 39 6A 20 00 00 00 00 00 00 00 00 00 00 00 00 80 39 6C EC 80 39 6C F8 80 39 6D 04 80 39 6D 10 80 39 6D 1C 80 39 6D 28 80 39 6D 34 44 45 43 52 45 4D 45 4E 54 20 4E 55 4D 20 41 54 20 43 55 52 53 4F 52 20 20 20 28 55 50 29 00 00 49 4E 43 52 45 4D 45 4E 54 20 4E 55 4D 20 41 54 20 43 55 52 53 4F 52 20 28 44 4F 57 4E 29 00 00 4D 4F 56 45 20 43 55 52 53 4F 52 20 54 4F 20 4C 45 46 54 20 20 20 20 20 28 4C 45 46 54 29 00 00 4D 4F 56 45 20 43 55 52 53 4F 52 20 54 4F 20 52 49 47 48 54 20 20 20 28 52 49 47 48 54 29 00 00 4D 45 4D 4F 52 59 20 44 55 4D 50 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 28 41 29 00 00 43 4C 45 41 52 20 4E 55 4D 20 41 54 20 43 55 52 53 4F 52 20 20 20 20 20 20 20 20 28 58 29 00 00 43 4C 4F 53 45 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 28 42 29 00 00 80 40 BC 74 80 40 BC 94 80 40 BC B4 80 40 BC D4 80 40 BC F4 80 40 BD 14 80 40 BD 34 00 00 00 00 00 00 00 00 00 00 00 00 80 39 4F 48 80 39 6C 78 80 40 BD 54 00 00 00 00 2B 2D 20 44 42 41 54 20 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2B 00 00 00 2B 2D 20 49 42 41 54 20 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2B 00 00 00 7C 20 25 64 20 42 4C 20 78 78 78 78 78 78 78 78 78 78 78 20 20 25 63 25 63 20 25 63 25 63 25 63 25 63 20 25 73 20 7C 00 7C 20 20 20 42 45 50 49 20 25 30 38 58 20 42 52 50 4E 20 25 30 38 58 20 7C 00 00 00 2B 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2D 2B 00 00 00 2B 2D 20 53";
+				hex+= "00 11 22 33 44 ee tt cc";
 				res=hex.replaceAll(" ", ",0x");
 				System.out.println(res);
-			*/
+			//*/
 		}
 	}
 
@@ -704,24 +704,55 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				//remove(saveButton);
 				
 				JOptionPane optionPane = new JOptionPane(
-					    JOptionPane.QUESTION_MESSAGE,
-					    JOptionPane.OK_CANCEL_OPTION);
+					    JOptionPane.ERROR_MESSAGE,
+					    JOptionPane.OK_OPTION);
 				
 				
-				
+				/*
 				String debugWarning="BE WARNED; If there are four pairs of zeroes in a row (00 00 00 00) within"+"\n"+
 						"the subaction's data, Crazy Hand will think that is the end of the subaction."+"\n"+
 						"This is a known bug and is being worked on."+"\n";
 				
 				int res = optionPane.showConfirmDialog(MeleeEdit.frame, "This feature is ONLY available with an ISO that has the FSM patch applied to it.\n"+
-																"Using an ISO without the FSM patch will cause Crazy Hand to crash, and may corrupt some important data on the ISO.\n"+
+															"Using an ISO without the FSM patch will cause Crazy Hand to crash, and may corrupt some important data on the ISO.\n"+
 					    										"Only hit \"OK\" if this ISO has the FSM patch or is a \"20XX Hack Pack\" iso.", "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+				*/
 				
-				if(res==JOptionPane.OK_OPTION){
+				boolean flag = true;
+				
+				//Check if FSM engine is installed
+				FileIO.initDOL();
+				String code = "7F63DB788BE3006C3FA0804563BD30841FFF0E907FFDFA14809F00008BFF00082C0400134182001C2C04001240A200202C1F000140A2001838800013480000102C1F000140A2000838800012C03E0894FC20081ED822000080A2000480C3007080E3007460E780003FE0804063FFB9A887BF00082C1D00004182006057BC463E2C1C00FF418200147C1C20004182000C418100484BFFFFDC57BC863E7C1C280041A1FFD057BC043E7C1C30004182000C7C1C38004082FFBC839F00042C1CFFFF41820018C03F00043FE0800663FFF1907FE803A64E800021BB6100144BC679B00000000000000000000000000000000000000000000000000000000000000000";
+				
+				int pointer = 0x4088B0;
+				
+				FileIO.setPosition(pointer);
+				for(int i = 0; i < code.length(); i+=2){
+					String tmp = new StringBuilder().append("").append(code.charAt(i)).append(code.charAt(i+1)).toString();
+					int byt = Integer.decode("0x" + tmp);
+					int fbt = FileIO.readByte();
+					
+					if(fbt!=byt){
+						flag=false;
+						System.out.println("[FSM check] FSM engine not installed.");
+						optionPane.showMessageDialog(MeleeEdit.frame, "FSM engine is not installed on this ISO!");MeleeEdit.selectedMenu=MENU_ATTRIBUTES;
+						
+						cb.setSelectedIndex(MeleeEdit.MENU_ATTRIBUTES);
+						actionPerformed(new ActionEvent(e.getSource(), e.getID(), e.getActionCommand()));
+						FileIO.init();
+						return;
+					}
+					
+				}
+				
+				
+				if(flag){
 					if(fsmPanel==null){
 						fsmPanel = new FSMPanel();
 					}
 					add(fsmPanel, BorderLayout.CENTER);
+					fsmPanel.updateUI();
+					updateUI();
 				}
 				else{
 					MeleeEdit.selectedMenu=MENU_ATTRIBUTES;

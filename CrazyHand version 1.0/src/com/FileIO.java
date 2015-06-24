@@ -661,7 +661,7 @@ public class FileIO {
 	//This was inspired by a post I saw on smashboards recently
 	//http://smashboards.com/threads/sd-remix-20xx.396699/
 	//Different mods that edit characters/dol conflict with each other due to the fact that the files overwrite each other.
-	//Consider adding a feature that saves only CHANGED values in a chacter/dol file that crazy hand can read, then make the appropriate changes to said file.
+	//Consider adding a feature that saves only CHANGED values in a character/dol file that crazy hand can read, then make the appropriate changes to said file.
 	//I.E saving all character changes as a .CHC(CrazyHandChange) file would work as follows:
 	//
 	//1. Crazy Hand creates a ByteBuffer/byte array for the selected character file located in def/

@@ -7,9 +7,12 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -108,7 +111,7 @@ public class FSMPanel extends JPanel {
 	public static String[] actionNames = new String[actions.length];
 	public ArrayList<FSMNode> nodes = new ArrayList<FSMNode>();
 	public JPanel j;//a temporary panel
-	public JButton addNew;
+	public JButton addNew, importFrom,exportTo;
 
 	public FSMPanel() {
 		super();
@@ -190,16 +193,32 @@ public class FSMPanel extends JPanel {
 		JScrollPane an = new JScrollPane(j);
 		an.getVerticalScrollBar().setUnitIncrement(10);
         an.setPreferredSize(new Dimension(700,500));
+        AddListener addl = new AddListener();
+        
+        importFrom = new JButton("Import FSM data from file");
+        importFrom.setActionCommand("import");
+        importFrom.addActionListener(addl);
+        
+        exportTo = new JButton("Export FSM data");
+        exportTo.setActionCommand("export");
+        exportTo.addActionListener(addl);
         
         addNew = new JButton("Add New Modifier");
-        addNew.addActionListener(new AddListener());
+        addNew.setActionCommand("add");
+        addNew.addActionListener(addl);
         
         //JScrollBar sb = an.getVerticalScrollBar();
         //sb.setValue(10000000);
         //System.out.println(an.getVerticalScrollBar().getMaximum());
         //System.out.println(an.getVerticalScrollBar().getValue());
         
-        this.add(addNew);
+        Box hbox = Box.createHorizontalBox();
+        hbox.add(addNew);
+        hbox.add(Box.createHorizontalStrut(5));
+        hbox.add(importFrom);
+        hbox.add(Box.createHorizontalStrut(5));
+        hbox.add(exportTo);
+        this.add(hbox);
         this.add(Box.createVerticalStrut(10));
 		this.add(an);
 		
@@ -260,13 +279,128 @@ public class FSMPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			int[] b = {0,0,0x80,0x2c};
-			nodes.add(new FSMNode(b,1.f));
-			
-			update();
+			String cmd = arg0.getActionCommand();
+			if(cmd=="add"){
+				int[] b = {0,0,0x80,0x2c};
+				nodes.add(new FSMNode(b,1.f));
+				
+				update();
+			}
+			if(cmd=="import"){
+				importFrom();
+			}
+			if(cmd=="export"){
+				exportFSMData();
+			}
 		}
 	}
 	
+	public void importFrom(){
+		JFileChooser loadFileDialog = new JFileChooser();
+		System.out.println("Exporting FSM data");
+		FileNameExtensionFilter datFilter = new FileNameExtensionFilter(
+				"Text Files", "txt");
+		loadFileDialog.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		loadFileDialog.addChoosableFileFilter(datFilter);
+		loadFileDialog.setFileFilter(datFilter);
+	loadFileDialog.setDialogType(JFileChooser.OPEN_DIALOG);
+
+	
+	int returnVal = loadFileDialog.showSaveDialog(MeleeEdit.frame);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			if(loadFileDialog.getSelectedFile() != null){
+				try{
+					File fi = loadFileDialog.getSelectedFile();
+					
+					try {
+						List<String> lines = Files.readAllLines(fi.toPath(), StandardCharsets.UTF_8);
+						for(int i = 0; i < lines.size(); i ++)
+						{
+							String o = lines.get(i);
+							System.out.println(o);
+							
+							String[] params = o.split(",");
+							
+							int[] data = new int[4];
+							for(int c = 0; c < data.length; c++){
+								data[c]=Integer.parseInt(params[c]);
+							}
+							float val = Float.parseFloat(params[4]);
+							
+							FSMNode n = new FSMNode(data, val);
+							nodes.add(n);
+						}
+						
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					
+				}
+				catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+		update();
+	}
+	
+	public void exportFSMData(){
+		JFileChooser saveFileDialog = new JFileChooser();
+		System.out.println("Exporting FSM data");
+		FileNameExtensionFilter datFilter = new FileNameExtensionFilter(
+				"Text Files", "txt");
+		saveFileDialog.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		saveFileDialog.addChoosableFileFilter(datFilter);
+		saveFileDialog.setFileFilter(datFilter);
+	saveFileDialog.setDialogType(JFileChooser.SAVE_DIALOG);
+
+	
+	int returnVal = saveFileDialog.showSaveDialog(MeleeEdit.frame);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			if(saveFileDialog.getSelectedFile() != null){
+				try{
+					File fi = saveFileDialog.getSelectedFile();
+					
+					String filePath = fi.getAbsolutePath();
+					if(!filePath.endsWith(".txt")) {
+					    fi = new File(filePath + ".txt");
+					}
+					
+					if(!fi.exists()){
+							fi.createNewFile();
+					}
+					
+					PrintWriter out = new PrintWriter(fi);
+					
+					String ln = System.lineSeparator();
+					String output="";
+					
+					Collections.sort(nodes);
+					
+					for(FSMNode n : nodes){
+						n.reconstitute();
+						for(int i = 0; i < n.data.length; i ++){
+							output+=n.data[i];
+							output+=",";
+						}
+						output+=((Number)n.value.getValue()).floatValue();
+						if(nodes.get(nodes.size()-1)!=n){
+							output+=ln;
+						}
+					}
+					
+					out.write(output);
+					out.close();
+					
+				}
+				catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	
 	
 }
