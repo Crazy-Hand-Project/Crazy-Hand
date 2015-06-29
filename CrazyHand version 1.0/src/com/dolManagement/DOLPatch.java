@@ -66,7 +66,7 @@ public class DOLPatch implements PropertyChangeListener {
 	
 	
 	public static final DOLPatch dolPatchFSM = new DOLPatch(
-			"(DOL)FSM Engine[Achilles]",
+			"(DOL)FSM Engine[Magus420]",
 			
 			//Default pointer to write to
 			0x4088B0,
