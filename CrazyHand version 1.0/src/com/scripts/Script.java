@@ -384,7 +384,7 @@ public class Script extends JPanel{
 				else if(arg0.getActionCommand()=="hbCopy"){
 					String hitboxFeed = "";
 					for(int i = 0; i < data.length; i ++){
-						hitboxFeed+=data[i];
+						hitboxFeed+=Integer.toHexString(data[i]);
 						hitboxFeed+="'";
 					}
 					
@@ -405,7 +405,7 @@ public class Script extends JPanel{
 						}
 						
 						for(int i = 0; i < data.length; i ++){
-							data[i]=Integer.parseInt(nubs[i]);
+							data[i]=Integer.parseInt(nubs[i],16);
 						}
 						
 						saveData();
