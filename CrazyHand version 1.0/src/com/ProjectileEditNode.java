@@ -1,5 +1,6 @@
 package com;
 
+import java.awt.Dimension;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -33,6 +34,7 @@ public class ProjectileEditNode extends JPanel {
 		projectile = new HitboxScript(Character.characters[chr].name + " - " + projName, d, pointer);
 		projectile.updateScriptBoxInfo();
 		projectile.setBorder(BorderFactory.createBevelBorder(1));
+		//projectile.setPreferredSize(new Dimension(500,projectile.getPreferredSize().height));
 		this.add(projectile);
 	}
 	

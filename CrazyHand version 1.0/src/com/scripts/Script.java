@@ -2,21 +2,25 @@ package com.scripts;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.text.MaskFormatter;
 
@@ -100,6 +104,7 @@ public class Script extends JPanel{
 		downButton.setToolTipText("Move this script down");
 		downButton.setActionCommand("scriptDown");
 		
+		
 		ButtonActionListener bac = new ButtonActionListener();
 		
 		upButton.addActionListener(bac);
@@ -107,6 +112,22 @@ public class Script extends JPanel{
 		
 		b0.add(upButton);
 		b0.add(downButton);
+		
+		if(this instanceof HitboxScript){
+			JButton copyButton = new JButton("Copy");
+			copyButton.setToolTipText("Copy hitbox data to clipboard");
+			copyButton.setActionCommand("hbCopy");
+			
+			JButton pasteButton = new JButton("Paste");
+			pasteButton.setToolTipText("Paste hitbox data from clipboard(Non-functional in projectile editor)");
+			pasteButton.setActionCommand("hbPaste");
+			
+			copyButton.addActionListener(bac);
+			pasteButton.addActionListener(bac);
+			
+			b0.add(copyButton);
+			b0.add(pasteButton);
+		}
 		
         JPanel pan = new JPanel();
         pan.setLayout(new BoxLayout(pan, BoxLayout.X_AXIS));
@@ -360,7 +381,47 @@ public class Script extends JPanel{
 					updateUI();
 					ScriptUtils.updateScripts(getArray());
 				}
-				else if(arg0.getActionCommand()=="more"){
+				else if(arg0.getActionCommand()=="hbCopy"){
+					String hitboxFeed = "";
+					for(int i = 0; i < data.length; i ++){
+						hitboxFeed+=data[i];
+						hitboxFeed+="'";
+					}
+					
+					Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+					 StringSelection selection = new StringSelection(hitboxFeed);
+				    clipboard.setContents(selection, selection);
+					
+				}
+				else if(arg0.getActionCommand()=="hbPaste"){
+					try {
+						String hitboxFeed=(String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+						
+						String[] nubs = hitboxFeed.split("'");
+						
+						if(nubs.length!=data.length){
+							System.out.println("Clipboard contents aren't 20 bytes! (" + nubs.length + " bytes)");
+							return;
+						}
+						
+						for(int i = 0; i < data.length; i ++){
+							data[i]=Integer.parseInt(nubs[i]);
+						}
+						
+						saveData();
+						FileIO.init();
+						MeleeEdit.refreshData();
+						
+					} catch (HeadlessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (UnsupportedFlavorException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
 				}
 			}

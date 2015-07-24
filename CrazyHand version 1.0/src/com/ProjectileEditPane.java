@@ -94,6 +94,38 @@ public class ProjectileEditPane extends JPanel implements ActionListener {
 			new ProjectileEditNode("Shadowball stage (3?)", MEWTWO_ID, 0x3E44),
 			new ProjectileEditNode("Shadowball stage (4?)", MEWTWO_ID, 0x3E98),
 			new ProjectileEditNode("Disable hitbox", MEWTWO_ID, 0x3D00),
+			
+			//Ness
+			new ProjectileEditNode("PK Fire(Pre-impact)", NESS_ID,0x3F3C),
+			new ProjectileEditNode("PK Fire(Fire pillar)", NESS_ID,0x3F5C),
+			new ProjectileEditNode("PK Thunder 1", NESS_ID,0x4138),
+			
+			//Pichu
+			new ProjectileEditNode("Thunder Jolt", PICHU_ID,0x3B64),
+			
+			//Pikachu
+			new ProjectileEditNode("Thunder Jolt", PIKACHU_ID,0x3CA4),
+			//new ProjectileEditNode("Thunder Jolt", PIKACHU_ID,0x3CA4),
+			
+			//Samus
+			new ProjectileEditNode("Charge Shot", SAMUS_ID,0x3ED4),
+			new ProjectileEditNode("Homing Missile", SAMUS_ID,0x4070),
+			new ProjectileEditNode("Bomb", SAMUS_ID,0x4170),
+			
+			//Sheik
+			new ProjectileEditNode("Needles", SHEIK_ID,0x39C0),
+			
+			//Yoshi
+			new ProjectileEditNode("Neutral-B grab hitbox 1", YOSHI_ID,0x361C),
+			new ProjectileEditNode("Neutral-B grab hitbox 2", YOSHI_ID,0x3630),
+			new ProjectileEditNode("Tossed egg", YOSHI_ID,0x3A90),
+			new ProjectileEditNode("Down-B star", YOSHI_ID,0x3B74),
+			
+			//Young Link
+			new ProjectileEditNode("Arrow", YOUNGLINK_ID,0x4190),
+			
+			//Zelda
+
 	};
 	
 		//PlKp.dat @0x4110 - Flame Breath hitbox?
@@ -146,7 +178,7 @@ public class ProjectileEditPane extends JPanel implements ActionListener {
 	
 	public ProjectileEditPane(){
 		super();
-		this.setPreferredSize(new Dimension(700, 300));
+		this.setPreferredSize(new Dimension(800, 500));
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		String[] tmp = new String[1];
@@ -171,6 +203,11 @@ public class ProjectileEditPane extends JPanel implements ActionListener {
 		add(projectilesList);
 		add(Box.createVerticalStrut(20));
 		
+		for(ProjectileEditNode node : nodes){
+			node.setPreferredSize(getPreferredSize());
+			node.setMinimumSize(node.getPreferredSize());
+		}
+		
 	}
 
 
@@ -193,7 +230,7 @@ public class ProjectileEditPane extends JPanel implements ActionListener {
 		
 		public ComboBoxRenderer() {
 			setOpaque(true);
-			setHorizontalAlignment(CENTER);
+			setHorizontalAlignment(LEFT);
 			setVerticalAlignment(CENTER);
 		}
 		

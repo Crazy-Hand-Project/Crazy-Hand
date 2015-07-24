@@ -117,7 +117,7 @@ public class DOLPatch implements PropertyChangeListener {
 	);
 	
 	
-	
+	/*
 	public static final DOLPatch dolPatchStockHandicap = new DOLPatch(
 			"(DOL) Handicap = Stock Count [Dan Salvato]",
 			//Default pointer to write to(In the case of Gecko codes. Unused in this case since it is pure AR.)
@@ -141,8 +141,10 @@ public class DOLPatch implements PropertyChangeListener {
 				new int[]{0x4B,0xFF,0xFF,0x8C}
 			}
 	);
+	*/
 	
 	//Probably will be deleted.
+	/*
 	public static final DOLPatch dolPatchGeckoInjector = new DOLPatch(
 			"(DOL) Easy Gecko Injection [Dan Salvato]",
 			//Default pointer to write to(In the case of Gecko codes.)
@@ -268,6 +270,7 @@ public class DOLPatch implements PropertyChangeListener {
 			}
 			
 	);
+	*/
 	
 	public String name = "ERR";
 	public int[] pointers;
@@ -409,7 +412,7 @@ public class DOLPatch implements PropertyChangeListener {
 		    			for(j = 0; j < valArray[i].length; j ++){
 		    				int bt = valArray[i][j];
 		    				FileIO.setPosition(pointer+j);
-		    				System.out.println(Integer.toHexString(pointer+j));
+		    				//System.out.println(Integer.toHexString(pointer+j));
 		    				FileIO.writeByte(bt);
 		    				progressAmount++;
 		    			}
@@ -455,11 +458,11 @@ public class DOLPatch implements PropertyChangeListener {
 					e.printStackTrace();
 				}
 	        	
-	        	
+	        	System.out.println("Patch "+name+ (operation==TASK_PATCH ? " applied successfully." : " removed successfully.") );
 	        	
 	            Toolkit.getDefaultToolkit().beep();
 	            try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException ignore) {}
 	        }
 	    }

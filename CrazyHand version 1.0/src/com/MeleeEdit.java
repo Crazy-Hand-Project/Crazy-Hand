@@ -5,13 +5,22 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -32,6 +41,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 
 import com.SpecialAttributeIndex.SpecialMoveAttribute;
@@ -221,6 +231,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				loadCharacterButton = new JMenuItem("Load character");
 					loadCharacterButton.addActionListener(fl);
 					loadCharacterButton.setActionCommand("loadcharacter");
+				JMenuItem updateCheckButton = new JMenuItem("Check for updates");
+					updateCheckButton.addActionListener(fl);
+					updateCheckButton.setActionCommand("checkforupdate");
 				JMenuItem m = new JMenuItem();
 					m.setEnabled(false);
 					
@@ -241,6 +254,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			menu.add(openButton);
 			menu.add(saveCharacterButton);
 			menu.add(loadCharacterButton);
+			//menu.add(updateCheckButton);
 			menu.add(m);
 			menu.add(closeButton);
 			
@@ -266,11 +280,14 @@ public class MeleeEdit extends JPanel implements ActionListener {
 					}
 				}
 				
+				/*//Currently unused. Will be implemented once there is more work done on a dol with a gecko codehandler built in.
 				JMenuItem managerbtn = new JMenuItem("Gecko code manager");
 				managerbtn.setActionCommand("codemgr");
 				managerbtn.addActionListener(fl);
 				
 				isoPatchMenu.add(managerbtn);
+				*/
+				
 				
 				if(!temp.isEmpty()){
 					System.out.println("Fields:"+temp.size());
@@ -314,7 +331,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		// } catch (IOException ex) {
 		// ex.printStackTrace();
 		// }
-		FileIO.init();
+		FileIO.init(0);
+		refreshData();
 	}
 	
 	public static void openScriptEditor(){
@@ -393,7 +411,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 							patchSelected.undoPatch();
 						}
 						//Cancel
-						else{
+						else {
 							
 						}
 						
@@ -699,7 +717,6 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				MeleeEdit.subactionList.setSelectedIndex(MeleeEdit.loggedSubactionSelection);
 			}
 			
-			//TODO Maybe we should move the FSM button to the "other" pane until we can sort it out for universal ISO use?
 			if (selectedMenu == MENU_FRAME_SPEED_MODIFIERS) {
 				//remove(saveButton);
 				
@@ -707,16 +724,6 @@ public class MeleeEdit extends JPanel implements ActionListener {
 					    JOptionPane.ERROR_MESSAGE,
 					    JOptionPane.OK_OPTION);
 				
-				
-				/*
-				String debugWarning="BE WARNED; If there are four pairs of zeroes in a row (00 00 00 00) within"+"\n"+
-						"the subaction's data, Crazy Hand will think that is the end of the subaction."+"\n"+
-						"This is a known bug and is being worked on."+"\n";
-				
-				int res = optionPane.showConfirmDialog(MeleeEdit.frame, "This feature is ONLY available with an ISO that has the FSM patch applied to it.\n"+
-															"Using an ISO without the FSM patch will cause Crazy Hand to crash, and may corrupt some important data on the ISO.\n"+
-					    										"Only hit \"OK\" if this ISO has the FSM patch or is a \"20XX Hack Pack\" iso.", "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-				*/
 				
 				boolean flag = true;
 				
@@ -731,13 +738,11 @@ public class MeleeEdit extends JPanel implements ActionListener {
 					String tmp = new StringBuilder().append("").append(code.charAt(i)).append(code.charAt(i+1)).toString();
 					int byt = Integer.decode("0x" + tmp);
 					int fbt = FileIO.readByte();
-					
-					System.out.println(code.length()-i);
-					
+
 					if(fbt!=byt){
 						flag=false;
-						System.out.println("[FSM check] FSM engine not installed.");
-						optionPane.showMessageDialog(MeleeEdit.frame, "FSM engine is not installed on this ISO!");MeleeEdit.selectedMenu=MENU_ATTRIBUTES;
+						System.out.println("[FSM check] FSM engine not installed. Bytes missing:"+ (code.length()-i)+" of "+code.length());
+						optionPane.showMessageDialog(MeleeEdit.frame, "FSM engine is not installed on this ISO! It can be installed using the ISO patches menu.");MeleeEdit.selectedMenu=MENU_ATTRIBUTES;
 						
 						cb.setSelectedIndex(MeleeEdit.MENU_ATTRIBUTES);
 						actionPerformed(new ActionEvent(e.getSource(), e.getID(), e.getActionCommand()));
@@ -1039,4 +1044,5 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	public static void updateTitle(String isoPath) {
 		frame.setTitle("Crazy Hand v" + Config.VERSION + " [" + isoPath + "]");
 	}
+
 }

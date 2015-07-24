@@ -16,6 +16,9 @@ import com.FileIO;
 import com.MeleeEdit;
 import com.Options;
 
+
+//Currently unused. Will be polished and implemented once there is more work done on a dol with a gecko codehandler built in.
+
 public class DOLPatchCreationPane extends JPanel implements ActionListener{
 	
 	public JButton okBtn;

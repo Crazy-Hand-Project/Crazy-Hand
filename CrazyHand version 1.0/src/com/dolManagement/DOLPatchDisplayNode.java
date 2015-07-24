@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+//Currently unused. Will be polished and implemented once there is more work done on a dol with a gecko codehandler built in.
+
 public class DOLPatchDisplayNode extends JPanel implements ActionListener{
 	
 	DOLPatch patch;
