@@ -252,6 +252,21 @@ public class Script extends JPanel{
 			this.setBackground(Color.white);
 			this.setToolTipText("");
 		}
+		
+		//temporary
+		String bitstring="Bits:";
+        int[] bits = new int[data.length*8];
+        for(int i = 0; i < bits.length; i ++){
+        	bits[i]=this.setBits(i, i);
+        	bitstring+=bits[i]+"|";
+        	if(i % 24 == 1){
+        		bitstring+="\n";
+        	}
+        }
+        this.setToolTipText(this.getToolTipText()+" "+bitstring);
+		//
+		
+		
 		numTag.setText(" " + (arrayPlacement+1) + "   ");
 		offsetTag.setText("   Offset: 0x" + Integer.toHexString(this.location));
 	}

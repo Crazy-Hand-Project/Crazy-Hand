@@ -69,10 +69,18 @@ public class ProjectileEditPane extends JPanel implements ActionListener {
 			new ProjectileEditNode("Laser", FALCO_ID, 0x3F98),
 			new ProjectileEditNode("Phantasm(Ground)", FALCO_ID, 0x4168),
 			new ProjectileEditNode("Phantasm(Air)", FALCO_ID, 0x4184),
-			new ProjectileEditNode("Unused?(1)",FALCO_ID, 0x3FFC),
+			//new ProjectileEditNode("Unused?(1)",FALCO_ID, 0x3FFC),
 			
 			//Game and watch
 			new ProjectileEditNode("Sausage", GAMEWATCH_ID, 0x440C),
+			
+			//Popo
+			new ProjectileEditNode("Ice Block", POPO_ID, 0x3B30),
+			//new ProjectileEditNode("Blizzard", POPO_ID, 0x3BE8),
+			
+			//Nana
+			new ProjectileEditNode("Ice Block", NANA_ID, 0x1A14),
+			//new ProjectileEditNode("Blizzard", NANA_ID, 0x1ACC),
 			
 			//Kirby
 			new ProjectileEditNode("Final Cutter", KIRBY_ID, 0x7B7C),
@@ -96,20 +104,24 @@ public class ProjectileEditPane extends JPanel implements ActionListener {
 			new ProjectileEditNode("Disable hitbox", MEWTWO_ID, 0x3D00),
 			
 			//Ness
+			new ProjectileEditNode("PK Flash", NESS_ID,0x3D94),
 			new ProjectileEditNode("PK Fire(Pre-impact)", NESS_ID,0x3F3C),
 			new ProjectileEditNode("PK Fire(Fire pillar)", NESS_ID,0x3F5C),
-			new ProjectileEditNode("PK Thunder 1", NESS_ID,0x4138),
+			new ProjectileEditNode("PK Thunder (Initial Spawn)", NESS_ID,0x4138),
+			new ProjectileEditNode("PK Thunder (In-air)", NESS_ID,0x4138),
 			
 			//Pichu
 			new ProjectileEditNode("Thunder Jolt", PICHU_ID,0x3B64),
+			new ProjectileEditNode("Lightning Bolt", PICHU_ID,0x3CE8),
 			
 			//Pikachu
 			new ProjectileEditNode("Thunder Jolt", PIKACHU_ID,0x3CA4),
-			//new ProjectileEditNode("Thunder Jolt", PIKACHU_ID,0x3CA4),
+			new ProjectileEditNode("Lightning Bolt", PIKACHU_ID,0x3E28),
 			
 			//Samus
 			new ProjectileEditNode("Charge Shot", SAMUS_ID,0x3ED4),
 			new ProjectileEditNode("Homing Missile", SAMUS_ID,0x4070),
+			new ProjectileEditNode("Smash Missile", SAMUS_ID,0x408C),
 			new ProjectileEditNode("Bomb", SAMUS_ID,0x4170),
 			
 			//Sheik
@@ -123,9 +135,11 @@ public class ProjectileEditPane extends JPanel implements ActionListener {
 			
 			//Young Link
 			new ProjectileEditNode("Arrow", YOUNGLINK_ID,0x4190),
+			new ProjectileEditNode("Bomb impact", YOUNGLINK_ID, 0x4434),
+			new ProjectileEditNode("Bomb explosion", YOUNGLINK_ID, 0x445C),
 			
 			//Zelda
-
+			new ProjectileEditNode("Din's Fire", ZELDA_ID,0x3FE4),
 	};
 	
 		//PlKp.dat @0x4110 - Flame Breath hitbox?
@@ -168,6 +182,8 @@ public class ProjectileEditPane extends JPanel implements ActionListener {
 	//7C 08 02 A6 3C 80 80 4A 90 01 00 04 38 A4 0C 64 94 21 FF D0 93 E1 00 2C 3B E0 00 00 93 C1 00 28 93 A1 00 24 93 81 00 20 7C 7C 1B 78 80 85 00 1C 80 05 00 20 7C 04 00 00 40 80 00 14
 	//
 	
+	//0x80275CB4 = pokeball spawn pokemon function?
+	//
 	
 	//Start.dol @0x25D7F4 -- CSS stuff?
 	

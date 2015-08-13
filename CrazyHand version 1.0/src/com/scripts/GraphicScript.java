@@ -26,7 +26,8 @@ public class GraphicScript extends Script {
     			zPos = new JFormattedTextField(0),
     			xExtent = new JFormattedTextField(0),
     			yExtent = new JFormattedTextField(0),
-    			zExtent = new JFormattedTextField(0);
+    			zExtent = new JFormattedTextField(0),
+    			boneAttachment = new JFormattedTextField(0);
 
         public GraphicScript(String n, int[] d, int l){
         	super(n,d,l);
@@ -57,6 +58,8 @@ public class GraphicScript extends Script {
             zExtent.setValue(this.setBits(112,127));
             yExtent.setValue(this.setBits(128,143));
             xExtent.setValue(this.setBits(144,159));
+            
+            boneAttachment.setValue(this.setBits(8, 13));
 
             
             
@@ -123,6 +126,54 @@ public class GraphicScript extends Script {
             tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
             tempPanel.add(Box.createHorizontalStrut(5));
             
+            this.add(Box.createVerticalStrut(5));
+            this.add(tempPanel);
+            this.add(Box.createVerticalStrut(5));
+            tempPanel= new JPanel();
+            tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.LINE_AXIS));
+            
+            //Temporary
+            String bitstring="Bits:";
+            int[] bits = new int[8];
+            for(int i = 0; i < bits.length; i ++){
+            	bits[i]=this.setBits(8+i, 8+i);
+            	bitstring+="|"+bits[i];
+            }
+            
+            tempPanel.add(new JLabel(bitstring));
+            
+            tempPanel.add(Box.createHorizontalStrut(5));
+            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
+            tempPanel.add(Box.createHorizontalStrut(5));
+            
+            System.out.println(bitstring);
+            
+            int UK1 = this.data[2];
+            int UK2 = this.data[3];
+            int UK3 = this.data[6];
+            int UK4 = this.data[7];
+            
+            if(UK1!=0){
+            	System.out.println("UNKNOWN 1 IS NOT 0(="+UK1+")@0x"+Integer.toHexString(location));
+            }
+            if(UK2!=0){
+            	System.out.println("UNKNOWN 2 IS NOT 0(="+UK2+")@0x"+Integer.toHexString(location));
+            }
+            if(UK3!=0){
+            	System.out.println("UNKNOWN 3 IS NOT 0(="+UK3+")@0x"+Integer.toHexString(location));
+            }
+            if(UK4!=0){
+            	System.out.println("UNKNOWN 4 IS NOT 0(="+UK4+")@0x"+Integer.toHexString(location));
+            }
+            
+            
+            //
+            
+            tempPanel.add(new JLabel("Bone attachment: "));
+            tempPanel.add(boneAttachment);
+            tempPanel.add(Box.createHorizontalStrut(5));
+            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
+            tempPanel.add(Box.createHorizontalStrut(5));
             
           
             this.add(Box.createVerticalStrut(5));
@@ -156,8 +207,10 @@ public class GraphicScript extends Script {
             this.saveBits(144,159,((Number)xExtent.getValue()).intValue());
             this.saveBits(128,143,((Number)yExtent.getValue()).intValue());
             this.saveBits(112,127,((Number)zExtent.getValue()).intValue());
-
-
+            
+            this.saveBits(8, 13, ((Number)boneAttachment.getValue()).intValue());
+            
+            //this.saveBits(15, 15, 0);
   		
         }
        

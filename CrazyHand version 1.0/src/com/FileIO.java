@@ -1,6 +1,7 @@
 package com;
 
 import isotool.filesystem.ISO;
+import isotool.filesystem.ISOFile;
 import isotool.filesystem.ISOFileSystem;
 
 import java.io.File;
@@ -21,6 +22,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.SpecialAttributeIndex.SpecialMoveAttribute;
 import com.scripts.BodyStateScript;
+import com.scripts.ComboSFXGFXScript;
 import com.scripts.GraphicScript;
 import com.scripts.HitboxScript;
 import com.scripts.LoopScript;
@@ -55,6 +57,7 @@ public class FileIO {
 								+ ".dat");
 
 		f.position(Character.characters[character].offset);
+		System.out.println("File is 0x" +Integer.toHexString(f.capacity())+" bytes in length.");
 	}
 	
 	public static void init() {
@@ -291,6 +294,9 @@ public class FileIO {
 				else if (e.id == 0x44) {
 					temp = new SoundScript(e.name, d, offset + 0x20 + bytesDown);
 				}
+				else if (e.id == 0xDC){
+					temp = new ComboSFXGFXScript(e.name, d, offset + 0x20 + bytesDown);
+				}
 				else {
 					if(e.id==0x10)
 						loopScript=-1;
@@ -382,7 +388,7 @@ public class FileIO {
 				}
 				
 				//TODO
-				name+="("+i+")";
+				name+="(0x"+Integer.toHexString(i).toUpperCase()+")";
 				
 				subactions[i] = name;
 			}
@@ -640,6 +646,113 @@ public class FileIO {
 				}
 			}
 		}
+		
+		
+		FileIO.initDOL();
+		
+		/*v1.00 SDI
+		int[]poses= new int[]{0x73DC0,0x73E84,0x74DB4};
+		int[][] vals = new int[3][4];
+		vals[0]=new int[]{0x60,0x00,0x00,0x00};
+		vals[1]=new int[]{0x60,0x00,0x00,0x00};
+		vals[2]=new int[]{0x60,0x00,0x00,0x00};
+		*/
+		
+		/*
+		int[]poses= new int[]{0x2A8890};
+		int[][] vals = new int[1][8];
+		vals[0]=new int[]{0x4B,0xFC,0x74,0x81,0x60,0x00,0x00,0x00};
+		*/
+		int[]poses=new int[]{0x3CF828};
+		int[][] vals = new int[1][0x20];
+		
+		
+		
+		
+		//Old data
+		//vals[0]=new int[]{0x80,0x11,0xA4,0x38};
+		
+		
+		//FOX NEUTRAL B
+		//old vals 80 0E 6A B4
+		
+		/*
+		vals[0]=new int[]{0x00,0x34,0x00,0x14,0x15,0x00,0x00,0x00,0x80,0x0E
+						 ,0xB8,0xA4,0x00,0x00,0x00,0x00,0x80,0x0E,0xB9
+						 ,0x1C,0x80,0x0E,0xB9,0x5C,0x80,0x07,0x61,0xC8
+		};
+		*/
+		
+		
+		/*Peach down-B 2
+		  vals[0]=new int[]{0x00,0x34,0x00,0x14,0x15,0x00,0x00,0x00,0x80,0x11
+				,0xD3,0x40,0x00,0x00,0x00,0x00,0x80,0x11,0xD3,0xB4,0x80,0x11
+				,0xD3,0xFC,0x80,0x07,0x61,0xC8
+		};
+		 */
+		/*
+		vals[0]=new int[]{0x00,0x34,0x00,0x14,//Unsure
+						  0x15,0x00,0x00,0x00,//Unsure
+						  0x80,0x27,0xAB,0x64,//SpawnPokemon(Obj?)
+						  0x00,0x00,0x00,0x00,//Unsure--Filler?
+						  0x80,0x27,0xa4,0xd4,//ChooseRandomPokemon()
+						  0x11,0xd3,0xfc,0x80,0x07,0x61,0xC8//REALLY unsure
+		};
+		*/
+		
+		vals[0]=new int[]{
+				//0x00,0x00,0x01,0x42,0x00,0x34,0x02,0x11,0x12,0x00,0x00,0x00,0x80,0x10,0xE9,0x30,0x80,0x10,0xF1,0xDC,0x80,0x10,0xF3,0x88,0x80,0x10,0xF6,0x54,0x80,0x07,0x61,0xC8
+				//0x00,0x00,0x01,0x48,0x00,0x34,0x06,0x11,0x12,0x00,0x00,0x00,0x80,0x10,0xEF,0x7C,0x80,0x10,0xF3,0x24,0x80,0x10,0xF4,0x48,0x80,0x10,0xFA,0x2C,0x80,0x07,0x61,0xC8
+				
+				/*
+				
+				0x00,0x00,0x01,0x3D,
+				
+				0x00,0x3C,0x00,0x14,
+				
+				0x15,0x00,0x00,0x00,
+				//First line of 0x80 spawns G&W down-B absorb hitbox, also controls move interrupts.
+				//0x80,0x14,0xD0,0x14,
+				0x80,0x0C,0xAE,0xD0,//Replace with grounded jump cancel
+				0x80,0x14,0xD1,0xAC,
+				
+				0x80,0x14,0xD3,0x1C,
+				
+				0x80,0x14,0xD3,0xB4,
+				0x80,0x07,0x61,0xC8,
+				*/
+				
+				//Replacing AI with Fox down-B loop
+				0x00,0x3C,0x10,0x14,0x15,
+				0x00,0x00,0x00,0x80,0x0E,
+				0x8A,0x24,0x80,0x0E,0x8B,
+				0x14,0x80,0x0E,0x8C,0x34,
+				0x80,0x0E,0x8C,0xDC,0x80,
+				0x07,0x61,0xC8
+		};
+		
+		//FileIO.setPosition(0x2A8890);
+		System.out.println(FileIO.isoFileSystem.getCurrentFile().getName());
+		for(int i = 0; i < poses.length; i ++)
+		{
+			int[] vls = vals[i];
+			FileIO.setPosition(poses[i]);
+			for(int c = 0; c < vls.length; c ++){
+				int byt = vls[c];
+				System.out.println(Integer.toHexString(FileIO.f.position())+"|"+Integer.toHexString(byt));
+				//FileIO.writeByte(byt);
+			}
+		}
+		
+		try {
+			FileIO.isoFileSystem.replaceFile(FileIO.isoFileSystem.getCurrentFile(), f.array());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		FileIO.init();
+		
 	}
 
 	public static void shuffle() {
@@ -703,8 +816,12 @@ public class FileIO {
 					}
 					
 					RandomAccessFile raf = new RandomAccessFile(fi, "rw");
+					
+					FileIO.init();
+					
 					f.position(0);
 					raf.write(f.array());
+					System.out.println("Saving character file 0x"+Integer.toHexString(f.capacity())+" bytes in length.");
 					raf.close();
 				}
 				catch(Exception e){}
@@ -777,8 +894,29 @@ public class FileIO {
 		}
 	}
 	
+	public static String stageFile="Start.dol";
 	
-	
+	//TODO remove when finished!
+	public static void runDebugStageSwap() throws IOException {
+		
+		FileIO.loadedISOFile.reload();
+		
+		ISOFile ifo = FileIO.loadedISOFile.getFileSystem().getISOFile(stageFile);
+		
+		RandomAccessFile raf = new RandomAccessFile(stageFile, "r");
+		
+		byte[] byt = new byte[(int) raf.length()];
+		
+		raf.readFully(byt);
+		
+		System.out.println("Replacing file " +stageFile+"....");
+		
+		//FileIO.isoFileSystem.replaceFile(ifo,byt);
+		
+		System.out.println("Done replacing file " +stageFile);
+		
+		FileIO.loadedISOFile.close();
+	}
 	
 	
 	

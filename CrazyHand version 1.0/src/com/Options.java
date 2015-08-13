@@ -20,6 +20,8 @@ public class Options
 {
 	public static boolean advanced = false;
 	
+	public static String advancedFsmLocation="";
+	public static boolean advancedFsmOpt=false;
 	
 	public static void loadOptions()
 	{
@@ -40,6 +42,15 @@ public class Options
 				else if(o.startsWith("optDolphinPath:")){
 					hasDolphinPath = true;
 					dolphinPath = o.split("optDolphinPath:")[1];
+				}
+				else if(o.startsWith("advfsm")){
+					if(o.startsWith("advfsmloc")){
+						advancedFsmLocation = o.split("advfsmloc:")[1];
+					}
+					else{
+						advancedFsmOpt = o.split("advfsm:")[1] != "true";
+						System.out.println("advfsm:"+advancedFsmOpt);
+					}
 				}
 			}
 			
@@ -117,6 +128,8 @@ public class Options
 			if(hasDolphinPath)
 			out.write("optDolphinPath:"+dolphinPath+ln);
 			out.write("tabSubactions:"+tabSubactions+ln);
+			out.write("advfsm:"+advancedFsmOpt+ln);
+			out.write("advfsmloc:"+(advancedFsmLocation == "" ? "4088B0" : advancedFsmLocation)+ln);
 			out.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -259,6 +272,8 @@ public class Options
 	}
 	
 	public static Process dolphinInstance;
+
+	public static String advancedFsmListLocation="";
 	
 	public static boolean isOSWindows(){
 		return System.getProperty("os.name").startsWith("Windows");

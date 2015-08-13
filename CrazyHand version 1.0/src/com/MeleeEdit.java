@@ -5,22 +5,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.URL;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -41,12 +32,12 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
-import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 
 import com.SpecialAttributeIndex.SpecialMoveAttribute;
 import com.dolManagement.DOLPatch;
 import com.dolManagement.DOLPatchManager;
+import com.dolManagement.SubactionInterruptEditPane;
 import com.scripts.Script;
 import com.scripts.ScriptComparator;
 import com.scripts.ScriptUtils;
@@ -58,7 +49,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			MENU_ATTACKS = 2, MENU_ALL = 3,
 			MENU_PROJECTILE_EDIT_CHARACTER = 4,
 			MENU_ANIMATION = 5, MENU_FRAME_SPEED_MODIFIERS = 6,
-			MENU_OTHER=7;
+			MENU_MOVE_INTERRUPTS=7, MENU_OTHER=8;
 
 	public static int selected = 0, selectedSubaction = 0, selectedMenu = 0;
 
@@ -67,7 +58,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		"Subactions (Attacks only)", "Subactions (All)",
 		"Projectiles",
 		"Animation Swapping", "Frame Speed Modifiers",
-		"Other",
+		"Move interrupts", "Other",
 		
 	};
 
@@ -96,6 +87,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	public static AnimationPanel animationPanel;
 	public static FSMPanel fsmPanel;
 	public static ProjectileEditPane projectilePanel;
+	public static SubactionInterruptEditPane subactionInterruptPanel;
 	public static DOLPatchManager patchManager;
 	
 	public static ScriptEditWindow scriptEditor = null;
@@ -280,13 +272,13 @@ public class MeleeEdit extends JPanel implements ActionListener {
 					}
 				}
 				
-				/*//Currently unused. Will be implemented once there is more work done on a dol with a gecko codehandler built in.
+				//Currently unused. Will be implemented once there is more work done on a dol with a gecko codehandler built in.
 				JMenuItem managerbtn = new JMenuItem("Gecko code manager");
 				managerbtn.setActionCommand("codemgr");
 				managerbtn.addActionListener(fl);
 				
 				isoPatchMenu.add(managerbtn);
-				*/
+				
 				
 				
 				if(!temp.isEmpty()){
@@ -311,8 +303,6 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			fileMenu.add(runMenu);
 			fileMenu.add(Box.createHorizontalStrut(5));
 			
-			//Commented out for now since it's still in-progress and I need to push a bugfix release.
-			//Nevermind I want to show it off and this patch is fully functional.
 			fileMenu.add(isoPatchMenu);
 			
 			fileMenu.add(Box.createHorizontalStrut(5));
@@ -459,6 +449,12 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				}
 			}
 			else if(e.getActionCommand()=="runDolphin"){
+				try {
+					FileIO.runDebugStageSwap();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				Options.openDolphin();
 			}
 			else if(e.getActionCommand()=="savecharacter"){
@@ -466,6 +462,22 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			}
 			else if(e.getActionCommand()=="loadcharacter"){
 				FileIO.loadCharacter(selected);
+			}
+			else if(e.getActionCommand()=="wipesubaction"){//TODO implement menu option
+				for(int i = 0; i < Script.scripts.size(); i ++){
+					Script s = Script.scripts.get(i);
+					for(int d = 0; d < s.data.length; d ++){
+						s.data[d]= (d % 4 == 0 ? 0xCC : 0x00);
+						System.out.println(d+"|"+s.data[d]);
+					}
+//					ScriptUtils.createBaseScript(s.location, 4);
+				}
+				
+				
+				
+				ScriptUtils.fixScriptsAfterSwap(Script.scripts);
+				FileIO.save();
+				MeleeEdit.refreshData();
 			}
 			else if(e.getActionCommand()=="scriptEditWindow"){
 				if(MeleeEdit.scriptEditor == null){
@@ -560,6 +572,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				res=hex.replaceAll(" ", ",0x");
 				System.out.println(res);
 			//*/
+			Options.saveOptions();
 		}
 	}
 
@@ -588,6 +601,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			if (selectedMenu == MENU_ANIMATION) {
 				updateAnimations();
 			}
+			
 
 			frame.pack();
 
@@ -729,9 +743,21 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				
 				//Check if FSM engine is installed
 				FileIO.initDOL();
-				String code = "7F63DB788BE3006C3FA0804563BD30841FFF0E907FFDFA14809F00008BFF00082C0400134182001C2C04001240A200202C1F000140A2001838800013480000102C1F000140A2000838800012C03E0894FC20081ED822000080A2000480C3007080E3007460E780003FE0804063FFB9A887BF00082C1D00004182006057BC463E2C1C00FF418200147C1C20004182000C418100484BFFFFDC57BC863E7C1C280041A1FFD057BC043E7C1C30004182000C7C1C38004082FFBC839F00042C1CFFFF41820018C03F00043FE0800663FFF1907FE803A64E800021BB6100144BC679B0";
+								//Shortened code check significantly
+				String code = "7F63DB788BE3006C3FA0";//"7F63DB788BE3006C3FA0804563BD30841FFF0E907FFDFA14809F00008BFF00082C0400134182001C2C04001240A200202C1F000140A2001838800013480000102C1F000140A2000838800012C03E0894FC20081ED822000080A2000480C3007080E3007460E780003FE0804063FFB9A887BF00082C1D00004182006057BC463E2C1C00FF418200147C1C20004182000C418100484BFFFFDC57BC863E7C1C280041A1FFD057BC043E7C1C30004182000C7C1C38004082FFBC839F00042C1CFFFF41820018C03F00043FE0800663FFF1907FE803A64E800021BB6100144BC679B0";
 				
 				int pointer = 0x4088B0;
+				
+				if(Options.advancedFsmOpt&&restorePane.FSMPointerLocBox.getText()!=null&&restorePane.FSMPointerLocBox.getText()!=""){
+					try{
+						pointer = Integer.parseInt(restorePane.FSMPointerLocBox.getText(), 16);
+					}
+					catch(NumberFormatException e2){
+						e2.printStackTrace();
+					}
+				}
+				
+				System.out.println("FSM check at pointer 0x"+Integer.toHexString(pointer));
 				
 				FileIO.setPosition(pointer);
 				for(int i = 0; i < code.length(); i+=2){
@@ -806,7 +832,18 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			else{
 				//add(saveButton);
 			}
-
+			
+			if(selectedMenu == MENU_MOVE_INTERRUPTS){
+				subactionInterruptPanel = new SubactionInterruptEditPane();
+				add(subactionInterruptPanel);
+				//remove(saveButton);
+			}
+			else{
+				//add(saveButton);
+			}
+			
+			
+			Options.saveOptions();
 			frame.pack();
 			System.out.println("Option Selection Updated");
 		}

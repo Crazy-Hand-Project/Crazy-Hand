@@ -24,9 +24,9 @@ import javax.swing.text.MaskFormatter;
 public class RestorePanel extends JPanel {
 	public JButton btn102, btn102All, btn101, btn101All, btn100, btn100All,
 			btnPAL, btnPALAll, randoBtn;
-	public JCheckBox rawBox;
+	public JCheckBox rawBox,advFSMBox;
 	
-	public JTextField randomSeed;
+	public JTextField randomSeed,FSMPointerLocBox,FSMListPointerLocBox;
 
 	public RestorePanel() {
 		super();
@@ -76,11 +76,20 @@ public class RestorePanel extends JPanel {
 		btnPALAll.setActionCommand("Restore");
 		// 102Btn.addActionListener(new 102BtnListener());
 		// this.add(btnPALAll);
+		
+		LFSM fsml = new LFSM();
 
 		rawBox = new JCheckBox("Use raw data for subactions");
 		// rawBox.setMnemonic(KeyEvent.VK_C);
 		rawBox.setSelected(false);
 		verticalBox.add(rawBox);
+		
+		advFSMBox = new JCheckBox("Use default start point for FSM list");
+		advFSMBox.setSelected(Options.advancedFsmOpt);
+		advFSMBox.setActionCommand("fsmopt");
+		advFSMBox.addActionListener(fsml);
+		
+		verticalBox.add(advFSMBox);
 
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
@@ -95,6 +104,29 @@ public class RestorePanel extends JPanel {
 		
 		randomSeed.setPreferredSize(new Dimension(100,randomSeed.getPreferredSize().height));
 		randomSeed.setMaximumSize(randomSeed.getPreferredSize());
+		
+		
+		FSMPointerLocBox = new JTextField();
+		FSMPointerLocBox.setEditable(true);
+		
+		FSMPointerLocBox.setPreferredSize(new Dimension(100,randomSeed.getPreferredSize().height));
+		FSMPointerLocBox.setMaximumSize(randomSeed.getPreferredSize());
+		FSMPointerLocBox.setText(Options.advancedFsmLocation);
+		FSMPointerLocBox.setActionCommand("fsmtb");
+		FSMPointerLocBox.addActionListener(fsml);
+		
+		FSMListPointerLocBox = new JTextField();
+		FSMListPointerLocBox.setEditable(true);
+		
+		FSMListPointerLocBox.setPreferredSize(new Dimension(100,randomSeed.getPreferredSize().height));
+		FSMListPointerLocBox.setMaximumSize(randomSeed.getPreferredSize());
+		FSMListPointerLocBox.setText(Options.advancedFsmListLocation);
+		FSMListPointerLocBox.setActionCommand("fsmltb");
+		FSMListPointerLocBox.addActionListener(fsml);
+		
+		verticalBox.add(FSMPointerLocBox);
+		verticalBox.add(FSMListPointerLocBox);
+		
 		//randomSeed.setMinimumSize(randomSeed.getPreferredSize());
 		/*
 		openISOBtn = new JButton("Open Another ISO...");
@@ -254,6 +286,24 @@ class LRando implements ActionListener {
 		}
 	}
 
+}
+
+class LFSM implements ActionListener{
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		String cmd = arg0.getActionCommand().toLowerCase();
+		if(cmd=="fsmopt"){
+			Options.advancedFsmOpt=MeleeEdit.restorePane.advFSMBox.isEnabled();
+		}
+		else if(cmd=="fsmtb"){
+			Options.advancedFsmLocation=MeleeEdit.restorePane.FSMPointerLocBox.getText();
+		}
+		else if(cmd=="fsmltb"){
+			Options.advancedFsmListLocation=MeleeEdit.restorePane.FSMListPointerLocBox.getText();
+		}
+	}
+	
 }
 
 class OpenISOAction implements ActionListener {

@@ -62,7 +62,7 @@ public class DOLPatch implements PropertyChangeListener {
 	//0x2A6C3C = Ness PK fire spawnmadoodle
 	//0x13F5B8 = Luigi fireball spawnmadoodle
 	//
-	//0x26933C = Default item spawn method(?)
+	//0x26933C(0026C75C in RAM) = Default item spawn method(?)
 	
 	
 	public static final DOLPatch dolPatchFSM = new DOLPatch(

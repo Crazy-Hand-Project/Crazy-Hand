@@ -31,15 +31,16 @@ public class Event {
     	new Event(0x1C, 0x8, "Subroutine"),
     	new Event(0x14, 0x8, "GoTo"),
     	new Event(0x18, 0x4, "Return"),
-    	new Event(0xAC, 0x4, "Generate article?"),
+    	new Event(0xAC, 0x4, "Rumble"),
     	new Event(0x7C, 0x4, "Model mod"),
     	new Event(0x28, 0x14, "Graphic Effect"),
     	new Event(0x44, 0xC, "Sound Effect"),
+    	new Event(0xDC, 0xC, "Sound + Graphic effect"),
     	new Event(0x48, 0x4, "Random Smash SFX"),
     	new Event(0x3C, 0x4, "Terminate Specific Collision"),
     	new Event(0x6C, 0x4, "Set All Bones State"),
     	new Event(0x70, 0x4, "Set Specific Bone State"),
-    	new Event(0xE8, 0x10, "TBD"),//Set to TBD instead of Unknown so that there aren't conflicts in drop-down menus with the script labeled Unknown with value 0x74
+    	new Event(0xE8, 0x10, "Aesthetic wind effect"),//Set to TBD instead of Unknown so that there aren't conflicts in drop-down menus with the script labeled Unknown with value 0x74
     	
     	//new Event(0x4e, 0x4, "B button check?"),
     	//01 checks if b button is held down, and if it is not continues the script. See young link's arrow start.

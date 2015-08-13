@@ -139,7 +139,23 @@ public class FSMPanel extends JPanel {
 
 		
 		FileIO.initDOL();
-		FileIO.setPosition(0x4089b0);
+		
+		
+		int pointer = 0x4089b0;
+		
+		if(Options.advancedFsmOpt&&MeleeEdit.restorePane.FSMListPointerLocBox.getText()!=null&&MeleeEdit.restorePane.FSMPointerLocBox.getText()!=""){
+			try{
+				pointer = Integer.parseInt(MeleeEdit.restorePane.FSMListPointerLocBox.getText(), 16);
+			}
+			catch(NumberFormatException e){
+				e.printStackTrace();
+			}
+		}
+		
+		System.out.println("FSM Panel refresh at loc 0x"+Integer.toHexString(pointer));
+		
+		
+		FileIO.setPosition(pointer);
 		int[] b = new int[4];
 		
 
@@ -235,9 +251,20 @@ public class FSMPanel extends JPanel {
 		
 		Collections.sort(nodes);
 		
+		int pointer = 0x4089b0;
+		
+		if(Options.advancedFsmOpt&&MeleeEdit.restorePane.FSMListPointerLocBox.getText()!=null&&MeleeEdit.restorePane.FSMPointerLocBox.getText()!=""){
+			try{
+				pointer = Integer.parseInt(MeleeEdit.restorePane.FSMListPointerLocBox.getText(), 16);
+			}
+			catch(NumberFormatException e){
+				e.printStackTrace();
+			}
+		}
+		
 		FileIO.initDOL();
 		System.out.println("po1");
-		FileIO.setPosition(0x4089b0);
+		FileIO.setPosition(pointer);
 		System.out.println("po2");
 		int i = 0;
 		for(FSMNode n: nodes){

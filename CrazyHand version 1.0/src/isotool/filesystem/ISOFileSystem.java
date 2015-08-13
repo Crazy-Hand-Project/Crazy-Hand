@@ -8,6 +8,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.HashMap;
 
+import com.FileIO;
+
 /**
  * 
  * Contains functions to modify and open files within the SSBM ISO.
@@ -195,6 +197,10 @@ public class ISOFileSystem {
 	 * @return
 	 */
 	private boolean isMovesetFile(String name) {// should be 34 files
+		//TODO remove this when finished!
+		if(name.equals(FileIO.stageFile)){
+			return true;
+		}
 		return (name.startsWith("Pl") && name.replace(".dat", "").length() == 4);
 	}
 
