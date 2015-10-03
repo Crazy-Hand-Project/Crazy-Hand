@@ -438,6 +438,8 @@ public class SpecialMovesList{
 		new SubAction(0x135, "(Air)Up-B"),
 		new SubAction(0x136, "(Ground)Down-B"),
 		new SubAction(0x137, "(Air)Down-B"),
+		new SubAction(0x138, "Zair"),
+		new SubAction(0x139, "Zair hit stage"),
 		//Two more entries below SpecialAirLw, AirCatch and AirCatchHit.
 		//I'd assume that's links zair.
 		//There's also an entry above SpecialNStart, AttackS42.
@@ -696,9 +698,9 @@ public class SpecialMovesList{
 		new SubAction(0x131, "(Air)Up-B Start"),
 		new SubAction(0x132, "(Air)Up-B"),
 		new SubAction(0x133, "(Ground)Down-B(?)"),
-		new SubAction(0x134, "(Ground)Down-B(?)"),
+		new SubAction(0x134, "(Ground)Down-B(?)2"),
 		new SubAction(0x135, "(Air)Down-B(?)"),
-		new SubAction(0x136, "(Air)Down-B(?)"),
+		new SubAction(0x136, "(Air)Down-B(?)2"),
 	};
 	
 	//Quick and dirty, but it works and I doubt this will need to be changed later down the line.

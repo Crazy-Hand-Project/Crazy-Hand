@@ -110,6 +110,9 @@ public class ProjectileEditPane extends JPanel implements ActionListener {
 			new ProjectileEditNode("PK Thunder (Initial Spawn)", NESS_ID,0x4138),
 			new ProjectileEditNode("PK Thunder (In-air)", NESS_ID,0x4138),
 			
+			//Peach
+			new ProjectileEditNode("Turnip?", PEACH_ID, 0x4310),
+			
 			//Pichu
 			new ProjectileEditNode("Thunder Jolt", PICHU_ID,0x3B64),
 			new ProjectileEditNode("Lightning Bolt", PICHU_ID,0x3CE8),

@@ -240,7 +240,15 @@ public class Script extends JPanel{
 	
 	public void updateScriptBoxInfo(){//Mainly used for scripts inside loops
 									  //This function will be added to as new needs arise.
-		if(this.isScriptInsideLoop){
+		if(this.data[0]==0xCC&&this.data[1]==0x0&&this.data[2]==0x0&&this.data[3]==0x0){//If this is a self-damage script with no damage
+			this.setBackground(new Color(0x75435C));
+			for(int i = 0; i < this.getComponentCount(); i ++)
+			{
+				this.getComponent(i).setBackground(new Color(0x733654));
+			}
+			this.setToolTipText("This script is filler data. It can be replaced with no negative effects.");
+		}
+		else if(this.isScriptInsideLoop){
 			this.setBackground(new Color(0xDDDDEE));
 			for(int i = 0; i < this.getComponentCount(); i ++)
 			{
@@ -252,19 +260,6 @@ public class Script extends JPanel{
 			this.setBackground(Color.white);
 			this.setToolTipText("");
 		}
-		
-		//temporary
-		String bitstring="Bits:";
-        int[] bits = new int[data.length*8];
-        for(int i = 0; i < bits.length; i ++){
-        	bits[i]=this.setBits(i, i);
-        	bitstring+=bits[i]+"|";
-        	if(i % 24 == 1){
-        		bitstring+="\n";
-        	}
-        }
-        this.setToolTipText(this.getToolTipText()+" "+bitstring);
-		//
 		
 		
 		numTag.setText(" " + (arrayPlacement+1) + "   ");

@@ -272,6 +272,7 @@ public class DOLPatch implements PropertyChangeListener {
 	);
 	*/
 	
+	
 	public String name = "ERR";
 	public int[] pointers;
 	public int[][] defaultValues, newValues;

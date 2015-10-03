@@ -59,7 +59,7 @@ public class GraphicScript extends Script {
             yExtent.setValue(this.setBits(128,143));
             xExtent.setValue(this.setBits(144,159));
             
-            boneAttachment.setValue(this.setBits(8, 13));
+            boneAttachment.setValue(this.setBits(7, 13));
 
             
             
@@ -134,17 +134,17 @@ public class GraphicScript extends Script {
             
             //Temporary
             String bitstring="Bits:";
-            int[] bits = new int[8];
+            int[] bits = new int[7];
             for(int i = 0; i < bits.length; i ++){
-            	bits[i]=this.setBits(8+i, 8+i);
+            	bits[i]=this.setBits(7+i, 7+i);
             	bitstring+="|"+bits[i];
             }
             
-            tempPanel.add(new JLabel(bitstring));
+           // tempPanel.add(new JLabel(bitstring));
             
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
+         //   tempPanel.add(Box.createHorizontalStrut(5));
+          //  tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
+        //    tempPanel.add(Box.createHorizontalStrut(5));
             
             System.out.println(bitstring);
             
@@ -208,7 +208,7 @@ public class GraphicScript extends Script {
             this.saveBits(128,143,((Number)yExtent.getValue()).intValue());
             this.saveBits(112,127,((Number)zExtent.getValue()).intValue());
             
-            this.saveBits(8, 13, ((Number)boneAttachment.getValue()).intValue());
+            this.saveBits(7, 13, ((Number)boneAttachment.getValue()).intValue());
             
             //this.saveBits(15, 15, 0);
   		

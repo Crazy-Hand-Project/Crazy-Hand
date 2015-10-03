@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,13 +44,16 @@ import com.scripts.ScriptComparator;
 import com.scripts.ScriptUtils;
 
 public class MeleeEdit extends JPanel implements ActionListener {
-
+	
+	public static boolean debugFeaturesEnabled=false;//Will have actual functionality at a later time.
+	
+	
 	public static final int
 			MENU_ATTRIBUTES = 0, MENU_SPECIAL_ATTRIBUTES = 1,
 			MENU_ATTACKS = 2, MENU_ALL = 3,
 			MENU_PROJECTILE_EDIT_CHARACTER = 4,
 			MENU_ANIMATION = 5, MENU_FRAME_SPEED_MODIFIERS = 6,
-			MENU_MOVE_INTERRUPTS=7, MENU_OTHER=8;
+			MENU_MOVE_LOGIC=7, MENU_OTHER=8;
 
 	public static int selected = 0, selectedSubaction = 0, selectedMenu = 0;
 
@@ -58,13 +62,14 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		"Subactions (Attacks only)", "Subactions (All)",
 		"Projectiles",
 		"Animation Swapping", "Frame Speed Modifiers",
-		"Move interrupts", "Other",
+		"Move Logic","Other",
 		
 	};
 
 	public static JFrame frame, geckoManagerFrame;
 	public JButton saveButton;
-	public JMenuItem saveCharacterButton, loadCharacterButton, newTabButton;
+	public JMenuItem saveCharacterButton, loadCharacterButton, newTabButton,
+					 wipeSubactionButton, revertSubactionButton;
 	public static JTable attributeTable, attributeTable2;
 	public JScrollPane aPane, SApane;
 
@@ -217,12 +222,21 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				JMenuItem closeButton = new JMenuItem("Close");
 					closeButton.addActionListener(fl);
 					closeButton.setActionCommand("close");
+				revertSubactionButton = new JMenuItem("Revert subaction");
+					revertSubactionButton.addActionListener(fl);
+					revertSubactionButton.setActionCommand("revertsubaction");
+					revertSubactionButton.setEnabled(false);
+				wipeSubactionButton = new JMenuItem("Wipe subaction");
+					wipeSubactionButton.addActionListener(fl);
+					wipeSubactionButton.setActionCommand("wipesubaction");
+					wipeSubactionButton.setEnabled(false);
 				saveCharacterButton = new JMenuItem("Save character");
 					saveCharacterButton.addActionListener(fl);
 					saveCharacterButton.setActionCommand("savecharacter");
 				loadCharacterButton = new JMenuItem("Load character");
 					loadCharacterButton.addActionListener(fl);
 					loadCharacterButton.setActionCommand("loadcharacter");
+					
 				JMenuItem updateCheckButton = new JMenuItem("Check for updates");
 					updateCheckButton.addActionListener(fl);
 					updateCheckButton.setActionCommand("checkforupdate");
@@ -246,6 +260,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			menu.add(openButton);
 			menu.add(saveCharacterButton);
 			menu.add(loadCharacterButton);
+			menu.add(wipeSubactionButton);
+			menu.add(revertSubactionButton);
 			//menu.add(updateCheckButton);
 			menu.add(m);
 			menu.add(closeButton);
@@ -277,7 +293,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				managerbtn.setActionCommand("codemgr");
 				managerbtn.addActionListener(fl);
 				
-				isoPatchMenu.add(managerbtn);
+				//isoPatchMenu.add(managerbtn);
 				
 				
 				
@@ -463,14 +479,14 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			else if(e.getActionCommand()=="loadcharacter"){
 				FileIO.loadCharacter(selected);
 			}
-			else if(e.getActionCommand()=="wipesubaction"){//TODO implement menu option
+			else if(e.getActionCommand()=="wipesubaction"){
 				for(int i = 0; i < Script.scripts.size(); i ++){
 					Script s = Script.scripts.get(i);
 					for(int d = 0; d < s.data.length; d ++){
 						s.data[d]= (d % 4 == 0 ? 0xCC : 0x00);
-						System.out.println(d+"|"+s.data[d]);
+						//System.out.println(d+"|"+s.data[d]);
 					}
-//					ScriptUtils.createBaseScript(s.location, 4);
+					//ScriptUtils.createBaseScript(s.location, 4);
 				}
 				
 				
@@ -478,6 +494,48 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				ScriptUtils.fixScriptsAfterSwap(Script.scripts);
 				FileIO.save();
 				MeleeEdit.refreshData();
+			}
+			else if(e.getActionCommand()=="revertsubaction"){
+				try {
+					RandomAccessFile raf = new RandomAccessFile("def/102/Pl"+Character.characters[selected].id+".dat", "r");
+					
+					FileIO.init();
+					
+					int subStart=Integer.MAX_VALUE;
+					int subEnd=Integer.MIN_VALUE;
+					
+					for(Script sc : Script.scripts){
+						if(sc.location<subStart){
+							subStart=sc.location;
+						}
+						if(sc.location+sc.data.length>subEnd){
+							subEnd=sc.location+sc.data.length;
+						}
+					}
+					
+					System.out.println("Reverting subaction[START=0x"+Integer.toHexString(subStart)+", END=0x"+Integer.toHexString(subEnd)+"]");
+					
+					
+					raf.skipBytes(subStart);
+					FileIO.setPosition(subStart);
+					
+					int off = 0;
+					while(subStart+off<subEnd){
+						FileIO.writeByte(raf.readByte());
+						off++;
+					}
+					
+					//FileIO.isoFileSystem.replaceFile(FileIO.isoFileSystem.getCurrentFile(), FileIO.f.array());
+					
+					//FileIO.init();
+					FileIO.save();
+					MeleeEdit.refreshData();
+					
+					
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			else if(e.getActionCommand()=="scriptEditWindow"){
 				if(MeleeEdit.scriptEditor == null){
@@ -549,6 +607,16 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			if(selectedMenu == MENU_PROJECTILE_EDIT_CHARACTER){
 				projectilePanel.save();
 			}
+			
+			if(selectedMenu == MENU_MOVE_LOGIC){
+				try {
+					subactionInterruptPanel.applyChanges();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
 
 			try {
 				FileIO.isoFileSystem
@@ -600,6 +668,11 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			}
 			if (selectedMenu == MENU_ANIMATION) {
 				updateAnimations();
+			}
+			if(selectedMenu == MENU_MOVE_LOGIC){
+				if(subactionInterruptPanel!=null){
+					subactionInterruptPanel.refresh();
+				}
 			}
 			
 
@@ -690,6 +763,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			
 			MeleeEdit.loggedSubactionSelection = MeleeEdit.selectedMenu == MeleeEdit.MENU_ATTACKS ? MeleeEdit.subactionList.getSelectedIndex() : MeleeEdit.subactionList2.getSelectedIndex();
 			
+			wipeSubactionButton.setEnabled(false);
+			revertSubactionButton.setEnabled(false);
+			
 			if(selectedMenu == MENU_SPECIAL_ATTRIBUTES) {
 				if(SpecialMovesList.getSpecialAttributesForCharacter(selected) != null){
 					updateSpecialAttributes();
@@ -729,6 +805,10 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				}
 				
 				MeleeEdit.subactionList.setSelectedIndex(MeleeEdit.loggedSubactionSelection);
+				
+				
+				wipeSubactionButton.setEnabled(true);
+				revertSubactionButton.setEnabled(true);
 			}
 			
 			if (selectedMenu == MENU_FRAME_SPEED_MODIFIERS) {
@@ -812,6 +892,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				}
 				
 				MeleeEdit.subactionList2.setSelectedIndex(MeleeEdit.loggedSubactionSelection);
+				wipeSubactionButton.setEnabled(true);
+				revertSubactionButton.setEnabled(true);
 			}
 			if (selectedMenu == MENU_OTHER) {
 				remove(saveButton);
@@ -833,7 +915,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				//add(saveButton);
 			}
 			
-			if(selectedMenu == MENU_MOVE_INTERRUPTS){
+			if(selectedMenu == MENU_MOVE_LOGIC){
 				subactionInterruptPanel = new SubactionInterruptEditPane();
 				add(subactionInterruptPanel);
 				//remove(saveButton);
@@ -986,6 +1068,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		Options.loadOptions();
 		FileIO.loadISOFile();
 		FileIO.init();
+		
 		// FileIO.declareAnims();
 		// SpecialMovesList.load();
 
@@ -1011,12 +1094,19 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				// Display the window.
 				frame.pack();
 				frame.setVisible(true);
-
 			}
 		});
-		
+
+		for(int i = 0; i < args.length; i ++){
+			System.out.println("ARG:"+args[i]);
+			if(args[i]=="-incompleteFeatures"){
+				MeleeEdit.debugFeaturesEnabled=true;
+			}
+		}
 		
 		Options.saveOptions();
+		
+		System.out.println(MeleeEdit.debugFeaturesEnabled);
 		
 
 	}

@@ -89,7 +89,7 @@ public class RestorePanel extends JPanel {
 		advFSMBox.setActionCommand("fsmopt");
 		advFSMBox.addActionListener(fsml);
 		
-		verticalBox.add(advFSMBox);
+		//verticalBox.add(advFSMBox);
 
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
@@ -124,8 +124,8 @@ public class RestorePanel extends JPanel {
 		FSMListPointerLocBox.setActionCommand("fsmltb");
 		FSMListPointerLocBox.addActionListener(fsml);
 		
-		verticalBox.add(FSMPointerLocBox);
-		verticalBox.add(FSMListPointerLocBox);
+		//verticalBox.add(FSMPointerLocBox);
+		//verticalBox.add(FSMListPointerLocBox);
 		
 		//randomSeed.setMinimumSize(randomSeed.getPreferredSize());
 		/*
