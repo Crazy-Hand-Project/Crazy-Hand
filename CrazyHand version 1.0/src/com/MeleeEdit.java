@@ -38,7 +38,7 @@ import javax.swing.table.AbstractTableModel;
 import com.SpecialAttributeIndex.SpecialMoveAttribute;
 import com.dolManagement.DOLPatch;
 import com.dolManagement.DOLPatchManager;
-import com.dolManagement.SubactionInterruptEditPane;
+import com.dolManagement.MoveLogicEditPane;
 import com.scripts.Script;
 import com.scripts.ScriptComparator;
 import com.scripts.ScriptUtils;
@@ -92,7 +92,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	public static AnimationPanel animationPanel;
 	public static FSMPanel fsmPanel;
 	public static ProjectileEditPane projectilePanel;
-	public static SubactionInterruptEditPane subactionInterruptPanel;
+	public static MoveLogicEditPane subactionInterruptPanel;
 	public static DOLPatchManager patchManager;
 	
 	public static ScriptEditWindow scriptEditor = null;
@@ -916,7 +916,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			}
 			
 			if(selectedMenu == MENU_MOVE_LOGIC){
-				subactionInterruptPanel = new SubactionInterruptEditPane();
+				subactionInterruptPanel = new MoveLogicEditPane();
 				add(subactionInterruptPanel);
 				//remove(saveButton);
 			}

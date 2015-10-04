@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -21,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.text.MaskFormatter;
 
@@ -28,7 +30,7 @@ import com.Character;
 import com.FileIO;
 import com.MeleeEdit;
 @SuppressWarnings("unused")
-public class SubactionInterruptEditPane extends JPanel implements ActionListener {
+public class MoveLogicEditPane extends JPanel implements ActionListener {
 	
 	//Formula is (very start of move interrupt table)+0x14(bytes down to first subaction interrupt line), then += 0x20 for each subaction added
 	
@@ -136,81 +138,11 @@ Crazy Hand ..... 3D11F8
 			new int[]{0x50,0x6C,0x5A,0x64},//Zelda
 			
 	};
-	
-	/*
-	
-	public InterruptNode[] bowserInterruptsList={
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Ground)Neutral-B start"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Ground)Neutral-B loop"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Ground)Neutral-B end"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Air)Neutral-B start"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Air)Neutral-B loop"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Air)Neutral-B end"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Ground)Side-B start"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Ground)Side-B hit"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Ground)Side-B hit(2)"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Ground)Side-B end forward"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Ground)Side-B end backward"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Air)Side-B start"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Air)Side-B hit"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Air)Side-B hit(2)"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Air)Side-B end forward"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Air)Side-B end backward"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Ground)Up-B"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Air)Up-B"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Ground)Down-B"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "(Air)Down-B"),
-			new InterruptNode(BOWSER_ID, bowserBaseOff+=0x20, "Down-B landing"),
-	};
-	
-	public InterruptNode[] nessInterruptsList ={
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Ground)Neutral-B Start"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Ground)Neutral-B Hold"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Ground)Neutral-B Hold(2)"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Ground)Neutral-B End"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Air)Neutral-B Start"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Air)Neutral-B Hold"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Air)Neutral-B Hold(2)"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Air)Neutral-B End"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Ground)Side-B"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Air)Side-B"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Ground)Up-B Start"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Ground)Up-B Hold"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Ground)Up-B End"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "Up-B"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Air)Up-B Start"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Air)Up-B Hold"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Air)Up-B End"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "Up-B(2)"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "DamageFall"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Ground)Down-B Start"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Ground)Down-B Hold"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Ground)Down-B Hit"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Ground)Down-B End"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Air)Down-B Start"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Air)Down-B Hold"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Air)Down-B Hit"),
-			new InterruptNode(NESS_ID, nessBaseOff+=0x20, "(Air)Down-B End"),
-	};
-	
-	*/
-	
-	/*
-	public InterruptOption[] interruptOptionsList={
-			new InterruptOption(new int[]{0x80,0x0C,0xAE,0xD0}, "Jump Cancel(Grounded)"),
-			new InterruptOption(new int[]{0x80,0x0C,0xB8,0x70}, "Jump Cancel(Aerial)"),
-			new InterruptOption(new int[]{0x80,0x0C,0xCD,0x34}, "Interruptible by any fall interrupt(?)"),
-			new InterruptOption(new int[]{0xD0,0xC0,0xDE,0xFF}, "Restore to default data")
-	};
-	*/
-		
-		//JComboBox charSelect,nodeSelect,optionSelect;
-		//JCheckBox advanced;
 		int selectedNode,selectedOption;
 		
 		JFormattedTextField[] hexFields;
 		
-		public SubactionInterruptEditPane(){
+		public MoveLogicEditPane(){
 			
 			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
@@ -218,14 +150,6 @@ Crazy Hand ..... 3D11F8
 			for (int i = 0; i < tmp.length; i++) {
 				tmp[i] = ""+i;
 			}
-			
-			/*
-			advanced = new JCheckBox();
-			advanced.setActionCommand("advcheckbox");
-			advanced.addActionListener(this);
-			*/
-			
-			hexPanelBox = Box.createHorizontalBox();
 			
 	        MaskFormatter formatter = createHexadecimalMaskFormatter();
 	        
@@ -236,7 +160,7 @@ Crazy Hand ..... 3D11F8
 	        for(int i = 0; i < hexFields.length; i ++){
 				hexFields[i] = new JFormattedTextField(formatter);
 				hexFields[i].setEditable(true);
-				hexFields[i].setValue("00 00 01 3F 00 34 02 11 12 00 00 00 80 10 E7 B4 80 10 F0 94 80 10 F3 28 80 10 F4 68 80 07 61 C8");
+				hexFields[i].setValue("00 00 01 3F");
 				hexFields[i].setPreferredSize(new Dimension(800,40));
 				hexFields[i].setMaximumSize(hexFields[i].getPreferredSize());
 				hexFields[i].add(Box.createHorizontalGlue());
@@ -251,8 +175,6 @@ Crazy Hand ..... 3D11F8
 			Box hbox = Box.createHorizontalBox();
 			
 			hbox.add(Box.createHorizontalGlue());
-			//hbox.add(new JLabel("Advanced options "));
-			//hbox.add(advanced);
 			
 			vbox.add(hbox);
 			
@@ -293,7 +215,7 @@ Crazy Hand ..... 3D11F8
 		{
 			String hexForm = "";
 	        
-	        for(int i = 0; i < 0x20; i++){
+	        for(int i = 0; i < 0x4; i++){
 	        	hexForm=hexForm + "HH";
 	        	if(i != 0x20-1){
 	        		hexForm=hexForm + " ";
@@ -314,13 +236,9 @@ Crazy Hand ..... 3D11F8
 		Box hexPanelBox;
 		
 		public void refresh(){
-			
-				
-				
 				try {
 					FileIO.loadedISOFile.reload();
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				FileIO.initDOL();
@@ -329,9 +247,11 @@ Crazy Hand ..... 3D11F8
 				
 				FileIO.setPosition(charOffsets[MeleeEdit.selected]);
 				
+				int chunkAmount=8;//Each "chunk" is four bytes (ex. 00 11 22 33).
+				
 				hexPanelBox.removeAll();
 				
-				hexFields = new JFormattedTextField[logicTable.length];
+				hexFields = new JFormattedTextField[ (logicTable.length*chunkAmount)];
 				MaskFormatter formatter = createHexadecimalMaskFormatter();
 				
 				String[] indentLabels={
@@ -343,57 +263,74 @@ Crazy Hand ..... 3D11F8
 					"Action physics funtion",
 					"Collision interrupt",
 					"Camera behavior function",
-					"Next subaction ID",
 				};
 				
 				//TODO Make a JTextField for each chunk of the subaction logic
 				//so that they can be properly labeled and interacted with.
 				
 				for(int i = 0; i < logicTable.length; i ++){
-					String data = "";
-					for(int c = 0; c < 0x20; c ++){
-						data+= Integer.toHexString( FileIO.readByte() );
-							
-						data+= " ";
+					
+					Box bax = Box.createVerticalBox();//Box to contain label box and hex box
+					Box hb = Box.createHorizontalBox();//Hex box
+					Box lb = Box.createHorizontalBox();//Label box
+					
+					for(int c = 0; c < chunkAmount; c ++){
+						
+						String data = "";
+						
+						int placement= c +( (i)*chunkAmount);
+						
+						
+						for(int d = 0; d < 0x4; d ++){
+							data+= Integer.toHexString( FileIO.readByte() );
+								
+							data+= " ";
+						}
+					
+						hexFields[placement] = new JFormattedTextField(formatter);
+						hexFields[placement].setEditable(true);
+						hexFields[placement].setValue(data);
+						
+						Box vbox = Box.createVerticalBox();
+						
+						vbox.add(new JLabel(indentLabels[c]));
+						vbox.add(hexFields[placement]);
+						
+						hb.add(vbox);
+						
+						lb.add(Box.createHorizontalStrut(10));
+						
 					}
-					hexFields[i] = new JFormattedTextField(formatter);
-					hexFields[i].setEditable(true);
-					//hexFields[i].setPreferredSize(new Dimension(800,40));
-					//hexFields[i].setMaximumSize(hexFields[i].getPreferredSize());
-					
-					//hexFields[i].add(Box.createHorizontalGlue());
-					
-					hexFields[i].setValue(data);
-					
-					Box hb = Box.createHorizontalBox();
 					
 					JLabel label = new JLabel(logicTable[i].subactionName);
+					label.add(Box.createHorizontalGlue());
 					
-					JButton resetButton = new JButton("Reset to default values");
-							resetButton.setActionCommand("resethexfield"+i);
-							resetButton.addActionListener(this);
+					bax.add(Box.createHorizontalGlue());
+					lb.add(Box.createHorizontalGlue());
+					bax.add(lb);
+					bax.add(hb);
 					
-					if(logicTable[i].subactionName.contains("*")){
-						label.setToolTipText("This data is irregular compared to the normal format. It may not really be linked to this subaction.");
-					}
+					lb.setBorder(BorderFactory.createRaisedBevelBorder());
+					bax.setBorder(BorderFactory.createRaisedBevelBorder());
 					
-						hb.add(label);
-						hb.add(Box.createHorizontalStrut(10));
-						hb.add(resetButton);
-						hb.add(Box.createHorizontalGlue());
-						
-					hexPanelBox.add(hb);
-					hexPanelBox.add(Box.createVerticalStrut(5));
 					
-					hb = Box.createHorizontalBox();
+					JButton resetButton=new JButton("*");
+					resetButton.setActionCommand("resetsub"+i);
+					resetButton.addActionListener(this);
+					resetButton.setToolTipText("Reset this field to its default values");
 					
-					//hb.add(new JLabel(indentLabels[i % 9]));
+					Box op = Box.createHorizontalBox();//Options box
+					op.add(label);
+					op.add(Box.createHorizontalStrut(10));
+					op.add(resetButton);
 					
-					hexPanelBox.add(hb);
-					hexPanelBox.add(Box.createVerticalStrut(5));
+					op.add(Box.createHorizontalGlue());
 					
-					hexPanelBox.add(hexFields[i]);
-					hexPanelBox.add(Box.createVerticalStrut(15));
+					hexPanelBox.add(op);
+					hexPanelBox.add(Box.createVerticalStrut(30));
+					hexPanelBox.add(bax);
+					hexPanelBox.add(Box.createVerticalStrut(60));
+					
 				}
 				
 				FileIO.setPosition(logicTable[0].pointer);
@@ -403,31 +340,30 @@ Crazy Hand ..... 3D11F8
 				try {
 					FileIO.loadedISOFile.reload();
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
-				//LogicNode node = getNodeListForCharacter(selectedCharacter)[nodeSelect.getSelectedIndex()];
-				
 				FileIO.setPosition(charOffsets[MeleeEdit.selected]);
+				
 				
 				for(JFormattedTextField txt : hexFields){
 					String data = "";
 					
-					for(int i = 0; i < 0x20; i ++){
-						
-						int byt = FileIO.readByte();
-						
-						if(byt<=0xF){
-							data+="0";
+						for(int i = 0; i < 0x4; i ++){
+							
+							int byt = FileIO.readByte();
+							
+							if(byt<=0xF){
+								data+="0";
+							}
+							
+							data+= Integer.toHexString(byt);
+							data+= " ";
 						}
 						
-						data+= Integer.toHexString(byt);
-						data+= " ";
-					}
+						txt.setValue(data);
+						txt.updateUI();
 					
-					txt.setValue(data);
-					txt.updateUI();
 				}
 				
 				FileIO.setPosition(charOffsets[MeleeEdit.selected]);
@@ -465,8 +401,8 @@ Crazy Hand ..... 3D11F8
 			
 			System.out.println("MOVEINTERRUPT:["+MeleeEdit.selected+"|"+selectedNode+"|"+selectedOption+"]");
 			
-			if(cmd.startsWith("resethexfield")){
-				int hexFieldToReset = Integer.parseInt(cmd.split("resethexfield")[1]);
+			if(cmd.startsWith("resetsub")){
+				int hexFieldToReset = Integer.parseInt(cmd.split("resetsub")[1]);
 				
 				RandomAccessFile raf;
 				try {
@@ -497,7 +433,6 @@ Crazy Hand ..... 3D11F8
 					}
 				
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -509,7 +444,6 @@ Crazy Hand ..... 3D11F8
 				try {
 					applyChanges();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -523,7 +457,6 @@ Crazy Hand ..... 3D11F8
 				try {
 					FileIO.loadedISOFile.reload();
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -641,7 +574,7 @@ Crazy Hand ..... 3D11F8
 				FileIO.setPosition(charOffsets[MeleeEdit.selected]);
 					
 				for(int i = 0; i < hexFields.length; i ++){
-					int[] data = new int[0x20];
+					int[] data = new int[0x4];
 					String[] tmp = hexFields[i].getText().split(" ");
 					
 					for(int c = 0; c < tmp.length; c ++){
