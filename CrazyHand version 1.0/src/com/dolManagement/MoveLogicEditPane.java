@@ -85,7 +85,7 @@ Crazy Hand ..... 3D11F8
 		0x3CE848,//Falco
 		0x3C4788,//Fox
 		0x3CF3E8,//Mr. Game & Watch
-		0x3CF568,//Ganondorf
+		0x3CFAB8,//Ganondorf
 		0x3CA2D0,//Popo
 		0x3CA838,//Nana
 		0x3CCEF0,//Jigglypuff

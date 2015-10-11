@@ -387,7 +387,6 @@ public class FileIO {
 					name = "[No Name]";
 				}
 				
-				//TODO
 				name+="(0x"+Integer.toHexString(i).toUpperCase()+")";
 				
 				subactions[i] = name;
@@ -894,11 +893,11 @@ public class FileIO {
 		}
 	}
 	
-	public static String stageFile="Start.dol";
+	public static String stageFile="GrNBa.dat";
 	
 	//TODO remove when finished!
 	public static void runDebugStageSwap() throws IOException {
-		
+		/*
 		FileIO.loadedISOFile.reload();
 		
 		ISOFile ifo = FileIO.loadedISOFile.getFileSystem().getISOFile(stageFile);
@@ -911,11 +910,12 @@ public class FileIO {
 		
 		System.out.println("Replacing file " +stageFile+"....");
 		
-		//FileIO.isoFileSystem.replaceFile(ifo,byt);
+		FileIO.isoFileSystem.replaceFile(ifo,byt);
 		
 		System.out.println("Done replacing file " +stageFile);
 		
 		FileIO.loadedISOFile.close();
+		*/
 	}
 	
 	

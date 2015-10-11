@@ -514,14 +514,14 @@ public class SpecialMovesList{
 	public static SubAction[] mewtwoSpecialMoves = {
 		new SubAction(0x127, "(Ground)Neutral-B Start"),
 		new SubAction(0x128, "(Ground)Neutral-B Loop"),
-		new SubAction(0x129, "(Ground)Neutral-B Loop(2)"),
+		new SubAction(0x129, "(Ground)Neutral-B Loop(Fully charged)"),
 		new SubAction(0x12A, "(Ground)Neutral-B Cancel"),
-		new SubAction(0x12B, "(Ground)Neutral-B End"),
+		new SubAction(0x12B, "(Ground)Neutral-B Shoot"),
 		new SubAction(0x12C, "(Air)Neutral-B Start"),
 		new SubAction(0x12E, "(Air)Neutral-B Loop"),
-		new SubAction(0x12D, "(Air)Neutral-B Loop(2)"),
+		new SubAction(0x12D, "(Air)Neutral-B Loop(Fully charged)"),
 		new SubAction(0x12F, "(Air)Neutral-B Cancel"),
-		new SubAction(0x130, "(Air)Neutral-B End"),
+		new SubAction(0x130, "(Air)Neutral-B Shoot"),
 		new SubAction(0x131, "(Ground)Side-B"),
 		new SubAction(0x132, "(Air)Side-B"),
 		new SubAction(0x133, "(Ground)Up-B Start"),
@@ -656,10 +656,10 @@ public class SpecialMovesList{
 		new SubAction(0x136, "(Ground)Up-B"),
 		new SubAction(0x137, "(Air)Up-B Start"),
 		new SubAction(0x138, "(Air)Up-B"),
-		new SubAction(0x139, "(Ground)Down-B Animation(?)"),
-		new SubAction(0x13A, "(Ground)Down-B(?)"),
-		new SubAction(0x13B, "(Air)Down-B Animation(?)"),
-		new SubAction(0x13C, "(Air)Down-B(?)"),
+		new SubAction(0x139, "(Ground)Down-B(ZE->SE)"),
+		new SubAction(0x13A, "(Ground)Down-B(SE->ZE)"),
+		new SubAction(0x13B, "(Air)Down-B(ZE->SE)"),
+		new SubAction(0x13C, "(Air)Down-B(SE->ZE)"),
 	};
 	
 	public static SubAction[] yoshiSpecialMoves = {
@@ -697,10 +697,10 @@ public class SpecialMovesList{
 		new SubAction(0x130, "(Ground)Up-B"),
 		new SubAction(0x131, "(Air)Up-B Start"),
 		new SubAction(0x132, "(Air)Up-B"),
-		new SubAction(0x133, "(Ground)Down-B(?)"),
-		new SubAction(0x134, "(Ground)Down-B(?)2"),
-		new SubAction(0x135, "(Air)Down-B(?)"),
-		new SubAction(0x136, "(Air)Down-B(?)2"),
+		new SubAction(0x133, "(Ground)Down-B(ZE->SE)"),
+		new SubAction(0x134, "(Ground)Down-B(SE->ZE)"),
+		new SubAction(0x135, "(Air)Down-B(ZE->SE)"),
+		new SubAction(0x136, "(Air)Down-B(SE->ZE)"),
 	};
 	
 	//Quick and dirty, but it works and I doubt this will need to be changed later down the line.

@@ -86,7 +86,7 @@ public class AnimationPanel extends JPanel{
 		for(int i = 0; i < AnimationPanel.anims.length; i++){
 			String[] t = AnimationPanel.anims[i].split(" ");
 			tmp[i] = t[0];
-			
+			tmp[i]+="(0x"+Integer.toHexString(i).toUpperCase()+")";
 			for(int k = 0; k < AnimationPanel.anims.length; k++){
 				
 			}
