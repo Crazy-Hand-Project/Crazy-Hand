@@ -1,19 +1,8 @@
 package com;
 
 public class Event {
-	
-	
-	//The HexString associated with Continuation Control is often absent
-	//in the aerial versions of special moves(See shiek's needle moves)
-	//It's possible that D0 00 00 03 is used to set a flag letting the game
-	//know that the character is on ground.
-	
-	//60 00 00 00 appears to be what will spawn projectiles for characters!
-	
-	
-	public static Event[] events = {//I re-organized the order of events to be grouped together
-									//by their relevance to each other. This list is used
-									//in the script replacement menu.
+
+	public static Event[] events = {
     	new Event(0x2C, 0x14, "Hitbox"),
     	new Event(0x88, 0xC, "Throw"),
 		new Event(0xE0, 0x8, "Start Smash Charge"),
@@ -40,13 +29,13 @@ public class Event {
     	new Event(0x3C, 0x4, "Terminate Specific Collision"),
     	new Event(0x6C, 0x4, "Set All Bones State"),
     	new Event(0x70, 0x4, "Set Specific Bone State"),
-    	new Event(0xE8, 0x10, "Aesthetic wind effect"),//Set to TBD instead of Unknown so that there aren't conflicts in drop-down menus with the script labeled Unknown with value 0x74
-    	
-    	//new Event(0x4e, 0x4, "B button check?"),
-    	//01 checks if b button is held down, and if it is not continues the script. See young link's arrow start.
-    	//
-    	
+    	new Event(0xE8, 0x10, "Aesthetic wind effect"),
+    	//new Event(0x4e, 0x4, "B button check?"),//01 checks if b button is held down, and if it is not continues the script. See young link's arrow start.
     	new Event(0x74, 0x4, "Unknown"),//0x74 for unknown is a placeholder so that if a user selects it there aren't issues
+    	
+    	//Custom subaction events
+    	new Event(0xF4,0x10,"Achilles projectile event"),
+    	
     };
 
 	public int id, length;

@@ -1,6 +1,7 @@
 package com;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +19,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -175,6 +177,14 @@ public class FSMPanel extends JPanel {
 	
 	public void update(){
 		
+		int scroll = 0;
+		
+		if(an!=null){
+			scroll=an.getVerticalScrollBar().getValue();
+		}
+		
+		//System.out.println(j.getParent() instanceof JScrollPane);
+		
 		this.removeAll();
 		
 		j = new JPanel();
@@ -196,11 +206,17 @@ public class FSMPanel extends JPanel {
 			j.add(new JSeparator(SwingConstants.HORIZONTAL));
 			
 		}
-
 		
-		JScrollPane an = new JScrollPane(j);
-		an.getVerticalScrollBar().setUnitIncrement(10);
-        an.setPreferredSize(new Dimension(700,500));
+		System.out.println(scroll);
+		
+		//if(an==null){
+			an = new JScrollPane(j);
+			an.getVerticalScrollBar().setUnitIncrement(10);
+	        an.setPreferredSize(new Dimension(700,500));
+		//}
+		an.getVerticalScrollBar().setValue(scroll*10);
+		an.getVerticalScrollBar().updateUI();
+        
         AddListener addl = new AddListener();
         
         importFrom = new JButton("Import FSM data from file");
@@ -237,7 +253,7 @@ public class FSMPanel extends JPanel {
 		//FileIO.loadedISOFile.close();
 	}
 	
-	
+	JScrollPane an;
 	
 	public void save(){
 		

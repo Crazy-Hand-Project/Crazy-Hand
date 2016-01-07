@@ -42,6 +42,8 @@ import com.dolManagement.MoveLogicEditPane;
 import com.scripts.Script;
 import com.scripts.ScriptComparator;
 import com.scripts.ScriptUtils;
+import com.scripts.SoundScript;
+import com.scripts.SynchronousScript;
 
 public class MeleeEdit extends JPanel implements ActionListener {
 	
@@ -53,23 +55,23 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			MENU_ATTACKS = 2, MENU_ALL = 3,
 			MENU_PROJECTILE_EDIT_CHARACTER = 4,
 			MENU_ANIMATION = 5, MENU_FRAME_SPEED_MODIFIERS = 6,
-			MENU_MOVE_LOGIC=7, MENU_OTHER=8;
+			MENU_COMMON_DATA = 7, MENU_MOVE_LOGIC = 8, MENU_OTHER = 9;
 
 	public static int selected = 0, selectedSubaction = 0, selectedMenu = 0;
 
 	public static String[] options = {
 		"Attributes","Character specific Attributes",
 		"Subactions (Attacks only)", "Subactions (All)",
-		"Projectiles",
-		"Animation Swapping", "Frame Speed Modifiers",
-		"Move Logic","Other",
+		"Projectiles", "Animation Swapping", "Frame Speed Modifiers",
+		"PlCo", "Move Logic", "Other",
 		
 	};
 
 	public static JFrame frame, geckoManagerFrame;
 	public JButton saveButton;
 	public JMenuItem saveCharacterButton, loadCharacterButton, newTabButton,
-					 wipeSubactionButton, revertSubactionButton;
+					 wipeSubactionButton, revertSubactionButton, growSubactionButton,
+					 shrinkSubactionButton;
 	public static JTable attributeTable, attributeTable2;
 	public JScrollPane aPane, SApane;
 
@@ -92,6 +94,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 	public static AnimationPanel animationPanel;
 	public static FSMPanel fsmPanel;
 	public static ProjectileEditPane projectilePanel;
+	public static PlCoEditPane plCoPanel;
 	public static MoveLogicEditPane subactionInterruptPanel;
 	public static DOLPatchManager patchManager;
 	
@@ -166,6 +169,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		restorePane = new RestorePanel();
 		
 		patchManager = new DOLPatchManager();
+		
+		plCoPanel = new PlCoEditPane();
 
 		attributeTable = new JTable(new AttributeTable());
 		// attributeTable.setPreferredScrollableViewportSize(new Dimension(700,
@@ -229,7 +234,15 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				wipeSubactionButton = new JMenuItem("Wipe subaction");
 					wipeSubactionButton.addActionListener(fl);
 					wipeSubactionButton.setActionCommand("wipesubaction");
-					wipeSubactionButton.setEnabled(false);
+					wipeSubactionButton.setEnabled(false);	
+				growSubactionButton = new JMenuItem("Grow subaction");
+					growSubactionButton.addActionListener(fl);
+					growSubactionButton.setActionCommand("growsubaction");
+					growSubactionButton.setEnabled(false);
+				shrinkSubactionButton = new JMenuItem("Shrink subaction");
+					shrinkSubactionButton.addActionListener(fl);
+					shrinkSubactionButton.setActionCommand("shrinksubaction");
+					shrinkSubactionButton.setEnabled(false);
 				saveCharacterButton = new JMenuItem("Save character");
 					saveCharacterButton.addActionListener(fl);
 					saveCharacterButton.setActionCommand("savecharacter");
@@ -262,6 +275,9 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			menu.add(loadCharacterButton);
 			menu.add(wipeSubactionButton);
 			menu.add(revertSubactionButton);
+			//TODO grow/shrink subactions will be done, but I wanted to get this code to github quickly.
+			//menu.add(growSubactionButton);
+			//menu.add(shrinkSubactionButton);
 			//menu.add(updateCheckButton);
 			menu.add(m);
 			menu.add(closeButton);
@@ -425,11 +441,10 @@ public class MeleeEdit extends JPanel implements ActionListener {
 					}
 				} catch (IllegalArgumentException | IllegalAccessException
 						| NoSuchFieldException | SecurityException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
-			else if(cmd=="codemgr"){
+			else if(cmd=="codemgr"){//TODO this feature is deprecated.
 				if(geckoManagerFrame==null){
 					geckoManagerFrame = new JFrame();
 					
@@ -468,7 +483,6 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				try {
 					FileIO.runDebugStageSwap();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				Options.openDolphin();
@@ -533,9 +547,80 @@ public class MeleeEdit extends JPanel implements ActionListener {
 					
 					
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+			}
+			else if(e.getActionCommand()=="growsubaction"){
+				JOptionPane optionPane = new JOptionPane(
+					    JOptionPane.QUESTION_MESSAGE,
+					    JOptionPane.OK_CANCEL_OPTION);
+				
+				optionPane.setOptions(new String[]{
+						"Apply",
+						"Remove",
+						"Cancel"
+				});
+				
+				int bytesToExtend = Integer.parseInt(optionPane.showInputDialog(MeleeEdit.frame, null, "Grow subaction by how many bytes?",JOptionPane.QUESTION_MESSAGE));
+				
+				
+				if(bytesToExtend>0){
+					//If the selected subaction is extended past the bounds of the character's subaction table space
+					if(Script.scripts.get(Script.scripts.size()-1).location+bytesToExtend+0x7>=Character.characters[MeleeEdit.selected].subEnd){
+						optionPane.showMessageDialog(MeleeEdit.frame, "Subaction cannot be extended! It goes past the subaction table! (Tried to extend script to location: 0x"+Integer.toHexString(Script.scripts.get(Script.scripts.size()-1).location+bytesToExtend).toUpperCase()+" subaction table limit: 0x"+Integer.toHexString(Character.characters[MeleeEdit.selected].subEnd).toUpperCase()+")","Can't grow subaction!", JOptionPane.ERROR_MESSAGE);
+					}
+					else{
+						ArrayList<Script> scriptsEffected = new ArrayList<Script>();
+						int pos = Script.scripts.get(Script.scripts.size()-1).location+0x7;
+						while(pos<Script.scripts.get(Script.scripts.size()-1).location+bytesToExtend){
+							FileIO.setPosition(pos);
+							Event ev = Event.getEvent(FileIO.readByte());
+							
+							int[] data = new int[ev.length];
+							for(int i=0;i<data.length;i++){
+								data[i]=FileIO.readByte();
+							}
+							
+							Script sc;
+							
+							if(ev.id==0x04||ev.id==0x08){
+								sc=new SynchronousScript(ev.name, data, pos-1);
+							}
+							else if(ev.id==0x44){
+								sc=new SoundScript(ev.name, data, pos-1);
+							}
+							else{
+								sc=new Script(ev.name, data, pos);
+							}
+							
+							sc.updateScriptBoxInfo();
+							scriptsEffected.add(sc);
+							
+							pos+=ev.length;
+						}
+						
+						JFrame frame = new JFrame("Effected scripts");
+						frame.setSize(600, 600);
+						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						
+						
+						JPanel  pane = new JPanel();
+						pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
+						JScrollPane scroll = new JScrollPane(pane,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+						
+						
+						for(Script s : scriptsEffected){
+							pane.add(Box.createVerticalStrut(15));
+							pane.add(s);
+						}
+						frame.add(scroll);
+						
+						frame.setVisible(true);
+					}
+				}
+			}
+			else if(e.getActionCommand()=="shrinksubaction"){
+				
 			}
 			else if(e.getActionCommand()=="scriptEditWindow"){
 				if(MeleeEdit.scriptEditor == null){
@@ -608,11 +693,14 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				projectilePanel.save();
 			}
 			
+			if(selectedMenu == MENU_COMMON_DATA){
+				plCoPanel.save();
+			}
+			
 			if(selectedMenu == MENU_MOVE_LOGIC){
 				try {
 					subactionInterruptPanel.applyChanges();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -765,6 +853,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			
 			wipeSubactionButton.setEnabled(false);
 			revertSubactionButton.setEnabled(false);
+			growSubactionButton.setEnabled(false);
+			shrinkSubactionButton.setEnabled(false);
 			
 			if(selectedMenu == MENU_SPECIAL_ATTRIBUTES) {
 				if(SpecialMovesList.getSpecialAttributesForCharacter(selected) != null){
@@ -809,6 +899,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				
 				wipeSubactionButton.setEnabled(true);
 				revertSubactionButton.setEnabled(true);
+				growSubactionButton.setEnabled(true);
+				shrinkSubactionButton.setEnabled(true);
 			}
 			
 			if (selectedMenu == MENU_FRAME_SPEED_MODIFIERS) {
@@ -894,6 +986,8 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				MeleeEdit.subactionList2.setSelectedIndex(MeleeEdit.loggedSubactionSelection);
 				wipeSubactionButton.setEnabled(true);
 				revertSubactionButton.setEnabled(true);
+				growSubactionButton.setEnabled(true);
+				shrinkSubactionButton.setEnabled(true);
 			}
 			if (selectedMenu == MENU_OTHER) {
 				remove(saveButton);
@@ -913,6 +1007,11 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			}
 			else{
 				//add(saveButton);
+			}
+			
+			if(selectedMenu == MENU_COMMON_DATA){
+				plCoPanel = new PlCoEditPane();
+				add(plCoPanel);
 			}
 			
 			if(selectedMenu == MENU_MOVE_LOGIC){

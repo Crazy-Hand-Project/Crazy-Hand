@@ -71,7 +71,7 @@ public class ISOFileSystem {
 			ISOFile file = new ISOFile(isoFileName, fileSize, fileOffset,
 					currentOffset, isFolder, null);
 
-			if (isMovesetFile(isoFileName)) {
+			if (isMovesetFile(isoFileName) || isoFileName=="PlCo.dat") {
 				cacheFile(file);
 			}
 
@@ -191,7 +191,7 @@ public class ISOFileSystem {
 
 	/**
 	 * Checks if the file is a character file. An example of a character file
-	 * would be: <b>PlBo.dat</b> for Bowser.
+	 * would be: <b>PlKp.dat</b> for Bowser.
 	 * 
 	 * @param name
 	 * @return

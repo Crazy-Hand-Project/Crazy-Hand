@@ -105,6 +105,9 @@ Crazy Hand ..... 3D11F8
 		0x3CB770,//Yoshi
 		0x3CDFA0,//Young Link
 		0x3CCA58,//Zelda
+		0x3D04E4,//Male Wireframe?
+		0x3D0544,//Female Wireframe?
+		0x3D05E8,//Giga Bowser
 	};
 	
 	int[][] charNames = {								//.    d    a    t
@@ -136,6 +139,9 @@ Crazy Hand ..... 3D11F8
 			new int[]{0x50,0x6C,0x59,0x73},//Yoshi
 			new int[]{0x50,0x6C,0x43,0x6C},//Young Link
 			new int[]{0x50,0x6C,0x5A,0x64},//Zelda
+			new int[]{0x50,0x6C,0x42,0x6F},//Male Wireframe
+			new int[]{0x50,0x6C,0x47,0x6C},//Female Wireframe
+			new int[]{0x50,0x6C,0x47,0x6B},//Giga Bowser
 			
 	};
 		int selectedNode,selectedOption;
@@ -502,20 +508,33 @@ Crazy Hand ..... 3D11F8
 			
 			
 			while(!finishedLooking){
+				/*
+				*Excludes Yoshi from this style of search because Yoshi is an odd case.
+				*Most move logic tables immediately cap off the move logic segments with pl**.dat
+				*Which is why this method checks for that to signify the end of the table.
+				*However, with Yoshi, There appears to be the text for an error message lodged after the move logic table
+				*
+				*---Move logic stuff---
+				*---yoshi matanim frame not same....---
+				*---ftyoshi.c...yoshi parts_model NULL!!....---
+				*---Continues in the normal fashion---
+				*
+				*So, Yoshi needs to be checked for "yoshi matanim" to signal the end of his move logic table.
+				*/
 				
-				//System.out.println("Pre-Check:0x"+Integer.toHexString(FileIO.f.position()));
+				if(MeleeEdit.selected!=Character.YOSHI_ID){
 				
-				
-				if(FileIO.readByte()==charNames[MeleeEdit.selected][0]){			//p
-					if(FileIO.readByte()==charNames[MeleeEdit.selected][1]){		//l
-						if(FileIO.readByte()==charNames[MeleeEdit.selected][2]){	//*
-							if(FileIO.readByte()==charNames[MeleeEdit.selected][3]){//*
-								if(FileIO.readByte()==0x2E){						//.
-									if(FileIO.readByte()==0x64){					//d
-										if(FileIO.readByte()==0x61){				//a
-											if(FileIO.readByte()==0x74){			//t
-												finishedLooking=true;
-												break;
+					if(FileIO.readByte()==charNames[MeleeEdit.selected][0]){			//p
+						if(FileIO.readByte()==charNames[MeleeEdit.selected][1]){		//l
+							if(FileIO.readByte()==charNames[MeleeEdit.selected][2]){	//*
+								if(FileIO.readByte()==charNames[MeleeEdit.selected][3]){//*
+									if(FileIO.readByte()==0x2E){						//.
+										if(FileIO.readByte()==0x64){					//d
+											if(FileIO.readByte()==0x61){				//a
+												if(FileIO.readByte()==0x74){			//t
+													finishedLooking=true;
+													break;
+												}
 											}
 										}
 									}
@@ -523,11 +542,29 @@ Crazy Hand ..... 3D11F8
 							}
 						}
 					}
+				
 				}
+				else{
+					if(FileIO.readByte()==0x79){//y
+					if(FileIO.readByte()==0x6F){//o
+					if(FileIO.readByte()==0x73){//s
+					if(FileIO.readByte()==0x68){//h
+					if(FileIO.readByte()==0x69){//i
+					if(FileIO.readByte()==0x20){//(space)
+					if(FileIO.readByte()==0x6D){//m
+					if(FileIO.readByte()==0x61){//a
+					if(FileIO.readByte()==0x74){//t
+					if(FileIO.readByte()==0x61){//a
+					if(FileIO.readByte()==0x6E){//n
+					if(FileIO.readByte()==0x69){//i
+					if(FileIO.readByte()==0x6D){//m
+						finishedLooking=true;
+						break;
+					}}}}}}}}}}}}}}//This | is the
+				//ugliest code I've ever V
+								  //    written.
 				
 				FileIO.setPosition(off);
-				
-				//System.out.println("Post-Check:0x"+Integer.toHexString(FileIO.f.position()));
 				
 				String tmp = ""+Integer.toHexString(FileIO.readByte())+""+Integer.toHexString(FileIO.readByte())+""+Integer.toHexString(FileIO.readByte())+""+Integer.toHexString(FileIO.readByte());
 				
@@ -535,7 +572,6 @@ Crazy Hand ..... 3D11F8
 					tmp=tmp.replaceFirst("0", "");
 				}
 				
-				//System.out.println(tmp);
 				
 				int i = 0;
 				

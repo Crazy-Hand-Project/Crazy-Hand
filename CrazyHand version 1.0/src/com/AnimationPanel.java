@@ -28,6 +28,13 @@ public class AnimationPanel extends JPanel{
 		
 	}
 	public void refresh(){
+		
+		int scroll=0;
+		
+		if(an!=null){
+			scroll=an.getVerticalScrollBar().getValue();
+		}
+		
 		this.removeAll();
 		nodes.clear();
 		
@@ -71,13 +78,20 @@ public class AnimationPanel extends JPanel{
     		
     		
     	}
-		JScrollPane an = new JScrollPane(j);
-		an.getVerticalScrollBar().setUnitIncrement(10);
-        an.setPreferredSize(new Dimension(700,500));
+	//	if(an==null){
+			an = new JScrollPane(j);
+			an.getVerticalScrollBar().setUnitIncrement(10);
+	        an.setPreferredSize(new Dimension(700,500));
+	//	}
+		
+		an.getVerticalScrollBar().setValue(scroll);
+		
+		System.out.println(scroll);
+		
 		this.add(an);
 	}
 	
-	
+	JScrollPane an;
 	
 	
 	public static String[] getNames(){

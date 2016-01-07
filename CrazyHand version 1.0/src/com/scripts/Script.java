@@ -126,8 +126,9 @@ public class Script extends JPanel{
 			pasteButton.addActionListener(bac);
 			
 			b0.add(copyButton);
-			b0.add(pasteButton);
+			b0.add(pasteButton);			
 		}
+		
 		
         JPanel pan = new JPanel();
         pan.setLayout(new BoxLayout(pan, BoxLayout.X_AXIS));
@@ -261,6 +262,19 @@ public class Script extends JPanel{
 			this.setToolTipText("");
 		}
 		
+		
+		if(this instanceof ThrowScript){
+			String strn = "";
+			for(int i = 0; i < this.data.length; i ++){
+				int in = data[i];
+				
+				strn +="0x";
+				if(in <= 0xF)strn+="0";
+				strn += Integer.toHexString(in);
+				strn +=" | ";
+			}
+			this.setToolTipText(strn);
+		}
 		
 		numTag.setText(" " + (arrayPlacement+1) + "   ");
 		offsetTag.setText("   Offset: 0x" + Integer.toHexString(this.location));
