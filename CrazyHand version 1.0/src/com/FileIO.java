@@ -266,9 +266,6 @@ public class FileIO {
 				d[i] = readByte();
 			}
 			Script temp;
-
-			// Ignore this, just a quick way to toggle raw data showing up
-			// instead of scripts.
 			if (!MeleeEdit.restorePane.rawBox.isSelected()) {
 				if (e.id == 0x2c) {
 					temp = new HitboxScript(e.name, d, offset + 0x20

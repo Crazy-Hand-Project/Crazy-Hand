@@ -261,8 +261,6 @@ public class Script extends JPanel{
 			this.setBackground(Color.white);
 			this.setToolTipText("");
 		}
-		
-		
 		if(this instanceof ThrowScript){
 			String strn = "";
 			for(int i = 0; i < this.data.length; i ++){

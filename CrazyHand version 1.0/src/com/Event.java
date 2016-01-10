@@ -10,6 +10,8 @@ public class Event {
 		new Event(0xCC, 0x4, "Self-Damage"),
 		new Event(0x40, 0x4, "Terminate Collisions"),
 		new Event(0xD0, 0x4, "Continuation control?"),
+		new Event(0x74, 0x4, "Toggle Followup Flag"),
+		new Event(0x78, 0x4, "Set Followup Flag"),
     	new Event(0x5C, 0x4, "Allow Interrupt (IASA)"),
     	new Event(0x4C, 0x4, "Autocancel"),
     	new Event(0x50, 0x4, "Reverse Direction?"),//Formerly Reverse Direction, Then Release Grabbed character, now back to Reverse Direction. 50 00 00 00 seems to do one or the other depending on unknown circumstances.
@@ -30,8 +32,9 @@ public class Event {
     	new Event(0x6C, 0x4, "Set All Bones State"),
     	new Event(0x70, 0x4, "Set Specific Bone State"),
     	new Event(0xE8, 0x10, "Aesthetic wind effect"),
+    	new Event(0x98, 0x1C, "Psuedo-random Sound Effect"),
     	//new Event(0x4e, 0x4, "B button check?"),//01 checks if b button is held down, and if it is not continues the script. See young link's arrow start.
-    	new Event(0x74, 0x4, "Unknown"),//0x74 for unknown is a placeholder so that if a user selects it there aren't issues
+    	new Event(0x02, 0x4, "Unknown"),//0x74 for unknown is a placeholder so that if a user selects it there aren't issues
     	
     	//Custom subaction events
     	new Event(0xF4,0x10,"Achilles projectile event"),
