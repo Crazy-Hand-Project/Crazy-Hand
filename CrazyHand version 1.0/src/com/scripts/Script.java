@@ -242,10 +242,10 @@ public class Script extends JPanel{
 	public void updateScriptBoxInfo(){//Mainly used for scripts inside loops
 									  //This function will be added to as new needs arise.
 		if(this.data[0]==0xCC&&this.data[1]==0x0&&this.data[2]==0x0&&this.data[3]==0x0){//If this is a self-damage script with no damage
-			this.setBackground(new Color(0x75435C));
+			this.setBackground(new Color(0xeec9ff));
 			for(int i = 0; i < this.getComponentCount(); i ++)
 			{
-				this.getComponent(i).setBackground(new Color(0x733654));
+				this.getComponent(i).setBackground(new Color(0xd9b2ff));
 			}
 			this.setToolTipText("This script is filler data. It can be replaced with no negative effects.");
 		}

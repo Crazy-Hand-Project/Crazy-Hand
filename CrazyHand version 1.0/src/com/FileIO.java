@@ -27,6 +27,7 @@ import com.scripts.ComboSFXGFXScript;
 import com.scripts.GraphicScript;
 import com.scripts.HitboxScript;
 import com.scripts.LoopScript;
+import com.scripts.ProjectileScript;
 import com.scripts.Script;
 import com.scripts.SelfDamageScript;
 import com.scripts.SmashChargeScript;
@@ -70,6 +71,17 @@ public class FileIO {
 		isoFileData = loadedISOFile.getFileSystem()
 				.getFileData(
 						"PlCo.dat");
+
+		f = ByteBuffer.wrap(isoFileData);
+
+		f.position(0);
+	}
+	
+	public static void initItCo(){
+		byte[] isoFileData;
+		isoFileData = loadedISOFile.getFileSystem()
+				.getFileData(
+						"ItCo.dat");
 
 		f = ByteBuffer.wrap(isoFileData);
 
@@ -297,6 +309,9 @@ public class FileIO {
 				}
 				else if (e.id == 0xDC){
 					temp = new ComboSFXGFXScript(e.name, d, offset + 0x20 + bytesDown);
+				}
+				else if (e.id == 0xF4){
+					temp = new ProjectileScript(e.name, d, offset + 0x20 + bytesDown);
 				}
 				else {
 					if(e.id==0x10)

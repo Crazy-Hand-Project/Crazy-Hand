@@ -30,6 +30,7 @@ public class ISOFileSystem {
 		this.currentLoadedFile = isoFile;
 		try {
 			readDOL();
+			System.out.println(iso.getStringTableOffset());
 			readFiles(isoFile, iso.getStringTableOffset());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -70,9 +71,25 @@ public class ISOFileSystem {
 
 			ISOFile file = new ISOFile(isoFileName, fileSize, fileOffset,
 					currentOffset, isFolder, null);
+			
 
-			if (isMovesetFile(isoFileName) || isoFileName=="PlCo.dat") {
+			
+			// this if statement previously had   isoFileName == "PlCo.dat"   instead of .equals()
+			// the == operator checks if they both point to the same memory location,
+			// the .equals() function checks if they contain the same characters.
+			// this probably means that line of code did nothing before? But it seemed to be functioning properly...
+			// edit: It's actually just a redundant line of code, that's why it didn't cause problems.
+			// PlCo gets picked up by the isMovesetFile() function. 
+			// Case closed.
+			if (isMovesetFile(isoFileName) || isoFileName.equals("PlCo.dat") || isoFileName.equals("ItCo.dat")) {
 				cacheFile(file);
+				
+				System.out.println(isoFileName);
+				//System.out.println(fileSize);
+				//System.out.println(fileOffset);
+				//System.out.println(currentOffset);
+				//System.out.println(isFolder);
+				//System.out.println();
 			}
 
 			currentOffset += 0xC;
@@ -253,7 +270,7 @@ public class ISOFileSystem {
 	public ISOFile getISOFile(String fileName) {
 		ISOFile info = cachedISOFiles.get(fileName);
 		if (info == null) {
-			throw new RuntimeException("Could not load cached ISO file!");
+			throw new RuntimeException("Could not load cached ISO file: " + fileName);
 		}
 		return info;
 	}

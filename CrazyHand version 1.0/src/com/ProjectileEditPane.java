@@ -48,6 +48,7 @@ import static com.Character.WIREGIRL_ID;
 import static com.Character.YOSHI_ID;
 import static com.Character.YOUNGLINK_ID;
 import static com.Character.ZELDA_ID;
+import static com.Character.OTHER_ID;
 
 import com.scripts.HitboxScript;
 
@@ -143,6 +144,13 @@ public class ProjectileEditPane extends JPanel implements ActionListener {
 			
 			//Zelda
 			new ProjectileEditNode("Din's Fire", ZELDA_ID,0x3FE4),
+			
+			
+			//Other
+			//new ProjectileEditNode("0xC7 Unowns", OTHER_ID,0xaca8),
+			//new ProjectileEditNode("0xC8 Lugia's Aeroblast", OTHER_ID,0xacc4),
+			//new ProjectileEditNode("0xCB Ho-oh's Flame", OTHER_ID,0xacf8),
+			//new ProjectileEditNode("0xCC Staryu's Star", OTHER_ID,0xad54),
 	};
 	
 		//PlKp.dat @0x4110 - Flame Breath hitbox?
@@ -273,7 +281,16 @@ public class ProjectileEditPane extends JPanel implements ActionListener {
 				setForeground(list.getForeground());
 			}
 			
-			ImageIcon icon = Character.characters[nodes[selectedIndex].charId].characterIcon;
+			
+			ImageIcon  icon;
+			
+			if(nodes[selectedIndex].charId == Character.OTHER_ID){
+				icon = Character.otherIcon;
+			}
+			else{
+				icon = Character.characters[nodes[selectedIndex].charId].characterIcon;
+			}
+		
 			if (icon != null && icon.getImage() != null) {
 				setFont(list.getFont());
 				setIcon(icon);

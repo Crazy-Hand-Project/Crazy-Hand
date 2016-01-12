@@ -18,7 +18,13 @@ public class ProjectileEditNode extends JPanel {
 		super();
 		prname=projName;
 		charId = chr;
-		FileIO.init(chr);
+		if(charId==255){
+			FileIO.initItCo();
+		}
+		else{
+			FileIO.init(charId);
+		}
+		
 		FileIO.setPosition(pointer);
 		int[] d = new int[0x20];
 		
@@ -31,7 +37,14 @@ public class ProjectileEditNode extends JPanel {
 			d[i]=bt;
 		}
 		
-		projectile = new HitboxScript(Character.characters[chr].name + " - " + projName, d, pointer);
+		String name;
+		if(charId != 255){
+			name = Character.characters[chr].name + " - " + projName;
+		}
+		else{
+			name = projName;
+		}
+		projectile = new HitboxScript(name, d, pointer);
 		projectile.updateScriptBoxInfo();
 		projectile.setBorder(BorderFactory.createBevelBorder(1));
 		//projectile.setPreferredSize(new Dimension(500,projectile.getPreferredSize().height));
@@ -42,7 +55,14 @@ public class ProjectileEditNode extends JPanel {
 		
 		try {
 			FileIO.loadedISOFile.reload();
-			FileIO.init(charId);
+
+			if(charId==255){
+				FileIO.initItCo();
+			}
+			else{
+				FileIO.init(charId);
+			}
+			
 			projectile.save();
 			
 			//FileIO.isoFileSystem.replaceFile(FileIO.isoFileSystem.getCurrentFile(), FileIO.f.array());

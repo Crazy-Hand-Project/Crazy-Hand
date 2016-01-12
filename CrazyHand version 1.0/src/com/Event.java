@@ -37,7 +37,7 @@ public class Event {
     	new Event(0x02, 0x4, "Unknown"),//0x74 for unknown is a placeholder so that if a user selects it there aren't issues
     	
     	//Custom subaction events
-    	new Event(0xF4,0x10,"Achilles projectile event"),
+    	new Event(0xF4,0x10,"Spawn Projectile [Achilles]"),
     	
     };
 

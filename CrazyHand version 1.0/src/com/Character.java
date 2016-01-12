@@ -9,7 +9,12 @@ public class Character {
 	POPO_ID=8,NANA_ID=9,JIGGLYPUFF_ID=10,KIRBY_ID=11,LUIGI_ID=12,LINK_ID=13,MARIO_ID=14,MARTH_ID=15,
 	MEWTWO_ID=16,NESS_ID=17,PEACH_ID=18,PICHU_ID=19,PIKACHU_ID=20,ROY_ID=21,SAMUS_ID=22,SHEIK_ID=23,
 	YOSHI_ID=24,YOUNGLINK_ID=25,ZELDA_ID=26,WIREBOY_ID=27,WIREGIRL_ID=28,GIGABOWSER_ID=29,SANDBAG_ID=30,
-	MASTERHAND_ID=31,CRAZYHAND_ID=32;
+	MASTERHAND_ID=31,CRAZYHAND_ID=32,
+	OTHER_ID=0xff;//used to handle projectiles not assigned to players.
+	
+	
+
+	public static ImageIcon otherIcon = new ImageIcon("img/icons/Other.png");
 	
 	public static Character[] characters = {
 		new Character(0x5,"Bowser","Kp",0x3644,0x007b40,0x0098e0),
