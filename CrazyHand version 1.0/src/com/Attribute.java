@@ -25,7 +25,7 @@ public class Attribute {
     	new Attribute("Jump H Maximum Velocity",""),
     	new Attribute("Shorthop V Initial Velocity",""),
     	new Attribute("Air Jump Multiplier",""),//20
-    	new Attribute("????",""),
+    	new Attribute("Double Jump Momentum",""),
     	new Attribute("Number of Jumps",""),//
     	new Attribute("Gravity",""),
     	new Attribute("Terminal Velocity",""),
