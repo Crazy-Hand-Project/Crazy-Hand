@@ -1,14 +1,21 @@
 package com;
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,921 +37,344 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.JToolBar;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.OceanTheme;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
-import com.SpecialAttributeIndex.SpecialMoveAttribute;
-import com.dolEditing.DOLPatch;
+import com.alee.laf.WebLookAndFeel;
+import com.panels.AnimationNode;
+import com.panels.AnimationPanel;
+import com.panels.AttributePanel;
+import com.panels.ToolBar;
+import com.panels.FSMPanel;
+import com.panels.MoveLogicEditPane;
+import com.panels.PlCoEditPane;
+import com.panels.PlCoPanel;
+import com.panels.ProjectileEditPane;
+import com.panels.RestorePanel;
+import com.panels.SpecialAttributePanel;
+import com.panels.SubactionPanel;
 import com.scripts.Script;
 import com.scripts.ScriptComparator;
 import com.scripts.ScriptUtils;
+import com.scripts.SoundScript;
+import com.scripts.SynchronousScript;
+
 
 public class MeleeEdit extends JPanel implements ActionListener {
+	
 
-	public static final int MENU_ATTRIBUTES = 0, MENU_ATTACKS = 1,
-			MENU_SPECIAL_MOVES = 20, MENU_ALL = 2, MENU_OTHER = 6,
-			MENU_ANIMATION = 3, MENU_SPECIAL_ATTRIBUTES = 4, MENU_FRAME_SPEED_MODIFIERS=5;
+	public static final int
+			MENU_ATTRIBUTES = 0, MENU_SPECIAL_ATTRIBUTES = 1,
+			MENU_SUBACTIONS_COMMON = 2, MENU_SUBACTIONS_ALL = 3,
+			MENU_PROJECTILE_EDIT_CHARACTER = 4,
+			MENU_ANIMATION = 5, MENU_FRAME_SPEED_MODIFIERS = 6,
+			MENU_COMMON_DATA = 7, MENU_MOVE_LOGIC = 8, MENU_OTHER = 9;
 
-	public static int selected = 0, selectedSubaction = 0, selectedMenu = 0;
+	public static int selected = 1, selectedMenu = 0;
 
-	public static String[] options = { "Attributes",
-			"Subactions (Attacks only)",// "Subactions (Special moves)",
-			"Subactions (All)", "Animation Swapping", "Character specific Attributes", "Frame Speed Modifiers","Other",
-	// "Special Moves",
-	// "Frames Speed Modifiers",
-	//
-	};
+	
 
 	public static JFrame frame;
-	public JButton saveButton;
-	public JMenuItem saveCharacterButton, loadCharacterButton, newTabButton;
-	public static JTable attributeTable, attributeTable2;
-	public JScrollPane aPane, SApane;
 
-	public JScrollPane scripts;
-	public JComboBox charList;
-	
-	public static JMenuBar fileMenu;
 
-	public static JComboBox subactionList;
-
-	public static JComboBox subactionList2;
-	
-	public static int loggedSubactionSelection=0;
-
-	public JComboBox specialList;
-	public JComboBox optionList;
-	public JPanel comboPane, scriptPanel;// ,specialPanel;
-
+	public static ToolBar toolBar;
+	public static SubactionPanel subactionPanel;
+	public static AttributePanel attributePanel;
+	public static SpecialAttributePanel specialAttributePanel;
 	public static RestorePanel restorePane;
 	public static AnimationPanel animationPanel;
 	public static FSMPanel fsmPanel;
+	public static ProjectileEditPane projectilePanel;
+	public static PlCoPanel plCoPanel;
+	public static MoveLogicEditPane subactionInterruptPanel;
 	
-	public static ScriptEditWindow scriptEditor = null;
-
-	public static JPanel scriptInner;
+	public static FileMenu fileMenu;
+	
+	
 
 	public MeleeEdit() {
 		super(new BorderLayout());
-		
-		SpecialMovesList.load();
 
-		String[] tmp = new String[Character.characters.length];
-		for (int i = 0; i < tmp.length; i++) {
-			tmp[i] = ""+i;
-		}
-
-		String[] tmp2 = new String[SubAction.subActions.length];
-		for (int i = 0; i < tmp2.length; i++) {
-			tmp2[i] = SubAction.subActions[i].name;
-		}
-
-		charList = new JComboBox(tmp);
-		charList.setSelectedIndex(0);
-		charList.setEditable(false);
-		
-		ComboBoxRenderer renderer = new ComboBoxRenderer();
-		renderer.setPreferredSize(new Dimension(64,58));
-		charList.setRenderer(renderer);
-		charList.setPreferredSize(new Dimension(100,70));
-		charList.setMaximumSize(charList.getPreferredSize());
-		charList.addActionListener(new CharListener());
-		charList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-		optionList = new JComboBox(options);
-		optionList.setSelectedIndex(0);
-		
-		optionList.setPreferredSize(new Dimension(200, 40));
-		optionList.setMaximumSize(optionList.getPreferredSize());
-		
-		optionList.addActionListener(new OptionListener());
-		optionList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-		subactionList = new JComboBox(tmp2);
-		subactionList.setSelectedIndex(0);
-		subactionList.addActionListener(new SubactionListener());
-		subactionList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-		subactionList2 = new JComboBox(FileIO.getDefaultSubactions());
-		subactionList2.setSelectedIndex(0);
-		subactionList2.addActionListener(new SubactionListener());
-		subactionList2.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-		comboPane = new JPanel();
-		comboPane.setLayout(new BoxLayout(comboPane, BoxLayout.LINE_AXIS));
-		comboPane.add(charList);
-		comboPane.add(Box.createHorizontalGlue());
-		comboPane.add(optionList);
-		comboPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-		saveButton = new JButton("save");
-		saveButton.setActionCommand("save");
-		saveButton.addActionListener(new SaveListener());
-
-		
-		//fsmPanel = new FSMPanel();
-		
-		FileIO.init();
-
+		//TODO decide what does and doesn't need to be initialized
+		toolBar = new ToolBar();
+		attributePanel = new AttributePanel();
+		//projectilePanel = new ProjectileEditPane();
 		restorePane = new RestorePanel();
-		
+		//plCoPanel = new PlCoEditPane();
+		//specialAttributePanel = new SpecialAttributePanel();
+		//animationPanel = new AnimationPanel();
+		//subactionPanel = new SubactionPanel();
+		//fsmPanel = new FSMPanel();
 
-		attributeTable = new JTable(new AttributeTable());
-		// attributeTable.setPreferredScrollableViewportSize(new Dimension(700,
-		// 600));
-		attributeTable.setFillsViewportHeight(true);
-		attributeTable.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		
-		attributeTable2 = new JTable(new SpecialAttributeTable());
-		attributeTable2.setFillsViewportHeight(true);
-		attributeTable2.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		
-		SApane = new JScrollPane(attributeTable2);
-		SApane.setPreferredSize(new Dimension(700, 500));
-		
-		scriptInner = new JPanel();
-		scriptInner.setLayout(new BoxLayout(scriptInner, BoxLayout.PAGE_AXIS));
-
-		FileIO.readScripts();
-
-		// j.setPreferredSize(new Dimension(300,400);
-
-		animationPanel = new AnimationPanel();
-
-		// Create the scroll pane and add the table to it.
-		aPane = new JScrollPane(attributeTable);
-		aPane.setPreferredSize(new Dimension(700, 500));
-
-		scripts = new JScrollPane(scriptInner);
-		scripts.setPreferredSize(new Dimension(700, 600));
-		scripts.getVerticalScrollBar().setUnitIncrement(10);
-
-		scriptPanel = new JPanel();
-		scriptPanel.setLayout(new BoxLayout(scriptPanel, BoxLayout.PAGE_AXIS));
-
-		scriptPanel.add(subactionList);
-		scriptPanel.add(scripts);
+		fileMenu = new FileMenu();
 		
 		
-		if(fileMenu==null){
-			fileMenu = new JMenuBar();
-			
-			JMenu menu = new JMenu("File");
-			JMenu runMenu = new JMenu("Run");
-			JMenu optionsMenu = new JMenu("Options");
-			JMenu isoPatchMenu = new JMenu("ISO patches");
-			//Close to complete, but not ready at this time.
-			//JMenu subactionEditorMenu = new JMenu("Subaction editor");
-			
-			fileListener fl = new fileListener();
-			
-				JMenuItem openButton = new JMenuItem("Open ISO");
-					openButton.setActionCommand("openISO");
-					openButton.addActionListener(fl);
-				JMenuItem closeButton = new JMenuItem("Close");
-					closeButton.addActionListener(fl);
-					closeButton.setActionCommand("close");
-				saveCharacterButton = new JMenuItem("Save character");
-					saveCharacterButton.addActionListener(fl);
-					saveCharacterButton.setActionCommand("savecharacter");
-				loadCharacterButton = new JMenuItem("Load character");
-					loadCharacterButton.addActionListener(fl);
-					loadCharacterButton.setActionCommand("loadcharacter");
-				JMenuItem m = new JMenuItem();
-					m.setEnabled(false);
-					
-					/*
-					JMenuItem editorButton = new JMenuItem("Open subaction editor");
-						editorButton.setOpaque(false);
-						editorButton.setBackground(new Color(0xEBEBEB));
-						editorButton.setBorder(BorderFactory.createEmptyBorder());
-						editorButton.addActionListener(fl);
-						editorButton.setActionCommand("scriptEditWindow");
-					 newTabButton = new JMenuItem("Open in subaction editor");
-						newTabButton.addActionListener(fl);
-						newTabButton.setActionCommand("newSubactionTab");
-						newTabButton.setEnabled(false);
-					subactionEditorMenu.add(editorButton);
-					subactionEditorMenu.add(newTabButton);
-				*/
-			menu.add(openButton);
-			menu.add(saveCharacterButton);
-			menu.add(loadCharacterButton);
-			menu.add(m);
-			menu.add(closeButton);
-			
-				JMenuItem dolphinButton = new JMenuItem("Run loaded ISO in Dolphin");
-				dolphinButton.addActionListener(fl);
-				dolphinButton.setActionCommand("runDolphin");
-				
-			runMenu.add(dolphinButton);
-			
-			
-				optionsMenu.setActionCommand("options");
-				optionsMenu.addActionListener(fl);
-				
-				ArrayList<Field>temp = new ArrayList<Field>();
-				Field[] dolpatchclassfields = DOLPatch.class.getFields();
-				for(Field field : dolpatchclassfields){
-					try {
-						if(field.getName().startsWith("dolPatch")&&field.get(null) instanceof DOLPatch){
-							temp.add(field);
-						}
-					} catch (IllegalArgumentException | IllegalAccessException e) {
-						e.printStackTrace();
-					}
-				}
-				
-				if(!temp.isEmpty()){
-					System.out.println("Fields:"+temp.size());
-					for(Field fld : temp){
-						try {
-							DOLPatch patch = (DOLPatch)fld.get(null);
-							JMenuItem patchMenuItem = new JMenuItem(patch.name);
-							patchMenuItem.setActionCommand("patchISO"+fld.getName());
-							patchMenuItem.addActionListener(fl);
-							
-							isoPatchMenu.add(patchMenuItem);
-						} catch (IllegalArgumentException
-								| IllegalAccessException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-				
-			fileMenu.add(menu);
-			fileMenu.add(Box.createHorizontalStrut(5));
-			fileMenu.add(runMenu);
-			fileMenu.add(Box.createHorizontalStrut(5));
-			
-			//Commented out for now since it's still in-progress and I need to push a bugfix release.
-			//Nevermind I want to show it off and this patch is fully functional.
-			fileMenu.add(isoPatchMenu);
-			
-			fileMenu.add(Box.createHorizontalStrut(5));
-		}
-
-		add(comboPane, BorderLayout.PAGE_START);
-		add(aPane, BorderLayout.CENTER);
-		add(saveButton, BorderLayout.PAGE_END);
 		
-		// FileIO.loadedISOFile.close();
-
-		// try {
-		// Runtime.getRuntime().exec("cmd.exe /c start");
-		// Runtime.getRuntime().exec("GCReEx.exe -x a.iso");
-		// System.out.println("ok");
-		// } catch (IOException ex) {
-		// ex.printStackTrace();
-		// }
-
+		
+		hardUpdate();
+	
 	}
 	
-	public static void openScriptEditor(){
-		scriptEditor = new ScriptEditWindow();
-	}
-	
-	class ComboBoxRenderer extends JLabel implements ListCellRenderer {
-				
-		public ComboBoxRenderer() {
-			setOpaque(true);
-			setHorizontalAlignment(CENTER);
-			setVerticalAlignment(CENTER);
+	public void save(){
+		try {
+			FileIO.loadedISOFile.reload();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+			return;
+
 		}
 		
-		public Component getListCellRendererComponent(
-				                    JList list,
-				                    Object value,
-				                    int index,
-				                    boolean isSelected,
-				                    boolean cellHasFocus) {
-			
-			int selectedIndex = Integer.parseInt(((String)value));
-			
-			if(selectedIndex<0){return this;}
-			
-			if (isSelected) {
-				setBackground(list.getSelectionBackground());
-				setForeground(list.getSelectionForeground());
-			}
-			else {
-				setBackground(list.getBackground());
-				setForeground(list.getForeground());
-			}
-			
-			ImageIcon icon = Character.characters[selectedIndex].characterIcon;
-			if (icon != null && icon.getImage() != null) {
-				setFont(list.getFont());
-				setIcon(icon);
-			}
-			
-				return this;
-		}
-				
-	}
-	
-	class fileListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String cmd = e.getActionCommand();
-			if(cmd.startsWith("patchISO")){
-				try {
-					System.out.println(cmd);
-					DOLPatch patchSelected = (DOLPatch)DOLPatch.class.getField(cmd.split("patchISO")[1]).get(null);
-					if(patchSelected==null){
-						System.out.println("Error finding DOL patch " + cmd + "! Entry is null!");
-					}
-					else{
-						JOptionPane optionPane = new JOptionPane(
-							    JOptionPane.QUESTION_MESSAGE,
-							    JOptionPane.OK_CANCEL_OPTION);
-						
-						optionPane.setOptions(new String[]{
-								"Apply",
-								"Remove",
-								"Cancel"
-						});
-						int res = optionPane.showOptionDialog(MeleeEdit.frame, "Would you like to apply this patch, or remove it?", "DOL Patcher", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, optionPane.getOptions(), optionPane.getOptions()[0]);
-						
-						//Apply
-						if(res==JOptionPane.OK_OPTION){
-							patchSelected.applyPatch();
-						}
-						//Remove
-						else if(res==JOptionPane.NO_OPTION){
-							patchSelected.undoPatch();
-						}
-						//Cancel
-						else{
-							
-						}
-						
-						
-					}
-				} catch (IllegalArgumentException | IllegalAccessException
-						| NoSuchFieldException | SecurityException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			else if(e.getActionCommand()=="openISO"){
-				FileIO.loadISOFile();
-			}
-			else if(e.getActionCommand()=="close"){
-				Container comp = getParent();
-				Container comp2 = null;
-				while(comp != null){
-					comp2 = comp;
-					comp = comp2.getParent();
-				}
-				if(comp2 instanceof JFrame){
-					((JFrame)comp2).dispose();
-				}
-			}
-			else if(e.getActionCommand()=="runDolphin"){
-				Options.openDolphin();
-			}
-			else if(e.getActionCommand()=="savecharacter"){
-				FileIO.saveCharacter(selected);
-			}
-			else if(e.getActionCommand()=="loadcharacter"){
-				FileIO.loadCharacter(selected);
-			}
-			else if(e.getActionCommand()=="scriptEditWindow"){
-				if(MeleeEdit.scriptEditor == null){
-					MeleeEdit.openScriptEditor();
-				}
-			}
-			else if(e.getActionCommand()=="newSubactionTab"){
-				if(MeleeEdit.scriptEditor == null){
-					MeleeEdit.openScriptEditor();
-				}
-				MeleeEdit.scriptEditor.createNewTab(MeleeEdit.selected, MeleeEdit.selectedSubaction, MeleeEdit.selectedSubaction);
-				String att = selectedMenu == MENU_ATTACKS ? (String)subactionList.getSelectedItem() : (String)subactionList2.getSelectedItem();
-				MeleeEdit.scriptEditor.currentTab = MeleeEdit.scriptEditor.tabs.size()-1;
-				MeleeEdit.scriptEditor.getCurrentTab().scriptName = Character.characters[selected].name + ":" + att;
-				MeleeEdit.scriptEditor.changeTabs(MeleeEdit.scriptEditor.currentTab);
-			}
-		}
-		
-	}
-
-	class helpListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			//HelpWindow w = new HelpWindow();
-			
-			//w.show();
-			
-		}
-		
-	}
-
-	class SaveListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-
-			try {
-				FileIO.loadedISOFile.reload();
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-				return;
-
-			}
-
-			if (selectedMenu == MENU_ATTRIBUTES || selectedMenu == MENU_SPECIAL_ATTRIBUTES) {
-				FileIO.save();
-			}
-			if (selectedMenu == MENU_ATTACKS || selectedMenu == MENU_ALL) {
-				FileIO.init();
-				for (Script script : Script.scripts) {
-					script.save();
-				}
-
-				FileIO.init();
-				FileIO.readScripts();
-				frame.pack();
-			}
-			if (selectedMenu == MENU_ANIMATION) {
-				// FileIO.init();
-				for (AnimationNode n : animationPanel.nodes) {
-					n.save();
-				}
-			}
-			
-			if(selectedMenu == MENU_FRAME_SPEED_MODIFIERS){
-				fsmPanel.save();
-			}
-
-			try {
-				FileIO.isoFileSystem
-						.replaceFile(FileIO.isoFileSystem.getCurrentFile(),
-								FileIO.f.array());
-
-			} catch (IOException e2) {
-				e2.printStackTrace();
-			}
-
-			FileIO.loadedISOFile.close();
-
-			System.out.println("Save Complete!");
-
-		}
-
-	}
-
-	class CharListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			JComboBox cb = (JComboBox) e.getSource();
-			selected = cb.getSelectedIndex();
-
-			if (selectedMenu == MENU_ATTRIBUTES) {
-				updateAttributes();
-			}
-			if(selectedMenu == MENU_SPECIAL_ATTRIBUTES){
-				if(SpecialMovesList.getSpecialAttributesForCharacter(selected) != null){
-					updateSpecialAttributes();
-				}
-				else
-				{
-					selectedMenu = MENU_ATTRIBUTES;
-					optionList.setSelectedIndex(MENU_ATTRIBUTES);
-					updateAttributes();
-				}
-			}
-			if (selectedMenu == MENU_ATTACKS || selectedMenu == MENU_ALL) {
-				updateSubactions();
-			}
-			if (selectedMenu == MENU_ANIMATION) {
-				updateAnimations();
-			}
-
-			frame.pack();
-
-			FileIO.loadedISOFile.close();
-			System.out.println("Character Selection Updated");
-		}
-	}
-
-	public static void updateAttributes() {
-		FileIO.init();
-		FileIO.setPosition(Character.characters[MeleeEdit.selected].offset);
-		for (int i = 0; i < Attribute.attributes.length; i++) {
-			attributeTable.setValueAt(FileIO.readFloat(), i, 1);
-		}
-	}
-	
-	public void updateSpecialAttributes() {
-		FileIO.init();
-		
-		//***Remove this line if it causes long load times***
-					SpecialMovesList.load();
-		//***See SpecialMovesList.load() for more info***
-		
-		boolean b = false;
-		for(int i = 0; i < this.getComponentCount(); i ++) {
-			if(this.getComponent(i) == SApane){
-				b = true;
-			}
-		}
-		
-		if(b)
-		this.remove(SApane);
-		
-		attributeTable2 = new JTable(new SpecialAttributeTable());
-		attributeTable2.setFillsViewportHeight(true);
-		attributeTable2.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		
-		SApane = new JScrollPane(attributeTable2);
-		SApane.setPreferredSize(new Dimension(700, 500));
-		
-		
-		this.add(SApane);
-	}
-
-	public static void updateSubactions() {
-		FileIO.init();
-		FileIO.readScripts();
-
-		// updates the "all" subactions list for the new character.
-		// I might move this to a function later on. --Ampers
-		subactionList2.removeAllItems();
-		subactionList.removeAllItems();
-		String[] tmp = FileIO.getDefaultSubactions();
-		for (int i = 0; i < tmp.length; i++) {
-			subactionList2.addItem(tmp[i]);
-		}
-		for(int i = 0; i < SubAction.subActions.length; i ++)
-		{
-			subactionList.addItem(SubAction.subActions[i].name);
-		}
-		SubAction[] moves=SpecialMovesList.getListForCharacter(selected);
-		for(int i = 0; i < moves.length; i ++)
-		{
-			subactionList.addItem(moves[i].name);
-		}
-	}
-
-	public void updateAnimations() {
-		FileIO.init();
-		animationPanel.refresh();
-
-		add(animationPanel, BorderLayout.CENTER);
-	}
-
-	class OptionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			JComboBox cb = (JComboBox) e.getSource();
-			selectedMenu = cb.getSelectedIndex();
-			
-			//newTabButton.setEnabled(false);
-			//loadSubactionButton.setEnabled(false);
-			
-			removeAll();
-			add(comboPane, BorderLayout.PAGE_START);
-			add(saveButton, BorderLayout.PAGE_END);
-			
-			MeleeEdit.loggedSubactionSelection = MeleeEdit.selectedMenu == MeleeEdit.MENU_ATTACKS ? MeleeEdit.subactionList.getSelectedIndex() : MeleeEdit.subactionList2.getSelectedIndex();
-			
-			if(selectedMenu == MENU_SPECIAL_ATTRIBUTES) {
-				if(SpecialMovesList.getSpecialAttributesForCharacter(selected) != null){
-					updateSpecialAttributes();
-				}
-				else {
-					MeleeEdit.selectedMenu = MENU_ATTRIBUTES;
-					optionList.setSelectedIndex(MENU_ATTRIBUTES);
-					add(aPane, BorderLayout.CENTER);
-					updateAttributes();
-				}
-			}
-			
-			if (selectedMenu == MENU_ATTRIBUTES) {
-
-				add(aPane, BorderLayout.CENTER);
-				// comboPane.remove(subactionList);
-
-				updateAttributes();
-
-			}
-			if (selectedMenu == MENU_ATTACKS) {
-				scriptPanel.remove(subactionList2);
-				scriptPanel.remove(scripts);
-				// scriptPanel.remove(specialPanel);
-				scriptPanel.add(subactionList);
-				scriptPanel.add(scripts);
-
-				add(scriptPanel, BorderLayout.CENTER);
-				// comboPane.add(subactionList);
-				
-				//newTabButton.setEnabled(true);
-
-				updateSubactions();
-				
-				if(MeleeEdit.loggedSubactionSelection>MeleeEdit.subactionList.getItemCount()){
-					MeleeEdit.loggedSubactionSelection = 0;
-				}
-				
-				MeleeEdit.subactionList.setSelectedIndex(MeleeEdit.loggedSubactionSelection);
-			}
-			
-			//TODO Maybe we should move the FSM button to the "other" pane until we can sort it out for universal ISO use?
-			if (selectedMenu == MENU_FRAME_SPEED_MODIFIERS) {
-				//remove(saveButton);
-				
-				JOptionPane optionPane = new JOptionPane(
-					    JOptionPane.QUESTION_MESSAGE,
-					    JOptionPane.OK_CANCEL_OPTION);
-				
-				
-				
-				String debugWarning="BE WARNED; If there are four pairs of zeroes in a row (00 00 00 00) within"+"\n"+
-						"the subaction's data, Crazy Hand will think that is the end of the subaction."+"\n"+
-						"This is a known bug and is being worked on."+"\n";
-				
-				int res = optionPane.showConfirmDialog(MeleeEdit.frame, "This feature is ONLY available for use with a 20XX modded ISO.\n"+
-																"Using a non-20XX ISO will cause Crazy Hand to crash, and may corrupt some important data on the ISO.\n"+
-					    										"Only hit \"OK\" if you are using a 20XX iso.", "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-				
-				if(res==JOptionPane.OK_OPTION){
-					if(fsmPanel==null){
-						fsmPanel = new FSMPanel();
-					}
-					add(fsmPanel, BorderLayout.CENTER);
-				}
-				else{
-					MeleeEdit.selectedMenu=MENU_ATTRIBUTES;
-					cb.setSelectedIndex(MeleeEdit.MENU_ATTRIBUTES);
-					actionPerformed(new ActionEvent(e.getSource(), e.getID(), e.getActionCommand()));
-				}
-			}
-			if (selectedMenu == MENU_ALL) {
-				scriptPanel.remove(subactionList);
-				scriptPanel.remove(scripts);
-				// scriptPanel.remove(specialPanel);
-				scriptPanel.add(subactionList2);
-				scriptPanel.add(scripts);
-
-				add(scriptPanel, BorderLayout.CENTER);
-				// comboPane.add(subactionList);
-				
-				//newTabButton.setEnabled(true);
-
-				updateSubactions();
-				
-				if(MeleeEdit.loggedSubactionSelection>MeleeEdit.subactionList2.getItemCount()){
-					MeleeEdit.loggedSubactionSelection = 0;
-				}
-				
-				MeleeEdit.subactionList2.setSelectedIndex(MeleeEdit.loggedSubactionSelection);
-			}
-			if (selectedMenu == MENU_OTHER) {
-				remove(saveButton);
-				//restorePane = new RestorePanel();
-				add(restorePane, BorderLayout.CENTER);
-			}
-			if (selectedMenu == MENU_ANIMATION) {
-				add(animationPanel, BorderLayout.CENTER);
-
-				updateAnimations();
-			}
-
-			frame.pack();
-			System.out.println("Option Selection Updated");
-		}
-	}
-
-	public class SubactionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			JComboBox cb = (JComboBox) e.getSource();
-
-			selectedSubaction = cb.getSelectedIndex();
+		switch(selectedMenu){
+		case MENU_ATTRIBUTES:
+			attributePanel.save();
+			break;
+		case MENU_SPECIAL_ATTRIBUTES:
+			specialAttributePanel.save();
+			break;
+		case MENU_SUBACTIONS_COMMON:
 			FileIO.init();
-			FileIO.readScripts();
-		}
-	}
-
-	class AttributeTable extends AbstractTableModel {
-		public String[] columnNames = { "Attribute", "Value", "Info", };
-		public Object[][] data = initGrid();
-
-		public Object[][] initGrid() {
-			FileIO.setPosition(Character.characters[MeleeEdit.selected].offset);
-			Object[][] tmp = new Object[Attribute.attributes.length][3];
-			for (int i = 0; i < Attribute.attributes.length; i++) {
-				tmp[i][0] = Attribute.attributes[i].name;
-				tmp[i][1] = FileIO.readFloat();
-				if (Attribute.attributes[i].name.equals("????"))
-					tmp[i][2] = "Don't modify.";
-				else
-					tmp[i][2] = Attribute.attributes[i].info;
+			for (Script script : Script.scripts) {
+				script.save();
 			}
-			return tmp;
+
+			FileIO.init();
+			MeleeEdit.subactionPanel.readScripts();
+			frame.pack();
+			break;
+		case MENU_SUBACTIONS_ALL:
+			FileIO.init();
+			for (Script script : Script.scripts) {
+				script.save();
+			}
+
+			FileIO.init();
+			MeleeEdit.subactionPanel.readScripts();
+			frame.pack();
+			break;
+		case MENU_PROJECTILE_EDIT_CHARACTER:
+			projectilePanel.save();
+			break;
+		case MENU_ANIMATION:
+			for (AnimationNode n : animationPanel.nodes) {
+				n.save();
+			}
+			break;
+		case MENU_FRAME_SPEED_MODIFIERS:
+			fsmPanel.save();
+			break;
+		case MENU_COMMON_DATA:
+			plCoPanel.save();
+			break;
+		case MENU_MOVE_LOGIC:
+			try {
+				subactionInterruptPanel.applyChanges();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			break;
+		case MENU_OTHER:
+
+			break;
 		}
 
-		public int getColumnCount() {
-			return columnNames.length;
+		
+
+		try {
+			FileIO.isoFileSystem.replaceFile(FileIO.isoFileSystem.getCurrentFile(),FileIO.f.array());
+
+		} catch (IOException e2) {
+			e2.printStackTrace();
 		}
 
-		public int getRowCount() {
-			return data.length;
-		}
+		FileIO.loadedISOFile.close();
 
-		public String getColumnName(int col) {
-			return columnNames[col];
-		}
-
-		public Object getValueAt(int row, int col) {
-			return data[row][col];
-		}
-
-		public Class getColumnClass(int c) {
-			return getValueAt(0, c).getClass();
-		}
-
-		public boolean isCellEditable(int row, int col) {
-			if (col == 1)
-				return true;
-			else
-				return false;
-		}
-
-		public void setValueAt(Object value, int row, int col) {
-			if (value == null)
-				return;
-			data[row][col] = value;
-			fireTableCellUpdated(row, col);
-		}
+		Options.saveOptions();
+		System.out.println("Save Complete");
+		
+		
+		MeleeEdit.toolBar.setButton(false);
+		
+		frame.pack();
 	}
 	
-	class SpecialAttributeTable extends AbstractTableModel {
-		public String[] columnNames = { "Attribute", "Value", "Used for", "Info"};
-		public Object[][] data = initGrid();
-
-		public Object[][] initGrid() {
-			SpecialMoveAttribute[] list = SpecialMovesList.getSpecialAttributesForCharacter(selected);
-			System.out.println("Loading special move attributes");
-			Object[][] tmp = new Object[SpecialMovesList.getSpecialAttributesForCharacter(selected).length][4];
-			for (int i = 0; i < list.length; i++) {
-				tmp[i][0] = list[i].name;
-
-					if(list[i].isInt){
-						FileIO.setPosition(list[i].loc);
-						tmp[i][1] = Float.parseFloat(""+FileIO.readInt());
-					}
-					else{
-						FileIO.setPosition(list[i].loc);
-						tmp[i][1] = FileIO.readFloat();
-					}
-					
-					if (list[i].name.equals("????"))
-						tmp[i][3] = "Unsure what this value is.";
-					else
-						tmp[i][3] = list[i].info;
-					
-					if(list[i].isInt){
-						tmp[i][3] += " (Integer values only!)";
-					}
-					
-					tmp[i][2] = list[i].associatedMove;
-					
+	//this function updates the data of a given but does completely generate new panels,
+	//unless hardUpdate() is called from within this function
+	public void softUpdate(){
+		switch(selectedMenu){
+		case MENU_ATTRIBUTES:
+			attributePanel.update();
+			break;
+		case MENU_SPECIAL_ATTRIBUTES:
+			hardUpdate();
+			break;
+		case MENU_SUBACTIONS_COMMON:
+			subactionPanel.updateSubactions();
+			break;
+		case MENU_SUBACTIONS_ALL:
+			subactionPanel.updateSubactions();
+			break;
+		case MENU_PROJECTILE_EDIT_CHARACTER:
+			//nothing
+			break;
+		case MENU_ANIMATION:
+			animationPanel.updateAnimations();
+			break;
+		case MENU_FRAME_SPEED_MODIFIERS:
+			//nothing
+			break;
+		case MENU_COMMON_DATA:
+			//nothing
+			break;
+		case MENU_MOVE_LOGIC:
+			if(subactionInterruptPanel!=null){
+				subactionInterruptPanel.refresh();
 			}
-			return tmp;
+			break;
+		case MENU_OTHER:
+			//nothing
+			break;
 		}
-
-		public int getColumnCount() {
-			return columnNames.length;
-		}
-
-		public int getRowCount() {
-			return data.length;
-		}
-
-		public String getColumnName(int col) {
-			return columnNames[col];
-		}
-
-		public Object getValueAt(int row, int col) {
-			return data[row][col];
-		}
-
-		public Class getColumnClass(int c) {
-			return getValueAt(0, c).getClass();
-		}
-
-		public boolean isCellEditable(int row, int col) {
-			if (col == 1)
-				return true;
-			else
-				return false;
-		}
-
-		public void setValueAt(Object value, int row, int col) {
-			if (value == null)
-				return;
-			data[row][col] = value;
-			fireTableCellUpdated(row, col);
-		}
+		frame.pack();
+		FileIO.loadedISOFile.close();
+		System.out.println("Character Selection Updated");
 	}
+	
+	//this function will completely refresh panels, creating new objects
+	public void hardUpdate(){
+		removeAll();
+		add(toolBar, BorderLayout.PAGE_START);
+
+		switch(selectedMenu){
+			case MENU_ATTRIBUTES:
+				add(attributePanel, BorderLayout.CENTER);
+				attributePanel.update();
+				break;
+			case MENU_SPECIAL_ATTRIBUTES:
+				specialAttributePanel = new SpecialAttributePanel();
+				add(specialAttributePanel, BorderLayout.CENTER);
+				break;
+			case MENU_SUBACTIONS_COMMON:
+				subactionPanel = new SubactionPanel();
+				add(subactionPanel, BorderLayout.CENTER);
+				subactionPanel.update();
+				break;
+			case MENU_SUBACTIONS_ALL:
+				subactionPanel = new SubactionPanel();
+				add(subactionPanel, BorderLayout.CENTER);
+				subactionPanel.update();
+				break;
+			case MENU_PROJECTILE_EDIT_CHARACTER:
+				projectilePanel = new ProjectileEditPane();
+				add(projectilePanel);
+				break;
+			case MENU_ANIMATION:
+				animationPanel = new AnimationPanel();
+				add(animationPanel, BorderLayout.CENTER);
+				//animationPanel.updateAnimations();
+				break;
+			case MENU_FRAME_SPEED_MODIFIERS:
+				fsmPanel = new FSMPanel();
+				add(fsmPanel, BorderLayout.CENTER);
+				fsmPanel.updateUI();
+				updateUI();
+				break;
+			case MENU_COMMON_DATA:
+				plCoPanel = new PlCoPanel();
+				add(plCoPanel);
+				break;
+			case MENU_MOVE_LOGIC:
+				subactionInterruptPanel = new MoveLogicEditPane();
+				add(subactionInterruptPanel);
+				break;
+			case MENU_OTHER:
+				add(restorePane, BorderLayout.CENTER);
+				break;
+		}
+		
+		Options.saveOptions();
+		frame.pack();
+	}
+	
+	
+
+	
+
+	public static MeleeEdit contentPane;
 
 	public static void main(String[] args) throws IOException {
+		
+		//Debug.act();//TODO remove!
+
+		
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		    	//System.out.println(info.getName());
+		        if ("Nimbus".equals(info.getName())) {
+		            //UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+		}
+		
+		WebLookAndFeel.install ();
+		
 		Options.loadOptions();
 		FileIO.loadISOFile();
-		FileIO.init();
-		// FileIO.declareAnims();
-		// SpecialMovesList.load();
+		AttributePanel.initAttributes();
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				// Create and set up the window.
 				frame = new JFrame();
+				
 				updateTitle(FileIO.loadedISOFile.getChosenISOFile().getName());
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 				ImageIcon img = new ImageIcon("img/hand.png");
 				frame.setIconImage(img.getImage());
 
-				// Create and set up the content pane.
-				MeleeEdit contentPane = new MeleeEdit();
-
-				//
-				//
-
+				contentPane = new MeleeEdit();
 				contentPane.setOpaque(true);
 				frame.setContentPane(contentPane);
-				frame.setJMenuBar(fileMenu);
-				// Display the window.
+				
+
+				frame.setJMenuBar(fileMenu);//TODO should this go here?
+			
+				//frame.setMaximizedBounds(new Rectangle(50,50,50,45));
+				frame.setMaximumSize(new Dimension(600, 1000));
+		        frame.setMinimumSize(new Dimension(600, 300));
 				frame.pack();
 				frame.setVisible(true);
-
 			}
 		});
-		
-		
+
 		Options.saveOptions();
+		
 		
 
 	}
+
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// not used, but required
 
 	}
-
-	public static void setScripts() {
-		int i = -1;
-
-		scriptInner.removeAll();
-		
-		ScriptUtils.updateScripts(Script.scripts);
-		Collections.sort(Script.scripts, new ScriptComparator());
-
-		for (Script script : Script.scripts) {
-			i++;
-
-			scriptInner.add(Script.scripts.get(i));
-
-			byte[] tempData = { 4, 53, 6 };
-			// j.add(new HitboxScript(tempData));
-
-			JSeparator sep = new JSeparator(SwingConstants.HORIZONTAL);
-			sep.setBackground(Color.BLUE);
-			scriptInner.add(sep);
-			// JPanel box = Box.createVerticalStrut(10);
-			scriptInner.add(Box.createVerticalStrut(30));
-
-			sep = new JSeparator(SwingConstants.HORIZONTAL);
-			sep.setBackground(Color.BLUE);
-			scriptInner.add(sep);
-			// j.add(Box.createVerticalStrut(5));
-
-		}
-		frame.pack();
-	}
 	
-	public static void refreshData() {
-		refreshData(MeleeEdit.selected, MeleeEdit.selectedSubaction, Script.scripts);
-	}
+	
 
-	/**
-	 * Refreshes the data values.
-	 */
-	public static void refreshData(int c, int pointer, ArrayList<Script> scripts) {
-		// currently this is only used for when restoring characters to defaults
-		// It refreshes the subactions values, etc to reflect the change to
-		// default
-		FileIO.init(c);
-		FileIO.readScripts(scripts);
-		FileIO.setPosition(Character.characters[MeleeEdit.selected].offset);
-		for (int i = 0; i < Attribute.attributes.length; i++) {
-			MeleeEdit.attributeTable.setValueAt(FileIO.readFloat(), i, 1);
-		}
-
-	}
 
 	public static void updateTitle(String isoPath) {
 		frame.setTitle("Crazy Hand v" + Config.VERSION + " [" + isoPath + "]");
 	}
+
 }

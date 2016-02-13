@@ -18,8 +18,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Options
 {
+	//TODO inspect this code which I have never cared enough to look at. like... I don't think I've ever looked at for longer than a few seconds. looks gross though from what I see now
 	public static boolean advanced = false;
 	
+	public static String advancedFsmLocation="";
+	public static boolean advancedFsmOpt=false;
 	
 	public static void loadOptions()
 	{
@@ -41,14 +44,61 @@ public class Options
 					hasDolphinPath = true;
 					dolphinPath = o.split("optDolphinPath:")[1];
 				}
+				else if(o.startsWith("advfsm")){
+					if(o.startsWith("advfsmloc")){
+						advancedFsmLocation = o.split("advfsmloc:")[1];
+					}
+					else{
+						advancedFsmOpt = o.split("advfsm:")[1] != "true";
+						System.out.println("advfsm:"+advancedFsmOpt);
+					}
+				}
 			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public static void loadCodeList()
+	{
+		File f = new File("codes.txt");
 		
+		try {
+			List<String> lines = Files.readAllLines(f.toPath(), StandardCharsets.UTF_8);
+			for(int i = 0; i < lines.size(); i ++)
+			{
+				String o = lines.get(i);
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
+	}
+	
+	public static void saveCodeList(String codes)
+	{
+		File f = new File("codes.txt");
+		
+		if(!f.exists())
+			try {
+				f.createNewFile();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		try {
+			PrintWriter out = new PrintWriter("codes.txt");
+			
+			String ln = System.lineSeparator();
+			
+			out.write(codes);
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static boolean hasLastIso = false, hasDolphinPath = false;
@@ -79,6 +129,8 @@ public class Options
 			if(hasDolphinPath)
 			out.write("optDolphinPath:"+dolphinPath+ln);
 			out.write("tabSubactions:"+tabSubactions+ln);
+			out.write("advfsm:"+advancedFsmOpt+ln);
+			out.write("advfsmloc:"+(advancedFsmLocation == "" ? "4088B0" : advancedFsmLocation)+ln);
 			out.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -121,40 +173,7 @@ public class Options
 		  -b, --batch             	Exit Dolphin with emulator
 		  -V, --video_backend=<str>  	Specify a video plugin
 		  -A, --audio_emulation=<str>  	Low level (LLE) or high level (HLE) audio
-		  
-		  
-		  
-		  
-		//Don't think we'll be needing this function anymore.
-	public static void writeDolphinRunFile(){
-		
-		File f = new File("runDolphin.bat");
-		
-		if(!f.exists())
-			try {
-				f.createNewFile();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			
-		try {
-			PrintWriter out = new PrintWriter("runDolphin.bat");
-			
-			String ln = System.lineSeparator();
-			out.write("@Echo off"+ln);
-			out.write("cd " + dolphinPath+ln);
-			out.write("start \"\" /wait Dolphin.exe /e " + FileIO.loadedISOFile.getChosenISOFile().getPath()+ ""+ln);
-			out.write("exit"+ln);
-			
-			
-			
-			
-			out.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 	*/
 	
 	public static void openDolphin()
@@ -176,6 +195,9 @@ public class Options
 			destroyDolphinInstance();
 		}
 		
+		if(FileIO.loadedISOFile.isOpen()){
+			FileIO.loadedISOFile.close();
+		}
 		
 			if(!Options.hasDolphinPath) {
 				FileNameExtensionFilter exeFilter = new FileNameExtensionFilter(
@@ -218,6 +240,8 @@ public class Options
 	}
 	
 	public static Process dolphinInstance;
+
+	public static String advancedFsmListLocation="";
 	
 	public static boolean isOSWindows(){
 		return System.getProperty("os.name").startsWith("Windows");

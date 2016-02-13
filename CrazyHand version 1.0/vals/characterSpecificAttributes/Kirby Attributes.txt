@@ -1,0 +1,98 @@
+0x4e8c~~Time it takes to change direction in midair jump (frames)~~~~I~~Jumps
+0x4e90~~Midair jump horizontal momentum backward~~~~F~~Jumps
+0x4e94~~Midair jump horizontal momentum forward~~~~F~~Jumps
+0x4e98~~????~~~~F~~Jumps
+0x4e9c~~????~~~~F~~Jumps
+0x4ea0~~Midair jump 1 vertical momentum~~~~F~~Jumps
+0x4ea4~~Midair jump 2 vertical momentum~~~~F~~Jumps
+0x4ea8~~Midair jump 3 vertical momentum~~~~F~~Jumps
+0x4eac~~Midair jump 4 vertical momentum~~~~F~~Jumps
+0x4eb0~~Midair jump 5 vertical momentum~~~~F~~Jumps
+0x4eb4~~????~~~~I~~Jumps
+0x4eb8~~????~~~~I~~Jumps
+0x4ebc~~????~~~~I~~Jumps
+0x4ec4~~????~~~~F~~Neutral-B
+0x4ec8~~????~~~~F~~Neutral-B
+0x4ecc~~????~~~~F~~Neutral-B
+0x4ed0~~????~~~~F~~Neutral-B
+0x4ed4~~Inhale velocity of outer grab box~~~~F~~Neutral-B
+0x4ed8~~Inhale velocity of inner grab box~~~~F~~Neutral-B
+0x4edc~~????~~~~F~~Neutral-B
+0x4ee0~~Part of breakout formula (lower values = harder to escape)~~~~F~~Neutral-B
+0x4ee4~~????~~~~F~~Neutral-B
+0x4ee8~~Part of breakout formula (higher values = harder to escape)~~~~F~~Neutral-B
+0x4eec~~Spit out horizontal deceleration rate~~~~F~~Neutral-B
+0x4ef0~~????~~~~F~~Neutral-B
+0x4ef4~~Frames foe is in spit out star~~~~F~~Neutral-B
+0x4ef8~~Frames foe is stuck in swallow star~~~~F~~Neutral-B
+0x4efc~~????~~~~F~~Neutral-B
+0x4f00~~????~~~~F~~Neutral-B
+0x4f04~~????~~~~F~~Neutral-B
+0x4f08~~Inhale walk speed~~~~F~~Neutral-B
+0x4f0c~~Inhale jump height~~~~F~~Neutral-B
+0x4f10~~Inhale stop walk momentum~~~~F~~Neutral-B
+0x4f14~~Grounded spit out initial horizontal velocity~~~~F~~Neutral-B
+0x4f18~~????~~~~F~~Neutral-B
+0x4f1c~~Swallow pop-out angle: 75 degrees (radians)~~~~F~~Neutral-B
+0x4f20~~????~~~~F~~Neutral-B
+0x4f24~~????~~~~F~~Neutral-B
+0x4f28~~????~~~~F~~Neutral-B
+0x4f2c~~????~~~~F~~Neutral-B
+0x4f20~~????~~~~F~~Neutral-B
+0x4f24~~????~~~~F~~Neutral-B
+0x4f28~~????~~~~F~~Neutral-B
+0x4f2c~~????~~~~F~~Neutral-B
+0x4f30~~????~~~~F~~Neutral-B
+0x4f34~~????~~~~F~~Neutral-B
+0x4f38~~????~~~~F~~Neutral-B
+0x4f3c~~Odds of losing power when hit~~~~F~~Neutral-B
+0x4f40~~????~~~~F~~Neutral-B
+0x4f44~~????~~~~F~~Side-B
+0x4f48~~????~~~~F~~Side-B
+0x4f4c~~????~~~~F~~Side-B
+0x4f50~~????~~~~F~~Side-B
+0x4f54~~????~~~~F~~Side-B
+0x4f58~~Aerial Side B vertical momentum~~~~F~~Side-B
+0x4f5c~~Aerial Side B landing lag (frames)~~~~F~~Side-B
+0x7bf8~~Hammer* graphic size~~~~F~~Side-B
+0x4f60~~Up B vertical momentum~~~~F~~Up-B
+0x4f64~~Maximum horizontal velocity forward?~~~~F~~Up-B
+0x4f68~~X offset of final cutter projectile~~~~F~~Up-B
+0x4f6c~~Y offset of final cutter projectile~~~~I~~Up-B
+0x4f70~~Up B turning threshold~~~~F~~Up-B
+0x7b4c~~Projectile initial velocity~~~~F~~Up-B
+0x7b50~~????~~~~F~~Up-B
+0x7b54~~Cutter Projectile duration (frames)~~~~F~~Up-B
+0x7b58~~Projectile horizontal deceleration rate?~~~~F~~Up-B
+0x7b5c~~????~~~~F~~Up-B
+0x7b60~~????~~~~F~~Up-B
+0x7b64~~????~~~~F~~Up-B
+0x7b68~~????~~~~F~~Up-B
+0x7b6c~~????~~~~F~~Up-B
+0x7b70~~????~~~~F~~Up-B
+0x7b74~~????~~~~F~~Up-B
+0x7b78~~????~~~~F~~Up-B
+0x4f78~~Maximum duration in stone mode (frames)~~~~I~~Stone
+0x4f7c~~Minimum duration in stone mode (frames)~~~~I~~Stone
+0x4f80~~????~~~~F~~Stone
+0x4f84~~????~~~~F~~Stone
+0x4f88~~????~~~~F~~Stone
+0x4f8c~~????~~~~F~~Stone
+0x4f90~~Stone Gravity~~~~F~~Stone
+0x4f94~~Stone HP~~~~I~~Stone
+0x4f98~~????~~~~I~~Stone
+0x4f9c~~????~~~~I~~Stone
+0x5238~~Initial horizontal momentum~~~~F~~Yoshi hat Neutral-B
+0x523c~~Initial vertical momentum~~~~F~~Yoshi hat Neutral-B
+0x5240~~Damage multiplier when egged~~~~F~~Yoshi hat Neutral-B
+0x5244~~????~~~~F~~Yoshi hat Neutral-B
+0x5248~~Egg lay growing time~~~~F~~Yoshi hat Neutral-B
+0x524c~~Part of breakout formula (lower = harder)~~~~F~~Yoshi hat Neutral-B
+0x5250~~Something with button mashing time?~~~~F~~Yoshi hat Neutral-B
+0x5254~~Something with egg wiggling?~~~~F~~Yoshi hat Neutral-B
+0x5258~~????~~~~F~~Yoshi hat Neutral-B
+0x525c~~????~~~~F~~Yoshi hat Neutral-B
+0x5260~~Enemies invincibility upon breaking out of egg (frames). 0 = infinite~~~~I~~Yoshi hat Neutral-B
+0x5264~~Horizontal velocity on breakout?~~~~F~~Yoshi hat Neutral-B
+0x5268~~Vertical velocity on breakout?~~~~F~~Yoshi hat Neutral-B
+0x526c~~Something to do with breakout time~~~~F~~Yoshi hat Neutral-B

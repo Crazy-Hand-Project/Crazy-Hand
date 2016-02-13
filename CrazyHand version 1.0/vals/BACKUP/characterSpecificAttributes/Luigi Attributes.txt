@@ -1,0 +1,42 @@
+0x3a94~~Initial Velocity~~~~F~~Neutral-B
+0x3a98~~Projectile lifetime (frames)~~~~F~~Neutral-B
+0x3a9c~~????~~~~F~~Neutral-B
+0x3aa0~~????~~~~F~~Neutral-B
+0x3524~~????~~~~F~~Side-B
+0x3528~~????~~~~F~~Side-B
+0x352c~~????~~~~F~~Side-B
+0x3530~~Frames to fully charge missile~~~~F~~Side-B
+0x3534~~Base damage~~~~F~~Side-B
+0x3538~~Damage slope (damage = base damage + frames spent charging * this)~~~~F~~Side-B
+0x353c~~????~~~~F~~Side-B
+0x3540~~????~~~~F~~Side-B
+0x3544~~????~~~~F~~Side-B
+0x3548~~Horizontal momentum~~~~F~~Side-B
+0x354c~~Horizontal momentum multiplier~~~~F~~Side-B
+0x3550~~Initial Vertical momentum~~~~F~~Side-B
+0x3554~~Vertical momentum multiplier (lower = higher)~~~~F~~Side-B
+0x3558~~Gravity right after movement animation~~~~F~~Side-B
+0x355c~~0 = SD at end of movement animation~~~~F~~Side-B
+0x3560~~Horizontal deceleration after movement animation~~~~F~~Side-B
+0x3564~~Gravity multiplier at end of movement animation~~~~F~~Side-B
+0x3568~~Misfire ratio (i.e. 1 out of this chance of misfiring)~~~~F~~Side-B
+0x356c~~Misfire horizontal momentum~~~~F~~Side-B
+0x3570~~Misfire vertical momentum~~~~F~~Side-B
+0x3574~~Aerial mobility in freefall~~~~F~~Up-B
+0x3578~~Landing lag~~~~F~~Up-B
+0x357c~~Control stick threshold to reverse UpB?~~~~F~~Up-B
+0x3580~~Control stick threshold to move horizontally?~~~~F~~Up-B
+0x3584~~Air control during UpB~~~~F~~Up-B
+0x3588~~Initial horizontal momentum from moving stick forward~~~~F~~Up-B
+0x358c~~Gravity during initial UpB~~~~F~~Up-B
+0x3590~~Initial vertical momentum during aerial UpB~~~~F~~Up-B
+0x3594~~Vertical momentum from first B tap~~~~F~~Down-B
+0x3598~~Grounded horizontal momentum~~~~F~~Down-B
+0x359c~~Aerial horizontal momentum~~~~F~~Down-B
+0x35a0~~Grounded turning momentum~~~~F~~Down-B
+0x35a4~~Aerial lift multiplier from tapping B in the air?~~~~F~~Down-B
+0x35a8~~Ending friction~~~~F~~Down-B
+0x35ac~~????~~~~I~~Down-B
+0x35b0~~Maximum vertical momentum gained from tapping B in the air~~~~F~~Down-B
+0x35b4~~Gravity during tapping B in the air~~~~F~~Down-B
+0x35b8~~Freefall toggle~~~~F~~Down-B

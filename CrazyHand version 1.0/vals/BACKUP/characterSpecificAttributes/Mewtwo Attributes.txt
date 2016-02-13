@@ -1,0 +1,48 @@
+0x38d4~~Increment frames before charging per each iteration~~~~F~~Neutral-B
+0x38d8~~Ground horizontal momentum from releasing Shadow Ball~~~~F~~Neutral-B
+0x38dc~~Air horizontal momentum from releasing Shadow Ball~~~~F~~Neutral-B
+0x38e0~~Loop iterations to fully charge Shadow Ball~~~~I~~Neutral-B
+0x38e4~~Frames before transition to Shadow Ball release animation (?)~~~~I~~Neutral-B
+0x38e8~~Landing lag/SpecialFall toggle~~~~F~~Neutral-B
+0x3da0~~Projectile lifetime~~~~F~~Neutral-B
+0x3da4~~Firing angle (radians)~~~~F~~Neutral-B
+0x3da8~~Uncharged projectile speed~~~~F~~Neutral-B
+0x3dac~~Fully charged projectile speed~~~~F~~Neutral-B
+0x3db0~~????~~~~F~~Neutral-B
+0x3db4~~????~~~~F~~Neutral-B
+0x3db8~~Base Shadow Ball size~~~~F~~Neutral-B
+0x3dbc~~Full Shadow Ball size~~~~F~~Neutral-B
+0x3dc0~~Wiggle intensity (?)~~~~I~~Neutral-B
+0x3dc4~~????~~~~F~~Neutral-B
+0x3dc8~~????~~~~F~~Neutral-B
+0x3dcc~~????~~~~F~~Neutral-B
+0x38ec~~Air vertical momentum boost~~~~F~~Side-B
+0x38f0~~????~~~~I~~Side-B
+0x38f4~~????~~~~I~~Side-B
+0x38f8~~Z-offset of reflection~~~~F~~Side-B
+0x38fc~~Y-offset of reflection~~~~F~~Side-B
+0x3900~~X-offset of reflection~~~~F~~Side-B
+0x3904~~Reflection size multiplier~~~~F~~Side-B
+0x3908~~????~~~~F~~Up-B
+0x390c~~????~~~~F~~Up-B
+0x3910~~????~~~~F~~Up-B
+0x3914~~If set to 0, moving down on Up+B crashes game~~~~F~~Up-B
+0x3918~~If set to 0, crashes game on Up+B~~~~F~~Up-B
+0x391c~~????~~~~F~~Up-B
+0x3920~~????~~~~F~~Up-B
+0x3924~~Travel time (frames)~~~~I~~Up-B
+0x3928~~????~~~~F~~Up-B
+0x392c~~Affects sensitivity to direction change?~~~~F~~Up-B
+0x3930~~Something with initial momentum (?)~~~~F~~Up-B
+0x3934~~Something with initial momentum (stacks with previous)~~~~F~~Up-B
+0x3938~~????~~~~F~~Up-B
+0x393c~~????~~~~I~~Up-B
+0x3940~~Ending momentum (?)~~~~F~~Up-B
+0x3944~~????~~~~F~~Up-B
+0x3948~~Landing lag (divided by ~10)~~~~F~~Up-B
+0x394c~~Base falling acceleration~~~~F~~Down-B
+0x3950~~Falling acceleration multiplier~~~~F~~Down-B
+0x3954~~X-offset of first hitbox~~~~F~~Down-B
+0x3958~~Y-offset of first hitbox~~~~F~~Down-B
+0x3cf8~~Number of times hitbox travels horizontally~~~~F~~Down-B
+0x3cfc~~Hitbox stretch multiplier (?)~~~~F~~Down-B

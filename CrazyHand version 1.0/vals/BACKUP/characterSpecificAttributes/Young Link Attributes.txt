@@ -1,0 +1,35 @@
+0x3724~~Frames until max arrow angle?~~~~F~~Neutral-B
+0x3728~~Arrow charging speed (higher = faster)~~~~F~~Neutral-B
+0x372c~~Anything other than 0 goes into special free fall~~~~F~~Neutral-B
+0x3730~~Behavior for projectile?(65 is Fire Arrow)~~~~I~~Neutral-B
+0x3734~~Model ID for projectile?(77 is Young Link's arrow)~~~~I~~Neutral-B
+0x4144~~Arrow lifetime (frames)~~~~F~~Neutral-B
+0x4148~~Uncharged arrow velocity multiplier~~~~F~~Neutral-B
+0x414c~~Charged arrow velocity multiplier~~~~F~~Neutral-B
+0x4150~~Uncharged arrow damage~~~~F~~Neutral-B
+0x4154~~Fully charged arrow damage~~~~F~~Neutral-B
+0x4158~~ ???~~~~F~~Neutral-B
+0x415c~~Arrow lifetime on ground (frames)~~~~F~~Neutral-B
+0x4160~~Arrow gravity~~~~F~~Neutral-B
+0x4164~~Arrow weight~~~~F~~Neutral-B
+0x3738~~Something to do with angle of boomerang, high numbers it cannot be angled~~~~F~~Side-B
+0x373c~~Boomerang angle (radians)~~~~F~~Side-B
+0x3740~~ ???~~~~F~~Side-B
+0x3744~~Smash Boomerang launch speed~~~~F~~Side-B
+0x3748~~Regular Boomerang launch speed~~~~F~~Side-B
+0x374c~~Boomerang return proximity (X offset of when catchable)~~~~F~~Side-B
+0x3750~~Thrown projectile ID(61 is Young Link's boomerang)~~~~I~~Side-B
+0x3754~~ ???~~~~F~~Side-B
+0x3758~~Boomerang Deceleration/Resistance?~~~~F~~Side-B
+0x375c~~ ???~~~~F~~Side-B
+0x3760~~ ???~~~~F~~Side-B
+0x3764~~ ???~~~~F~~Side-B
+0x3768~~ ???~~~~F~~Side-B
+0x3754~~Up B landing lag~~~~F~~Up-B
+0x3758~~Up B initial horizontal momentum~~~~F~~Up-B
+0x375c~~Up B aerial mobility multiplier~~~~F~~Up-B
+0x3760~~Maximum mobility~~~~F~~Up-B
+0x3764~~Initial vertical momentum~~~~F~~Up-B
+0x3768~~Up B gravity~~~~F~~Up-B
+0x376c~~Item ID for bomb(59 is Young Link's bomb)~~~~I~~Down-B
+0x3770~~Down Air 'bounce' vertical momentum~~~~F~~Miscellaneous

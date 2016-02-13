@@ -1,0 +1,32 @@
+0x38c8~~Charge animation iterations to reach full charge (animation is 30 frames, so basically half-seconds)~~~~I~~Neutral-B
+0x38cc~~Base damage~~~~I~~Neutral-B
+0x38d0~~Damage added per charge animation iteration (again, basically half-seconds)~~~~I~~Neutral-B
+0x38d4~~????~~~~F~~Neutral-B
+0x38d8~~Aerial horizontal deceleration~~~~F~~Neutral-B
+0x38dc~~????~~~~F~~Neutral-B
+0x38e0~~????~~~~F~~Side-B
+0x38e4~~Aerial vertical boost~~~~F~~Side-B
+0x38e8~~Aerial horizontal deceleration~~~~F~~Side-B
+0x38ec~~Gravity during move~~~~F~~Side-B
+0x38f0~~Max horizontal air movement in freefall~~~~F~~Up-B
+0x38f4~~Landing lag~~~~F~~Up-B
+0x38f8~~????~~~~F~~Up-B
+0x38fc~~????~~~~F~~Up-B
+0x3900~~directionalization distance (displacement, not angle)~~~~F~~Up-B
+0x3904~~directionalized pre-jump displacement (has a low max)~~~~F~~Up-B
+0x3908~~aerial jump height ratio (relative to ground version)~~~~F~~Up-B
+0x390c~~gravity after use~~~~F~~Up-B
+0x3910~~max fall speed after use~~~~F~~Up-B
+0x3914~~????~~~~F~~Up-B
+0x3918~~????~~~~F~~Down-B
+0x391c~~Counter gravity~~~~F~~Down-B
+0x3920~~Counter max fall speed~~~~F~~Down-B
+0x3924~~????~~~~F~~Down-B
+0x3928~~Hitlag/Freeze frames on activation~~~~F~~Down-B
+0x392c~~Y-axis height of Counter collision box (positive int only)~~~~I~~Down-B
+0x3930~~X-axis movement of collision box (floating point)~~~~F~~Down-B
+0x3934~~also affects Y-axis movement of bubble, maybe this is position and 392C is bone?~~~~F~~Down-B
+0x3938~~Z-axis movement of collision box (floating point)~~~~F~~Down-B
+0x393c~~Counter collision box size~~~~F~~Down-B
+0x3940~~????~~~~F~~Down-B
+0x3944~~affects length of sword trail~~~~F~~Down-B

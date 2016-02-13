@@ -1,11 +1,18 @@
 package com.scripts;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.HeadlessException;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -16,15 +23,13 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.text.MaskFormatter;
 
 import com.Character;
-import com.Event;
+import com.EventIdentifier;
 import com.FileIO;
 import com.MeleeEdit;
-import com.ScriptEditWindow;
 
 
 
@@ -48,7 +53,7 @@ public class Script extends JPanel{
 	public int subactionOffset;//Not sure if this will be needed yet. Leaving it in for the time being.
 	public Character linkedCharacter;//Not sure about this one either. We'll see.
 	
-	String[] allScripts=new String[Event.events.length];
+	String[] allScripts=new String[EventIdentifier.events.length];
 	
 	public Script(String n, int[] d, int l){
 		super();
@@ -81,8 +86,8 @@ public class Script extends JPanel{
 			tmp = tmp + " ";
 		}
 
-		numTag = new JLabel(" " + (arrayPlacement+1) + "   ");// + name + "(Loc:"+Integer.toHexString(this.location)+")"); 
-		numTag.setFont(new Font("wut", Font.BOLD, 18));
+		//numTag = new JLabel(" " + (arrayPlacement+1) + "   ");// + name + "(Loc:"+Integer.toHexString(this.location)+")"); 
+		//numTag.setFont(new Font("wut", Font.BOLD, 18));
 		offsetTag = new JLabel("         Offset: 0x" + Integer.toHexString(this.location));
 		offsetTag.setFont(new Font("wut", Font.ITALIC, 12));
 				
@@ -92,13 +97,16 @@ public class Script extends JPanel{
 		Box b0 = Box.createHorizontalBox();
 		
 		
-		JButton upButton = new JButton("Up");
+		JButton upButton = new JButton(new ImageIcon("img/up.png"));
+		upButton.setPreferredSize(new Dimension(30, 30));
 		upButton.setToolTipText("Move this script up");
 		upButton.setActionCommand("scriptUp");
 		
-		JButton downButton = new JButton("Down");
+		JButton downButton = new JButton(new ImageIcon("img/down.png"));
+		downButton.setPreferredSize(new Dimension(30, 30));
 		downButton.setToolTipText("Move this script down");
 		downButton.setActionCommand("scriptDown");
+		
 		
 		ButtonActionListener bac = new ButtonActionListener();
 		
@@ -108,22 +116,47 @@ public class Script extends JPanel{
 		b0.add(upButton);
 		b0.add(downButton);
 		
+		if(this instanceof HitboxScript){
+			JButton copyButton = new JButton(new ImageIcon("img/copy.png"));
+			copyButton.setPreferredSize(new Dimension(30, 30));
+			copyButton.setToolTipText("copy data");
+			copyButton.setActionCommand("hbCopy");
+			
+			JButton pasteButton = new JButton(new ImageIcon("img/paste.png"));
+			pasteButton.setPreferredSize(new Dimension(30, 30));
+			pasteButton.setToolTipText("paste data");
+			pasteButton.setActionCommand("hbPaste");
+			
+			copyButton.addActionListener(bac);
+			pasteButton.addActionListener(bac);
+			
+			b0.add(copyButton);
+			b0.add(pasteButton);			
+		}
+		
+		
         JPanel pan = new JPanel();
+        //pan.setBackground(new Color(.96f,.96f,1f,1f));//TODO idk color stuff. this is for title background thing
         pan.setLayout(new BoxLayout(pan, BoxLayout.X_AXIS));
 		Box  b = Box.createHorizontalBox();
-        b.add(numTag);
+        //b.add(numTag);
         
+        //TODO organize this better
         //Minimizing the amount of objects loaded into each script.
-        if(!FileIO.randomizingScripts){
-	        for(int i = 0; i < Event.events.length; i ++){
-	        	allScripts[i]=Event.events[i].name+"  ["+Event.events[i].length+" bytes]";
+        //if(!FileIO.randomizingScripts){
+	        for(int i = 0; i < EventIdentifier.events.length; i ++){
+	        	allScripts[i]=EventIdentifier.events[i].name+"  ["+EventIdentifier.events[i].length+" bytes]";
+	        	//allScripts[i]=EventIdentifier.events[i].name;
 	        }
 	        
 	        scriptSwitchBar = new JComboBox(allScripts);
-	        scriptSwitchBar.setSelectedIndex(Event.getEventPlacementFromName(Event.getEvent(this.id).name));
+	        scriptSwitchBar.setSelectedIndex(EventIdentifier.getEventPlacementFromName(EventIdentifier.getEventIdentifier(this.id).name));
 	        scriptSwitchBar.addActionListener(bac);
 	        scriptSwitchBar.setToolTipText("Change the kind of script this is.");
 	        scriptSwitchBar.setFont(new Font("wut", Font.BOLD, 14));
+	        scriptSwitchBar.setPreferredSize(new Dimension(250, 20));
+	        scriptSwitchBar.setBackground(new Color(.96f,.96f,1f,1f));
+	        scriptSwitchBar.setForeground(new Color(.2f,.2f,.3f,1f));
 	        //scriptSwitchBar.getEditor().getEditorComponent().setBackground(Color.WHITE);
 	        b.add(scriptSwitchBar);
 	         
@@ -132,7 +165,7 @@ public class Script extends JPanel{
 	        pan.add(b);
 	        pan.add(b0);
 			this.add(pan);
-        }
+        //}
 		
 		String hexForm = "";
         
@@ -164,10 +197,12 @@ public class Script extends JPanel{
         	this.remove(b);
         }
         
-		this.setBackground(new Color(255,255,255));
-		this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+		//this.setBackground(new Color(255,255,255));
+		//this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.updateScriptBoxInfo();
+		
+		this.setMaximumSize(new Dimension((int)getMaximumSize().getWidth(),100));
 	}
 	
 	public boolean linkedToCharacterFile = true;
@@ -197,11 +232,14 @@ public class Script extends JPanel{
 		
     }
 	
+	//TODO dont fuggin know
+	/*
 	public ScriptEditWindow editWindow;
 	public Script setInEditor(ScriptEditWindow w){
 		editWindow = w;
 		return this;
 	}
+	*/
 	public Script setStandalone(boolean b){
 		this.linkedToCharacterFile = b;
 		if(b)
@@ -219,7 +257,15 @@ public class Script extends JPanel{
 	
 	public void updateScriptBoxInfo(){//Mainly used for scripts inside loops
 									  //This function will be added to as new needs arise.
-		if(this.isScriptInsideLoop){
+		if(this.data[0]==0xCC&&this.data[1]==0x0&&this.data[2]==0x0&&this.data[3]==0x0){//If this is a self-damage script with no damage
+			this.setBackground(new Color(0xeec9ff));
+			for(int i = 0; i < this.getComponentCount(); i ++)
+			{
+				this.getComponent(i).setBackground(new Color(0xd9b2ff));
+			}
+			this.setToolTipText("This script is filler data. It can be replaced with no negative effects.");
+		}
+		else if(this.isScriptInsideLoop){
 			this.setBackground(new Color(0xDDDDEE));
 			for(int i = 0; i < this.getComponentCount(); i ++)
 			{
@@ -231,7 +277,20 @@ public class Script extends JPanel{
 			this.setBackground(Color.white);
 			this.setToolTipText("");
 		}
-		numTag.setText(" " + (arrayPlacement+1) + "   ");
+		if(this instanceof ThrowScript){
+			String strn = "";
+			for(int i = 0; i < this.data.length; i ++){
+				int in = data[i];
+				
+				strn +="0x";
+				if(in <= 0xF)strn+="0";
+				strn += Integer.toHexString(in);
+				strn +=" | ";
+			}
+			this.setToolTipText(strn);
+		}
+		
+		//numTag.setText(" " + (arrayPlacement+1) + "   ");
 		offsetTag.setText("   Offset: 0x" + Integer.toHexString(this.location));
 	}
 	
@@ -247,10 +306,12 @@ public class Script extends JPanel{
 		}
 		
 	}
+	//TODO get rid of this
 	public void scramble(){
 		
 	}
 	
+	//TODO and these
 	public static int bit(int num, int bit, int set) {
     	if(set==1){
     		return num | (1 << bit);
@@ -333,12 +394,7 @@ public class Script extends JPanel{
 	}
 	
 	public ArrayList<Script> getArray(){
-		if(editWindow == null){
-			return Script.scripts;
-		}
-		else{
-			return editWindow.getCurrentTab().scriptsInTab;
-		}
+		return Script.scripts;
 	}
 	
 	
@@ -360,32 +416,49 @@ public class Script extends JPanel{
 					updateUI();
 					ScriptUtils.updateScripts(getArray());
 				}
-				else if(arg0.getActionCommand()=="more"){
+				else if(arg0.getActionCommand()=="hbCopy"){
+					String hitboxFeed = "";
+					for(int i = 0; i < data.length; i ++){
+						hitboxFeed+=Integer.toHexString(data[i]);
+						hitboxFeed+="'";
+					}
+					
+					Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+					 StringSelection selection = new StringSelection(hitboxFeed);
+				    clipboard.setContents(selection, selection);
 					
 				}
-			}
-			else if(arg0.getSource() instanceof JComboBox){
-				JComboBox cb = (JComboBox) arg0.getSource();
-				Script sc = ScriptUtils.createBaseScript(location, cb.getSelectedIndex());
-				sc.linkedToCharacterFile = linkedToCharacterFile;
-				sc.editWindow = editWindow;
-				sc.save();
-				getArray().set(ScriptUtils.getArrayIndexForScriptAtPointer(location, getArray()), sc);
-				if(linkedToCharacterFile){
-					MeleeEdit.refreshData(linkedCharacter.getPlaceInArray(), subactionOffset, getArray());
+				else if(arg0.getActionCommand()=="hbPaste"){
+					try {
+						String hitboxFeed=(String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+						
+						String[] nubs = hitboxFeed.split("'");
+						
+						if(nubs.length!=data.length){
+							System.out.println("Clipboard contents aren't 20 bytes! (" + nubs.length + " bytes)");
+							return;
+						}
+						
+						for(int i = 0; i < data.length; i ++){
+							data[i]=Integer.parseInt(nubs[i],16);
+						}
+						
+						saveData();
+						FileIO.init();
+						MeleeEdit.subactionPanel.update();//TODO miiiight cause slowdowns. this used to be "refresh" before I deleted that
+						
+					} catch (HeadlessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (UnsupportedFlavorException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				}
-				
-				ScriptUtils.fixScriptsAfterSwap(getArray());
-				
-				ScriptUtils.updateScripts(getArray());
-				//FileIO.readScripts();
-				FileIO.init();
-				for (Script script : Script.scripts) {
-					script.save();
-				}
-
-				FileIO.init();
-				FileIO.readScripts();
 			}
 			
 		}

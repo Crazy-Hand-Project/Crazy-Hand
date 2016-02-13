@@ -1,0 +1,37 @@
+0x3bf4~~Initial projectile speed~~~~F~~Pills
+0x3bf8~~Initial projectile angle(radians)~~~~F~~Pills
+0x3bfc~~Projectile duration(In frames)~~~~F~~Pills
+0x3c04~~Projectile bounce height multiplier~~~~F~~Pills
+0x36c4~~Horizontal momentum from moving left/right~~Smaller values means more momentum~~F~~Side-B
+0x36c8~~Affects vertical momentum?~~~~F~~Side-B
+0x36cc~~Vertical momentum~~~~F~~Side-B
+0x36d0~~Vertical momentum from moving left/right~~~~F~~Side-B
+0x36d4~~????~~~~F~~Side-B
+0x36d8~~Prop ID~~54 = cape?~~I~~Side-B
+0x3728~~Max damage reflectable?~~~~I~~Side-B
+0x372c~~Reflection bubble X-offset~~~~F~~Side-B
+0x3730~~Reflection bubble Y-offset~~~~F~~Side-B
+0x3734~~Reflection bubble Z-offset~~~~F~~Side-B
+0x3738~~Reflection bubble size~~~~F~~Side-B
+0x373c~~Reflection damage multiplier~~~~F~~Side-B
+0x3740~~Reflection speed multiplier~~~~F~~Side-B
+0x3744~~????~~~~F~~Side-B
+0x36dc~~Special fall aerial mobility~~~~F~~Up-B
+0x36e0~~Landing lag(in frames)~~~~F~~Up-B
+0x36e4~~Control stick threshold to reverse?~~~~F~~Up-B
+0x36e8~~Control stick threshold to move horizontally?~~~~F~~Up-B
+0x36ec~~Air control during Up-B~~~~F~~Up-B
+0x36f0~~Initial horizontal momentum from moving stick forward~~~~F~~Up-B
+0x36f4~~Gravity during initial Up-B~~~~F~~Up-B
+0x36f8~~Initial vertical momentum during aerial Up-B~~~~F~~Up-B
+0x36fc~~Affects ability to rise during grounded tornado~~~~F~~Down-B
+0x3700~~Horizontal momentum on ground~~~~F~~Down-B
+0x3704~~Horizontal momentum in the air~~~~F~~Down-B
+0x3708~~????~~~~F~~Down-B
+0x370c~~????~~~~F~~Down-B
+0x3710~~????~~~~F~~Down-B
+0x3714~~????~~~~I~~Down-B
+0x3718~~Affects ability to rise from mashing B~~~~F~~Down-B
+0x371c~~Maximum vertical moment gained from mashing B~~~~F~~Down-B
+0x3720~~Landing lag?~~Non-0 values toggle freefall after usage~~F~~Down-B
+0x3724~~????~~~~I~~Down-B

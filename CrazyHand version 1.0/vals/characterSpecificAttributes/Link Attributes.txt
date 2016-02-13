@@ -1,0 +1,34 @@
+0x3580~~Frames until max arrow angle?~~~~F~~Neutral-B
+0x3584~~Arrow charging speed (higher = faster)~~~~F~~Neutral-B
+0x3588~~Anything other than 0 goes into special free fall~~~~F~~Neutral-B
+0x358c~~Item Loader ID? (0 = Capsule + game freeze)~~~~I~~Neutral-B
+0x3590~~Item Loader ID? (0 = Capsule + normal arrow shooting)~~~~I~~Neutral-B
+0x3f68~~Arrow lifetime (frames)~~~~F~~Neutral-B
+0x3f6c~~Uncharged arrow velocity multiplier~~~~F~~Neutral-B
+0x3f70~~Charged arrow velocity multiplier~~~~F~~Neutral-B
+0x3f74~~Uncharged arrow damage~~~~F~~Neutral-B
+0x3f78~~Fully charged arrow damage~~~~F~~Neutral-B
+0x3f7c~~ ???~~~~F~~Neutral-B
+0x3f80~~Arrow lifetime on ground (frames)~~~~F~~Neutral-B
+0x3f84~~Arrow gravity~~~~F~~Neutral-B
+0x3f88~~Arrow weight~~~~F~~Neutral-B
+0x3594~~Something to do with angle of boomerang, high numbers it cannot be angled~~~~F~~Side-B
+0x3598~~Boomerang angle (radians)~~~~F~~Side-B
+0x359c~~ ???~~~~F~~Side-B
+0x35a0~~Smash Boomerang launch speed~~~~F~~Side-B
+0x35a4~~Regular Boomerang launch speed~~~~F~~Side-B
+0x35b0~~Up B landing lag~~~~F~~Up-B
+0x35b4~~Up B initial horizontal momentum~~~~F~~Up-B
+0x35b8~~Up B aerial mobility~~~~F~~Up-B
+0x35bc~~Up B momentum preservation?~~~~F~~Up-B
+0x35c0~~Initial vertical momentum~~~~F~~Up-B
+0x35c8~~ID for bomb(58 is Link's bomb)~~~~I~~Down-B
+0x4224~~Bomb lifetime~~~~I~~Down-B
+0x4230~~Bomb starts flashing when timer reaches this value~~~~I~~Down-B
+0x4234~~Bomb HP~~~~I~~Down-B
+0x35cc~~Down Air 'bounce' vertical momentum~~~~F~~Miscellaneous
+0x35d0~~Frames before hitbox reappears after hitting with Down Air~~~~F~~Miscellaneous
+0x3648~~Shield block collision X offset~~~~I~~Miscellaneous
+0x364c~~Shield block collision Y offset (positive is down, negative is up)~~~~I~~Miscellaneous
+0x3650~~Shield block collision Z offset~~~~I~~Miscellaneous
+0x3654~~Shield block hitbox size modifier~~~~F~~Miscellaneous

@@ -3,8 +3,10 @@ package com.scripts;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import com.Event;
+import com.EventIdentifier;
 import com.FileIO;
 import com.MeleeEdit;
 
@@ -22,7 +24,7 @@ public class ScriptUtils {
 		System.out.println("First script pointer:"+ Integer.toHexString(start));
 		for(int i = 0; i < scripts.size(); i ++){
 			
-			Event e = Event.getEvent(scripts.get(i).id);
+			EventIdentifier e = EventIdentifier.getEventIdentifier(scripts.get(i).id);
 			if(e.id == 0x10){
 				loopScript=-1;
 			}
@@ -39,10 +41,7 @@ public class ScriptUtils {
 			scripts.get(i).location = start + offset;
 			scripts.get(i).updateScriptBoxInfo();
 			scripts.get(i).updateData();
-			offset += Event.getEvent(scripts.get(i).id).length;
-		}
-		if(scripts.get(0).editWindow != null){
-			//scripts.get(0).editWindow.updateScripts();
+			offset += EventIdentifier.getEventIdentifier(scripts.get(i).id).length;
 		}
 		System.out.println("Last script pointer:" + Integer.toHexString((start+offset)));
 	}
@@ -109,20 +108,20 @@ public class ScriptUtils {
 		Script result = new Script("Whoops, this isn't supposed to happen!", scriptData, 0x74);//Result ALWAYS needs to be overwritten.
 		
 		ArrayList<Script> effectedScripts = new ArrayList<Script>();
-		Event e = Event.events[script];
+		EventIdentifier e = EventIdentifier.events[script];
 		curSubStart = getLowestPointerInScriptList(result.getArray());
 		 curSubEnd = getHighestPointerInScriptList(result.getArray());
-		int differingSize = e.length - Event.getEvent(result.getArray().get(ScriptUtils.getArrayIndexForScriptAtPointer(loc, result.getArray())).id).length;
+		int differingSize = e.length - EventIdentifier.getEventIdentifier(result.getArray().get(ScriptUtils.getArrayIndexForScriptAtPointer(loc, result.getArray())).id).length;
 		
 		if(differingSize>0){
 			System.out.println("Differing sizes in replace; Script is bigger than the previous one!");
-			int space = e.length-Event.getEvent(result.getArray().get(ScriptUtils.getArrayIndexForScriptAtPointer(loc, result.getArray())).id).length;
+			int space = e.length-EventIdentifier.getEventIdentifier(result.getArray().get(ScriptUtils.getArrayIndexForScriptAtPointer(loc, result.getArray())).id).length;
 			int placement = ScriptUtils.getArrayIndexForScriptAtPointer(loc, result.getArray())+1;
 			int effectedBytes = 0;
 			//While there's still more scripts to find
 			while(space > 0){
 				Script sc = result.getArray().get(placement);
-				space -= Event.getEvent(sc.id).length;
+				space -= EventIdentifier.getEventIdentifier(sc.id).length;
 				effectedScripts.add(sc);
 				placement ++;
 			}
@@ -132,7 +131,7 @@ public class ScriptUtils {
 				effects += effectedScripts.get(i).name;
 				effects += "(Offset: 0x"+ Integer.toHexString(effectedScripts.get(i).location) +")";
 				effects += "\n";
-				effectedBytes += Event.getEvent(effectedScripts.get(i).id).length;
+				effectedBytes += EventIdentifier.getEventIdentifier(effectedScripts.get(i).id).length;
 				
 			}
 			
@@ -167,7 +166,7 @@ public class ScriptUtils {
 			
 			int leftoverBytes = Math.abs(differingSize);
 			
-			System.out.println(Event.getEvent(replaced.id).name+"(size:"+replaced.data.length+") Replaced by:"+e.name+"(size:"+e.length+")"+"Left over:("+leftoverBytes+")");
+			System.out.println(EventIdentifier.getEventIdentifier(replaced.id).name+"(size:"+replaced.data.length+") Replaced by:"+e.name+"(size:"+e.length+")"+"Left over:("+leftoverBytes+")");
 			replaced.setAsGarbageData();
 			
 			
@@ -194,11 +193,17 @@ public class ScriptUtils {
 			result = new ThrowScript(e.name, scriptData, loc);
 		} else if (e.id == 0x68) {
 			result = new BodyStateScript(e.name, scriptData, loc);
-		} else if (e.id == 0x44||e.id==0x40) {
+		} else if (e.id == 0x44) {
 			scriptData[10]=0x7F;
 			scriptData[11]=0x40;
 			result = new SoundScript(e.name, scriptData, loc);
-		} else {
+		}
+		else if (e.id == 0xDC){
+			scriptData[10]=0x7F;
+			scriptData[11]=0x40;
+			result = new ComboSFXGFXScript(e.name, scriptData, loc);
+		}
+		else {
 			scriptData[0]=e.id;
 			result = new Script(e.name, scriptData, loc);
 		}
@@ -220,7 +225,7 @@ public class ScriptUtils {
 		int scriptSize = 0;
 		int scriptParsed = 0;
 		boolean flag = false;
-		Event e=null;
+		EventIdentifier e=null;
 		System.out.println("Checking for zeroes. Start: 0x" + Integer.toHexString(curSubStart) + " End: 0x" + Integer.toHexString(curSubEnd));
 		while(bytesDown < curSubEnd){
 			
@@ -229,7 +234,7 @@ public class ScriptUtils {
 			id &= ~0b1;
 			id &= ~0b10;
 			if(scriptParsed>=scriptSize){
-				e = Event.getEvent(id);
+				e = EventIdentifier.getEventIdentifier(id);
 				scriptParsed=0;
 				scriptSize=e.length;
 			}
@@ -250,7 +255,7 @@ public class ScriptUtils {
 						FileIO.writeByte(0x00);
 						FileIO.writeByte(0x00);
 						flag = true;
-						FileIO.readScripts();
+						MeleeEdit.subactionPanel.readScripts();
 						FileIO.init();
 					}
 					else
@@ -319,11 +324,8 @@ public class ScriptUtils {
 					script.save();
 				}
 				FileIO.init(scripts.get(0).linkedCharacter.getPlaceInArray());
-				FileIO.readScripts(scripts.get(0).getArray());
-				if(scripts.get(0).editWindow != null){
-					scripts.get(0).editWindow.updateScripts();
-				}
-				MeleeEdit.scriptInner.updateUI();
+				MeleeEdit.subactionPanel.readScripts(scripts.get(0).getArray());
+				MeleeEdit.subactionPanel.scriptInner.updateUI();
 			}
 
 		}

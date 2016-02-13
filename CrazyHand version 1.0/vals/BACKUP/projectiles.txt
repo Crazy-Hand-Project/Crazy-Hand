@@ -1,0 +1,45 @@
+Kp~~0x4110~~Flame Breath
+Dr~~0x3c08~~Pill
+Fx~~0x3edc~~Laser
+Fx~~0x40c4~~Phantasm(Ground)
+Fx~~0x40e0~~Phantasm(Air)
+Fc~~0x3f98~~Laser
+Fc~~0x4168~~Phantasm(Ground)
+Fc~~0x4184~~Phantasm(Air)
+Gw~~0x440c~~Sausage
+Pp~~0x3b30~~Ice Block
+Nn~~0x1a14~~Ice Block
+Kb~~0x7b7c~~Final Cutter
+Lg~~0x3aa4~~Fireball
+Lk~~0x3fb4~~Arrow
+Lk~~0x4258~~Bomb impact
+Lk~~0x4184~~Bomb explosion
+Mr~~0x3acc~~Fireball
+Mt~~0x3dd4~~Shadowball stage 1
+Mt~~0x3e0c~~Shadowball stage (2?)
+Mt~~0x3e44~~Shadowball stage (3?)
+Mt~~0x3e98~~Shadowball stage (4?)
+Mt~~0x3d00~~Disable hitbox
+Ns~~0x3d94~~PK Flash
+Ns~~0x3f3c~~PK Fire(Pre-impact)
+Ns~~0x3f5c~~PK Fire(Fire pillar)
+Ns~~0x4138~~PK Thunder (Initial Spawn)
+Ns~~0x4138~~PK Thunder (In-air)
+Pe~~0x4310~~Turnip?
+Pc~~0x3b64~~Thunder Jolt
+Pc~~0x3ce8~~Lightning Bolt
+Pk~~0x3ca4~~Thunder Jolt
+Pk~~0x3e28~~Lightning Bolt
+Ss~~0x3ed4~~Charge Shot
+Ss~~0x4070~~Homing Missile
+Ss~~0x408c~~Smash Missile
+Ss~~0x4170~~Bomb
+Sk~~0x39c0~~Needles
+Ys~~0x361c~~Neutral-B grab hitbox 1
+Ys~~0x3630~~Neutral-B grab hitbox 2
+Ys~~0x3a90~~Tossed egg
+Ys~~0x3b74~~Down-B star
+Cl~~0x4190~~Arrow
+Cl~~0x4434~~Bomb impact
+Cl~~0x445c~~Bomb explosion
+Zd~~0x3fe4~~Din's Fire

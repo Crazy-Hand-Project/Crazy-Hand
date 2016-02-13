@@ -151,6 +151,9 @@ public class ThrowScript extends Script {
         
 
     }
+    
+    
+    //TODO wtf with these duplicated functions. delete the hell out of them.
     public static int bit(int num, int bit, int set) {
     	if(set==1){
     		return num | (1 << bit);
@@ -183,6 +186,7 @@ public class ThrowScript extends Script {
     }
     
     
+    //TODO this is probably jank which would explain the elecric throws
     public void updateData(){
     	int num = throwType.getSelectedIndex() == 0 ? 0 : 1;
     	

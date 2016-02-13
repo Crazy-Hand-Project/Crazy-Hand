@@ -1,0 +1,80 @@
+0x3898~~????~~~~F~~Unknown
+0x389c~~????~~~~F~~Unknown
+0x38a0~~????~~~~F~~Unknown
+0x38a4~~????~~~~F~~Unknown
+0x38a8~~????~~~~I~~Unknown
+0x38ac~~????~~~~F~~Unknown
+0x38b0~~????~~~~I~~Unknown
+0x38bc~~????~~~~F~~Unknown
+0x38c0~~????~~~~F~~Unknown
+0x38c4~~????~~~~F~~Unknown
+0x38c8~~????~~~~F~~Unknown
+0x38cc~~????~~~~F~~Unknown
+0x38d0~~????~~~~F~~Unknown
+0x38d4~~????~~~~F~~Unknown
+0x38d8~~????~~~~F~~Unknown
+0x38dc~~????~~~~F~~Unknown
+0x38e0~~????~~~~F~~Unknown
+0x38e4~~????~~~~F~~Unknown
+0x38e8~~????~~~~F~~Unknown
+0x38ec~~????~~~~F~~Unknown
+0x38f0~~????~~~~F~~Up-B
+0x38f4~~Aerial momentum preservation on startup?~~~~F~~Up-B
+0x38f8~~Momentum on startup?~~~~F~~Up-B
+0x38fc~~Default angle? (radians)~~~~F~~Up-B
+0x3900~~How many frames before you stop traveling (does not affect distance past a certain point)~~~~F~~Up-B
+0x3904~~????~~~~I~~Up-B
+0x3908~~Something with distance? Perhaps frames before slowing down?~~~~F~~Up-B
+0x390c~~Speed of travel/distance traveled~~~~F~~Up-B
+0x3910~~Max momentum to stop at~~~~F~~Up-B
+0x3914~~????~~~~F~~Up-B
+0x3918~~Something to do with angle when hitting ground?~~~~F~~Up-B
+0x391c~~How far you go when hitting ground angled~~~~F~~Up-B
+0x3920~~????~~~~F~~Up-B
+0x3924~~????~~~~F~~Up-B
+0x3928~~Landing lag?~~~~F~~Up-B
+0x392c~~????~~~~F~~Up-B
+0x3930~~????~~~~F~~Unknown
+0x3934~~????~~~~F~~Unknown
+0x3938~~????~~~~F~~Unknown
+0x393c~~????~~~~I~~Unknown
+0x3940~~????~~~~F~~Unknown
+0x3944~~????~~~~F~~Unknown
+0x3948~~????~~~~I~~Unknown
+0x394c~~Max damage reflectable~~~~I~~Down-B?
+0x3950~~Reflection bubble x-pos~~~~I~~Down-B?
+0x3954~~Reflection bubble y-pos~~~~F~~Down-B?
+0x3958~~Reflection bubble z-pos~~~~I~~Down-B?
+0x395c~~Reflection bubble radius~~~~F~~Down-B?
+0x3960~~Reflection damage multiplier~~~~F~~Down-B?
+0x3964~~Reflection speed multiplier~~~~F~~Down-B?
+0x3e34~~????~~~~F~~Neutral-B projectiles?
+0x3e38~~????~~~~F~~Neutral-B projectiles?
+0x3e3c~~????~~~~I~~Neutral-B projectiles?
+0x3e40~~????~~~~I~~Neutral-B projectiles?
+0x3e44~~????~~~~I~~Neutral-B projectiles?
+0x3e48~~????~~~~I~~Neutral-B projectiles?
+0x3e4c~~????~~~~F~~Neutral-B projectiles?
+0x3e50~~????~~~~F~~Neutral-B projectiles?
+0x3e54~~????~~~~F~~Neutral-B projectiles?
+0x3e58~~????~~~~F~~Neutral-B projectiles?
+0x3e5c~~????~~~~F~~Neutral-B projectiles?
+0x3e60~~????~~~~I~~Neutral-B projectiles?
+0x3e64~~????~~~~I~~Neutral-B projectiles?
+0x3e68~~????~~~~I~~Neutral-B projectiles?
+0x3e6c~~????~~~~I~~Neutral-B projectiles?
+0x3e70~~????~~~~F~~Neutral-B projectiles?
+0x3e74~~????~~~~F~~Neutral-B projectiles?
+0x3e78~~????~~~~F~~Neutral-B projectiles?
+0x3e7c~~????~~~~F~~Neutral-B projectiles?
+0x3e80~~????~~~~F~~Neutral-B projectiles?
+0x3e84~~????~~~~F~~Neutral-B projectiles?
+0x3e88~~????~~~~F~~Neutral-B projectiles?
+0x3e8c~~????~~~~F~~Neutral-B projectiles?
+0x3e90~~????~~~~F~~Neutral-B projectiles?
+0x3eb4~~Lifetime (can only actually hit on [this-1] frames though)~~~~F~~Neutral-B projectiles?
+0x3eb8~~????~~~~F~~Neutral-B projectiles?
+0x3ebc~~3EBC-3ED4 are all 0.~~~~I~~Neutral-B projectiles?
+0x3ed8~~????~~~~F~~Neutral-B projectiles?
+0x38b4~~Projectile ID~~~~I~~Neutral-B projectiles?
+0x38b8~~Blaster ID~~~~I~~Neutral-B projectiles?

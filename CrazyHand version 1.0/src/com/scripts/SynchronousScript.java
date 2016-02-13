@@ -2,7 +2,7 @@ package com.scripts;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -42,11 +42,7 @@ public class SynchronousScript extends Script {
          
             
         }
-        
-        public void scramble(){
-        	data[3]=FileIO.randInt(data[3]/2,data[3]*2-((data[3]*2)/2));
-        }
-        
+
         public void updateData(){
         	data[3]=((Number)frames.getValue()).intValue();
         }

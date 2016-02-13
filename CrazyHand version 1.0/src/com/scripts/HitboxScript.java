@@ -2,8 +2,7 @@ package com.scripts;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -42,12 +41,7 @@ public class HitboxScript extends Script {
     	
         public HitboxScript(String n, int[] d, int l){
         	super(n,d,l);
-        	
-        	//Prevents memory waste
-        	if(FileIO.randomizingScripts){
-        		return;
-        	}
-        	
+
         			baseKnockback = new JFormattedTextField(0);
         			knockbackGrowth = new JFormattedTextField(0);
         			weightKnockback = new JFormattedTextField(0);
@@ -293,11 +287,7 @@ public class HitboxScript extends Script {
         
         
         public void updateData(){
-        	
-        	//Prevents memory waste
-        	if(FileIO.randomizingScripts){
-        		return;
-        	}
+
         	
         	this.saveBits(23,31,((Number)damage.getValue()).intValue());
         	this.saveBits(32,47,((Number)size.getValue()).intValue());
@@ -342,71 +332,5 @@ public class HitboxScript extends Script {
         	this.saveBits(137,143,el);
   		
         }
-        public void scramble(){
-        	//System.out.println("Scrambling hitbox @0x" + Integer.toHexString(location));
-        	int min=50, max=200;
-        	//baseKnockback.setValue((int)(((Number)baseKnockback.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	//knockbackGrowth.setValue((int)(((Number)knockbackGrowth.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	//weightKnockback.setValue((int)(((Number)weightKnockback.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	//damage.setValue((int)(((Number)damage.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	//shieldDamage.setValue((int)(((Number)shieldDamage.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	//size.setValue((int)(((Number)size.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	//angle.setValue((int)(((Number)angle.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	//zOff.setValue((int)(((Number)zOff.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	//xOff.setValue((int)(((Number)xOff.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-        	//yOff.setValue((int)(((Number)yOff.getValue()).intValue()*FileIO.randInt(min, max)/100.f));
-
-        	
-        	int baseknockback=(FileIO.randInt(0, 20));
-        	int knockbackgrowth=(FileIO.randInt(0, 140));
-        	//weightKnockback.setValue(0));
-        	int damage=(FileIO.randInt(0,25));
-        	int shielddamage=(FileIO.randInt(0, 20));
-        	int size=(FileIO.randInt(0,3000));
-        	int angle=(FileIO.randInt(0, 360));
-        	int zOff=(FileIO.randInt(0,1500)*FileIO.sign());
-        	int xOff=(FileIO.randInt(0,1500)*FileIO.sign());
-        	int yOff=(FileIO.randInt(0,1500)*FileIO.sign());
-        	
-        	
-        	this.saveBits(23,31,damage);
-        	this.saveBits(32,47,size);
-        	
-            int tmp = (zOff);
-            if(getBit(tmp,15)==1){
-            	tmp+=65536;
-            }
-            this.saveBits(48,63,tmp);
-            
-            tmp = (yOff);
-            if(getBit(tmp,15)==1){
-            	tmp+=65536;
-            }
-            this.saveBits(64,79,tmp);
-            
-            tmp = (xOff);
-            if(getBit(tmp,15)==1){
-            	tmp+=65536;
-            }
-            this.saveBits(80,95,tmp);
-            
-            this.saveBits(96,104,angle);
-            this.saveBits(105,113,knockbackgrowth);
-            this.saveBits(128,136,baseknockback);
-            this.saveBits(143,149,shielddamage);
-            //this.saveBits(114,122,weightKnockback);
-            //this.saveBits(14,20,boneAttachment);
-            //this.saveBits(150,157,sound);
-            //this.saveBits(158,159,hurtboxInteraction);
-
-            
-            /*
-        	int bit0=getBit(data[17],0),bit1=getBit(data[17],1);
-
-        	int el = HitboxEffect.hitboxEffect[ Attribute.getSelectedIndex()].id;
-        	el=bit(el,0,bit0);
-        	el=bit(el,1,bit1);
-        	this.saveBits(137,143,el);
-        	*/
-    	}
+      
     }

@@ -1,0 +1,18 @@
+0x3b60~~Max arm swings~~How many arm swings to fully charge~~I~~Neutral-B
+0x3b64~~Damage per arm swing~~First arm swing has no effect~~I~~Neutral-B
+0x3b68~~Grounded charged punch horizontal velocity~~~~F~~Neutral-B
+0x3b6c~~Landing lag~~~~F~~Neutral-B
+0x3b70~~????~~~~F~~Neutral-B
+0x3b74~~????~~~~F~~Neutral-B
+0x3b78~~Aerial gravity~~~~F~~Side-B
+0x3b7c~~????~~~~F~~Side-B
+0x3b80~~Aerial vertical velocity~~~~F~~Up-B
+0x3b84~~Aerial gravity~~~~F~~Up-B
+0x3b88~~Grounded horizontal velocity~~~~F~~Up-B
+0x3b8c~~Aerial horizontal velocity~~~~F~~Up-B
+0x3b90~~Grounded mobility~~~~F~~Up-B
+0x3b94~~Aerial mobility~~~~F~~Up-B
+0x3b98~~Landing lag~~~~F~~Up-B
+0x3b9c~~X offset of hitbox 1~~~~F~~Down-B
+0x3ba0~~X offset of hitbox 2~~~~F~~Down-B
+0x3ba4~~????~~~~F~~Down-B

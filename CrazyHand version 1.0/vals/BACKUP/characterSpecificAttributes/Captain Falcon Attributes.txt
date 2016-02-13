@@ -1,0 +1,20 @@
+0x3904~~Momentum forward~~~~F~~Neutral-B
+0x3908~~Momentum holding up~~~~F~~Neutral-B
+0x3930~~Landing lag~~~~F~~Side-B
+0x3934~~Landing lag(on hit)~~~~F~~Side-B
+0x3838~~Miss gravity~~~~F~~Side-B
+0x383c~~Miss gravity related~~~~F~~Side-B
+0x3938~~Horizontal momentum~~~~F~~Up-B
+0x3944~~Landing lag~~~~F~~Up-B
+0x3948~~Unknown~~~~F~~Up-B
+0x3950~~Joys-stick position to reverse~~~~F~~Up-B
+0x3954~~Unknown~~~~F~~Up-B
+0x3958~~Gravity after releasing an opponent~~~~F~~Up-B
+0x3968~~Fire aura angle~~~~F~~Down-B
+0x396c~~Speed modifier on hit~~~~F~~Down-B
+0x3974~~Ground-lag multiplier~~Higher values means less lag~~F~~Down-B
+0x3978~~Aerial landing lag multiplier~~Higher values means less lag~~F~~Down-B
+0x397c~~????~~~~F~~Down-B
+0x3980~~Friction from landing from aerial Down-B~~~~F~~Down-B
+0x3984~~Unknown~~~~F~~Down-B
+0x3988~~???Seems to prevent grounded falcon punch from coming out if its not 544~~~~F~~Neutral-B?

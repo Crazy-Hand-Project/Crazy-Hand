@@ -1,0 +1,37 @@
+0x3ab8~~Initial speed~~~~F~~Neutral-B
+0x3abc~~Initial angle (radians)~~~~F~~Neutral-B
+0x3ac0~~Duration~~~~F~~Neutral-B
+0x3ac8~~Bounce height multiplier~~~~F~~Neutral-B
+0x345c~~Horizontal momentum from moving left/right (smaller = more)~~~~F~~Side-B
+0x3460~~Affects vertical momentum?~~~~F~~Side-B
+0x3464~~Vertical momentum~~~~F~~Side-B
+0x3468~~Vertical momentum from moving left/right~~~~F~~Side-B
+0x346c~~????~~~~F~~Side-B
+0x3470~~Prop ID = 53 (Cape) ?~~~~I~~Side-B
+0x34c0~~Max damage reflectable?~~~~I~~Side-B
+0x34c4~~Reflection bubble X-offset~~~~F~~Side-B
+0x34c8~~Reflection bubble Y-offset~~~~F~~Side-B
+0x34cc~~Reflection bubble Z-offset~~~~F~~Side-B
+0x34d0~~Reflection bubble size~~~~F~~Side-B
+0x34d4~~Reflection damage multiplier~~~~F~~Side-B
+0x34d8~~Reflection speed multiplier~~~~F~~Side-B
+0x34dc~~????~~~~F~~Side-B
+0x3474~~Special fall aerial mobility~~~~F~~Up-B
+0x3478~~Landing lag~~~~F~~Up-B
+0x347c~~Control stick threshold to reverse UpB?~~~~F~~Up-B
+0x3480~~Control stick threshold to move horizontally?~~~~F~~Up-B
+0x3484~~Air control during UpB~~~~F~~Up-B
+0x3488~~Initial horizontal momentum from moving stick forward~~~~F~~Up-B
+0x348c~~Gravity during initial UpB~~~~F~~Up-B
+0x3490~~Initial vertical momentum during aerial UpB~~~~F~~Up-B
+0x3494~~Affects ability to rise during grounded tornado~~~~F~~Down-B
+0x3498~~Horizontal momentum on ground~~~~F~~Down-B
+0x349c~~Horizontal momentum in the air~~~~F~~Down-B
+0x34a0~~????~~~~F~~Down-B
+0x34a4~~????~~~~F~~Down-B
+0x34a8~~????~~~~F~~Down-B
+0x34ac~~????~~~~I~~Down-B
+0x34b0~~Affects ability to rise from tapping B~~~~F~~Down-B
+0x34b4~~Maximum vertical momentum gained from tapping B~~~~F~~Down-B
+0x34b8~~Non-0 values toggle freefall after usage; Landing lag?~~~~F~~Down-B
+0x34bc~~????~~~~I~~Down-B

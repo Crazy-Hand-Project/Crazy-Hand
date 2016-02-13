@@ -1,0 +1,12 @@
+0x38ac~~Momentum forward in air~~~~F~~Neutral-B
+0x38b0~~Momentum from holding up~~~~F~~Neutral-B
+0x38b8~~Miss gravity~~~~F~~Side-B
+0x38bc~~Miss gravity related~~~~F~~Side-B
+0x38d8~~Landing lag~~~~F~~Side-B
+0x38dc~~Landing lag from hit~~~~F~~Side-B
+0x38e4~~Horizontal momentum~~~~F~~Up-B
+0x38ec~~Landing lag~~~~F~~Up-B
+0x3910~~Purple aura angle~~~~F~~Down-B
+0x3914~~Speed modifier on hit~~~~F~~Down-B
+0x391c~~Ground-ground ending lag modifier~~~~F~~Down-B
+0x3920~~Aerial-ground landing lag modifier~~~~F~~Down-B

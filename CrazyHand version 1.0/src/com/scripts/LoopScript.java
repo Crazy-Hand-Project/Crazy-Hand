@@ -70,11 +70,7 @@ public class LoopScript extends Script {
         repeatAmount.setValue(data[3]);
 //        repeatFrames.setValue(data[7]);
 	}
-	
-	public void scramble(){
-		data[3]=FileIO.randInt(1,data[3]*2-((data[3]*2)/2));
-	}
-	
+
 	public void updateData(){
     	data[3]=((Number)repeatAmount.getValue()).intValue();
 //    	data[4]=(timerType.getSelectedIndex()+1)*0x4;

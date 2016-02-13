@@ -1,0 +1,79 @@
+0x34e0~~????~~~~I~~Double Jump??
+0x34e4~~????~~~~F~~Double Jump??
+0x34e8~~Knockback resistance?~~~~F~~Double Jump??
+0x34ec~~????~~~~I~~Double Jump??
+0x34f0~~Initial horizontal momentum~~~~F~~Neutral-B
+0x34f4~~Initial vertical momentum~~~~F~~Neutral-B
+0x34f8~~Damage multiplier when egged~~~~F~~Neutral-B
+0x34fc~~I don't know but it can make it upside down? wtf~~~~F~~Neutral-B
+0x3500~~Egg lay growing time~~~~F~~Neutral-B
+0x3504~~Part of breakout formula (lower = harder)~~~~F~~Neutral-B
+0x3508~~Something with button mashing time?~~~~F~~Neutral-B
+0x350c~~Something with egg wiggling?~~~~F~~Neutral-B
+0x3510~~????~~~~F~~Neutral-B
+0x3514~~????~~~~F~~Neutral-B
+0x3518~~Enemies invincibility upon breaking out of egg (frames). 0 = infinite~~~~I~~Neutral-B
+0x351c~~horizontal velocity on breakout?~~~~I~~Neutral-B
+0x3520~~vertical velocity on breakout?~~~~F~~Neutral-B
+0x3524~~something to do with breakout time~~~~F~~Neutral-B
+0x3528~~Max length (frames)~~~~I~~Side-B
+0x352c~~Min length (frames)~~~~I~~Side-B
+0x3530~~????~~~~I~~Side-B
+0x3534~~????~~~~F~~Side-B
+0x3538~~Initial horizontal speed~~~~I~~Side-B
+0x353c~~Initial vertical speed~~~~F~~Side-B
+0x3540~~????~~~~F~~Side-B
+0x3544~~rolling momentum when you land for the first time~~~~F~~Side-B
+0x3548~~????~~~~F~~Side-B
+0x354c~~gravity~~~~F~~Side-B
+0x3550~~ending gravity~~~~F~~Side-B
+0x3554~~base rolling momentum?~~~~F~~Side-B
+0x3558~~rolling momentum multiplier?~~~~F~~Side-B
+0x355c~~something with rolling momentum?~~~~F~~Side-B
+0x3560~~something with rolling momentum?~~~~F~~Side-B
+0x3564~~????~~~~F~~Side-B
+0x3568~~????~~~~F~~Side-B
+0x356c~~????~~~~F~~Side-B
+0x3570~~air acceleration~~~~F~~Side-B
+0x3574~~????~~~~F~~Side-B
+0x3578~~????~~~~F~~Side-B
+0x357c~~????~~~~F~~Side-B
+0x3580~~????~~~~F~~Side-B
+0x3584~~????~~~~I~~Side-B
+0x3588~~????~~~~F~~Side-B
+0x358c~~????~~~~F~~Side-B
+0x3590~~????~~~~F~~Side-B
+0x3594~~bounce velocity multiplier~~~~F~~Side-B
+0x3598~~????~~~~F~~Side-B
+0x359c~~????~~~~F~~Side-B
+0x35a0~~Used in damage formula?~~~~F~~Side-B
+0x35a4~~????~~~~F~~Side-B
+0x35a8~~????~~~~F~~Side-B
+0x35ac~~????~~~~F~~Side-B
+0x35b0~~ending air acceleration?~~~~F~~Side-B
+0x35b4~~????~~~~F~~Side-B
+0x35b8~~????~~~~F~~Side-B
+0x35bc~~????~~~~I~~Side-B
+0x35c0~~ending horizontal speed?~~~~F~~Side-B
+0x35c4~~(45 degrees)~~~~F~~Side-B
+0x35c8~~something to do with freefall~~~~F~~Side-B
+0x35cc~~affects angle of thrown egg backward and forward? (radians)~~~~F~~Up-B
+0x35d0~~affects angle of thrown egg backward and forward? (30 degrees)~~~~F~~Up-B
+0x35d4~~affects angle of thrown egg backward and forward? (4 degrees)~~~~F~~Up-B
+0x35d8~~throwing angle? (73 degrees)~~~~F~~Up-B
+0x35dc~~base speed~~~~F~~Up-B
+0x35e0~~speed scaling based on button hold?~~~~F~~Up-B
+0x35e4~~creation X pos~~~~F~~Up-B
+0x35e8~~creation Y pos~~~~F~~Up-B
+0x35ec~~Egg air friction?~~~~F~~Up-B
+0x35f0~~base egg spin~~~~F~~Up-B
+0x35f4~~Ground Pound drop speed?~~~~F~~Down-B
+0x35f8~~Ground Pound stars X pos~~~~F~~Down-B
+0x35fc~~Ground Pound stars Y pos~~~~F~~Down-B
+0x3600~~????~~~~F~~Down-B
+0x3604~~????~~~~F~~Down-B
+0x3608~~????~~~~F~~Down-B
+0x3a88~~How long until it explodes (frames)?~~~~F~~Up-B Eggs
+0x3a8c~~How long explosion exists in frames?~~~~F~~Up-B Eggs
+0x3b6c~~Horizontal movement?~~~~F~~Down-B Stars
+0x3b70~~Gravity?~~~~F~~Down-B Stars

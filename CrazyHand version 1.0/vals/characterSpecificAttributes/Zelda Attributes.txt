@@ -1,0 +1,45 @@
+0x3978~~????~~~~F~~Neutral-B
+0x397c~~????~~~~I~~Neutral-B
+0x3980~~Horizontal momentum preservation (less = more)?~~~~F~~Neutral-B
+0x3984~~Vertical momentum?~~~~F~~Neutral-B
+0x3988~~????~~~~I~~Neutral-B
+0x398c~~????~~~~I~~Neutral-B
+0x3990~~Frame you start falling?~~~~I~~Side-B
+0x3994~~Earliest frame to detonate projectile~~~~I~~Side-B
+0x3998~~X offset?~~~~F~~Side-B
+0x399c~~Y offset?~~~~F~~Side-B
+0x39a0~~????~~~~F~~Side-B
+0x39a4~~Falling gravity?~~~~F~~Side-B
+0x39a8~~????~~~~F~~Side-B
+0x39ac~~Landing lag~~~~F~~Side-B
+0x3ee8~~Max travel distance in frames?~~~~F~~Side-B
+0x3eec~~Frames where damage grows with distance~~~~F~~Side-B
+0x3ef0~~ ?? (read during startup)~~~~F~~Side-B
+0x3ef4~~ ?? (read during startup)~~~~F~~Side-B
+0x3ef8~~Firing angle (radians)~~~~I~~Side-B
+0x3efc~~Initial speed~~~~F~~Side-B
+0x3f00~~Acceleration~~~~F~~Side-B
+0x3f04~~ ?? (read during startup)~~~~F~~Side-B
+0x3f08~~Joystick sensitivity for maneuverability~~~~F~~Side-B
+0x3f0c~~Up/Down maneuverability (1.4 degrees)~~~~F~~Side-B
+0x3f10~~Maximum curve projectile can angle (high numbers allow reversing direction) (80 degrees)~~~~F~~Side-B
+0x3f14~~Frames before explosion after releasing B~~~~F~~Side-B
+0x3fc0~~Projectile lifetime~~~~F~~Side-B
+0x3fc4~~Initial Hitbox Size multiplier~~~~F~~Side-B
+0x3fc8~~Hitbox Growth multiplier~~~~F~~Side-B
+0x3fcc~~Initial Damage~~~~F~~Side-B
+0x3fd0~~Damage Growth Rate~~~~F~~Side-B
+0x39b0~~horizontal momentum preservation (smaller = higher)?~~~~F~~Up-B
+0x39b4~~vertical momentum preservation (smaller = higher)?~~~~F~~Up-B
+0x39b8~~Vertical momentum preservation?~~~~F~~Up-B
+0x39bc~~Something with momentum preservation?~~~~F~~Up-B
+0x39c0~~Travel distance (in frames)?~~~~I~~Up-B
+0x39c4~~????~~~~F~~Up-B
+0x39c8~~????~~~~F~~Up-B
+0x39cc~~????~~~~F~~Up-B
+0x39d0~~????~~~~F~~Up-B
+0x39d4~~????~~~~F~~Up-B
+0x39d8~~????~~~~I~~Up-B
+0x39dc~~????~~~~F~~Up-B
+0x39e0~~????~~~~F~~Up-B
+0x39e4~~Landing lag ~~~~F~~Up-B

@@ -1,0 +1,9 @@
+0xa174~~Max number of frames of hitstun~~f
+0xa178~~Damage Multiplier for frames of hitstun~~f
+0xa17c~~Base Hitstun~~f
+0xa180~~Hitstun multiplier on crouching (?)~~f
+0xa184~~Electric element hitstun multiplier~~f
+0xa134~~Hitstun multiplier~~f
+0xa790~~loupe damage max~~i
+0xa78c~~frames before taking loupe damage~~i
+0xa794~~loupe damage~~i

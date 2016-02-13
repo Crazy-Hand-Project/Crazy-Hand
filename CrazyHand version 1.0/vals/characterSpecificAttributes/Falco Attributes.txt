@@ -1,0 +1,47 @@
+0x39c0~~????~~~~F~~Up-B
+0x39c4~~Aerial momentum preservation on startup?~~~~F~~Up-B
+0x39c8~~Momentum on startup?~~~~F~~Up-B
+0x39cc~~Default angle?(radians)~~~~F~~Up-B
+0x39d0~~How many frames before you stop traveling~~Does not affect distance past a certain point~~F~~Up-B
+0x39d4~~????~~~~I~~Up-B
+0x39d8~~Something to do with distance?~~~~F~~Up-B
+0x39dc~~Speed of travel/distance traveled~~~~F~~Up-B
+0x39e0~~Max momentum to stop at~~~~F~~Up-B
+0x39e4~~????~~~~F~~Up-B
+0x39e8~~Something to do with angle when hitting the ground?~~~~F~~Up-B
+0x39ec~~How far you go when hitting the ground at an angle~~~~F~~Up-B
+0x39f0~~????~~~~F~~Up-B
+0x39f4~~????~~~~F~~Up-B
+0x39f8~~Landing lag?~~~~F~~Up-B
+0x3984~~Neutral-B projectile ID~~The integer ID for the desired projectile.~~I~~Neutral B projectile
+0x3988~~Neutral-B gun ID~~The integer ID for what Falco holds while using Neutral B~~I~~Neutral B
+0x3f44~~Projectile lifetime?~~Blaster shot~~F~~Unknown
+0x665b~~Test~~Falco's shadow?~~I~~Undefined
+0x3968~~????~~~~F~~Unknown
+0x396c~~????~~~~F~~Unknown
+0x3970~~????~~~~F~~Unknown
+0x3974~~????~~~~F~~Unknown
+0x3978~~????~~~~I~~Unknown
+0x397c~~????~~~~F~~Unknown
+0x3980~~????~~~~I~~Unknown
+0x398c~~????~~~~F~~Unknown
+0x3990~~????~~~~F~~Unknown
+0x3994~~????~~~~F~~Unknown
+0x3998~~????~~~~F~~Unknown
+0x399c~~????~~~~F~~Unknown
+0x39a0~~????~~~~F~~Unknown
+0x39a4~~????~~~~F~~Unknown
+0x39a8~~????~~~~F~~Unknown
+0x39ac~~????~~~~F~~Unknown
+0x39b0~~????~~~~F~~Unknown
+0x39b4~~????~~~~F~~Unknown
+0x39b8~~????~~~~F~~Unknown
+0x39bc~~????~~~~F~~Unknown
+0x39fc~~????~~~~F~~Unknown
+0x3a00~~????~~~~F~~Unknown
+0x3a04~~????~~~~F~~Unknown
+0x3a08~~????~~~~F~~Unknown
+0x3a0c~~????~~~~I~~Unknown
+0x3a10~~????~~~~F~~Unknown
+0x3a14~~????~~~~F~~Unknown
+0x3a18~~????~~~~I~~Unknown

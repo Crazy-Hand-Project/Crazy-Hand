@@ -1,0 +1,15 @@
+0x39b4~~Needle lifetime (frames)~~~~F~~Neutral-B
+0x39b8~~Idle needle duration on ground (frames)~~~~F~~Neutral-B
+0x39bc~~Needle traveling speed~~~~F~~Neutral-B
+0x35b0~~How long chain is out before reeling in (release B)~~~~F~~Side-B
+0x35b4~~ ??~~~~F~~Side-B
+0x35b8~~frame chain comes out~~~~F~~Side-B
+0x35bc~~frame you can move chain around~~~~F~~Side-B
+0x35c0~~frame after releasing B chain reels in~~~~F~~Side-B
+0x35c4~~frame chain disappears after releasing B~~~~F~~Side-B
+0x35d4~~Travel frames~~~~I~~Up-B
+0x35f4~~????~~~~F~~Up-B
+0x35f8~~Landing lag.~~~~F~~Up-B
+0x35fc~~????~~~~F~~Up-B
+0x3600~~????~~~~F~~Up-B
+0x3604~~Gravity?~~~~F~~Down-B

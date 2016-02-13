@@ -1,0 +1,45 @@
+0x37cc~~Frame delay between cycles~~Game checks if B is held or not every (this) frames.~~I~~Neutral-B
+0x37d0~~????~~~~F~~Undefined
+0x37d4~~????~~~~F~~Undefined
+0x37d8~~Refueling/spacing in gfx?~~~~F~~Neutral-B
+0x37dc~~Spacing in fire gfx?~~~~F~~Neutral-B
+0x37e0~~GFX scaling~~Smaller number makes GFX larger~~F~~Neutral-B
+0x37e4~~Minimum distance?~~~~F~~Neutral-B
+0x37e8~~????~~~~I~~Neutral-B
+0x37ec~~X offset of Fire~~~~F~~Neutral-B
+0x37f0~~Y offset of Fire~~~~F~~Neutral-B
+0x37f4~~????~~~~I~~Neutral-B
+0x40f8~~Maximum lifespan for flames(in frames)~~~~F~~Neutral-B
+0x40fc~~Minimum lifespan for flames(in frames)~~~~F~~Neutral-B
+0x4100~~Flame speed?~~~~F~~Neutral-B
+0x4104~~Horizontal momentum of flames?~~~~F~~Neutral-B
+0x4108~~Default:(125 degrees)~~The minimum angle that a spawned flame can go at~~F~~Neutral-B
+0x410c~~Default:(145 degrees)~~The maximum angle that a spawned flame can go at~~F~~Neutral-B
+0x37f8~~Side B Throw?~~Something to do with throwing after grabbing with side B~~F~~Side-B
+0x37fc~~????~~~~F~~Side-B
+0x3800~~????~~~~F~~Side-B
+0x3804~~????~~~~F~~Side-B
+0x3808~~????~~~~F~~Side-B
+0x380c~~????~~~~F~~Side-B
+0x3810~~Side B grab break out~~Higher number breaks out faster~~F~~Side-B
+0x3814~~????~~~~F~~Side-B
+0x3818~~????~~~~F~~Side-B
+0x381c~~Vertical momentum in air~~~~F~~Up-B
+0x3820~~Gravity~~~~F~~Up-B
+0x3824~~????~~~~F~~Undefined
+0x3828~~Grounded moving speed~~~~F~~Up-B
+0x382c~~Momentum preservation on turning?~~~~F~~Up-B
+0x3830~~Grounded turning speed~~~~F~~Up-B
+0x3834~~Aerial mobility~~~~F~~Up-B
+0x3838~~Frames after landing to automatically Up-B again?~~~~F~~Up-B
+0x383c~~Something dealing with above~~Affects how long you stay in shell?~~F~~Up-B
+0x3840~~Something dealing with above~~High values delay the animation somehow?~~F~~Up-B
+0x3844~~Landing lag?~~~~F~~Up-B
+0x3848~~Vertical aerial momentum preservation on startup?~~~~F~~Down-B
+0x384c~~Initial aerial vertical momentum~~~~F~~Down-B
+0x3850~~Distance to the ground before impact~~Do NOT set to zero. Trust me.~~F~~Down-B
+0x3854~~????~~~~F~~Undefined
+0x3858~~Gravity~~Bowser's new gravity while using Down-B~~F~~Down-B
+0x385c~~Descent speed~~Positive values send you upwards~~F~~Down-B
+0x3860~~????~~~~F~~Undefined
+0x3864~~????~~~~F~~Undefined

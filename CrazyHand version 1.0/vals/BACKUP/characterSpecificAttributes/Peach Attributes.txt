@@ -1,0 +1,42 @@
+0x3a48~~Float duration (frames)~~~~F~~Float
+0x3a80~~Horizontal Travel Momentum (tilt)~~~~F~~Side-B
+0x3a84~~Horizontal Travel Momentum (smash)~~~~F~~Side-B
+0x3a88~~Vertical Travel Momentum~~~~F~~Side-B
+0x3a8c~~????~~~~F~~Side-B
+0x3a90~~????~~~~F~~Side-B
+0x3a94~~????~~~~F~~Side-B
+0x3a98~~????~~~~F~~Side-B
+0x3a9c~~????~~~~F~~Side-B
+0x3aa0~~Vertical Boost During Recoil~~~~F~~Side-B
+0x3aa4~~????~~~~F~~Side-B
+0x3aa8~~????~~~~F~~Side-B
+0x3aac~~????~~~~F~~Up-B
+0x3ab0~~????~~~~F~~Up-B
+0x3ab4~~????~~~~F~~Up-B
+0x3ab8~~????~~~~F~~Up-B
+0x3abc~~Amount to which the launch may be directed (larger = significantly more control)~~~~F~~Up-B
+0x3a4c~~Number of item data sets to load (starting @3A54)?~~~~I~~Down-B items
+0x3a50~~Odds for getting an Item (1 out of this many)~~~~I~~Down-B items
+0x3a54~~Item 1 odds~~~~I~~Down-B items
+0x3a58~~Item 1 ID~~~~I~~Down-B items
+0x3a5c~~Item 2 odds~~~~I~~Down-B items
+0x3a60~~Item 2 ID~~~~I~~Down-B items
+0x3a64~~Item 3 odds~~~~I~~Down-B items
+0x3a68~~Item 3 ID~~~~I~~Down-B items
+0x410c~~Number of turnip data sets to load (starting @4110)?~~~~I~~Down-B Turnips
+0x4110~~Turnip 1 odds~~~~I~~Down-B Turnips
+0x4114~~Turnip 1 damage~~~~I~~Down-B Turnips
+0x4118~~Turnip 2 odds~~~~I~~Down-B Turnips
+0x411c~~Turnip 2 damage~~~~I~~Down-B Turnips
+0x4120~~Turnip 3 odds~~~~I~~Down-B Turnips
+0x4124~~Turnip 3 damage~~~~I~~Down-B Turnips
+0x4128~~Turnip 4 odds~~~~I~~Down-B Turnips
+0x412c~~Turnip 4 damage~~~~I~~Down-B Turnips
+0x4130~~Turnip 5 odds~~~~I~~Down-B Turnips
+0x4134~~Turnip 5 damage~~~~I~~Down-B Turnips
+0x4138~~Turnip 6 odds~~~~I~~Down-B Turnips
+0x413c~~Turnip 6 damage~~~~I~~Down-B Turnips
+0x4140~~Turnip 7 odds~~~~I~~Down-B Turnips
+0x4144~~Turnip 7 damage~~~~I~~Down-B Turnips
+0x4148~~Turnip 8 odds~~~~I~~Down-B Turnips
+0x414c~~Turnip 8 damage~~~~I~~Down-B Turnips

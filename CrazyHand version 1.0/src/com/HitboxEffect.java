@@ -2,6 +2,7 @@ package com;
 
 public class HitboxEffect {
 	
+	//TODO possibly move this to a .txt thing, or get it out of its own class
 	public static HitboxEffect[] hitboxEffect = {
 		new HitboxEffect(0x00, "Normal"),
 		new HitboxEffect(0x04, "Fire"),
@@ -20,7 +21,8 @@ public class HitboxEffect {
 		new HitboxEffect(0x38, "Screw Attack"),
 		new HitboxEffect(0x3C, "Poison/Flower"),
 		new HitboxEffect(0x40, "Nothing (no graphic)"),
-		//new HitboxEffect(0x44, "Random"),
+		//Should be commented out for releases
+		new HitboxEffect(0x44, "Random Attribute(WITH PATCH)"),
 	};
 
 	public int id;

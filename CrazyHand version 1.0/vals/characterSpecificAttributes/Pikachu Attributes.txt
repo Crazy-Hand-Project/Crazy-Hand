@@ -1,0 +1,50 @@
+0x3c94~~Lifetime~~~~F~~Neutral-B
+0x3c98~~Aerial jolt angle (radians)~~~~F~~Neutral-B
+0x3c9c~~Aerial jolt velocity~~~~F~~Neutral-B
+0x372c~~Charge time~~~~F~~Side-B
+0x3730~~Base damage~~~~F~~Side-B
+0x3734~~Damage multiplier~~~~F~~Side-B
+0x3740~~Falling speed~~~~F~~Side-B
+0x3744~~Base horizontal firing momentum~~~~F~~Side-B
+0x3748~~Horizontal momentum multiplier~~~~F~~Side-B
+0x374c~~Base vertical firing momentum~~~~F~~Side-B
+0x3750~~Vertical momentum multiplier~~~~F~~Side-B
+0x3754~~ ?? read on release~~~~F~~Side-B
+0x3758~~????~~~~F~~Side-B
+0x375c~~????~~~~F~~Side-B
+0x3760~~????~~~~F~~Side-B
+0x35e0~~Momentum subtracted during ending frames 9-49~~~~F~~Up-B
+0x35e4~~Momentum cap from subtraction during ending~~~~F~~Up-B
+0x3764~~ ?? read on startup~~~~I~~Up-B
+0x3768~~Travel distance~~~~I~~Up-B
+0x376c~~Momentum subtracted frames 11-13 during startup~~~~F~~Up-B
+0x3770~~Model rotation traveling on ground~~~~F~~Up-B
+0x3774~~Model width multiplier traveling on ground~~~~F~~Up-B
+0x3778~~Model height multiplier traveling on ground~~~~F~~Up-B
+0x377c~~Model length multiplier traveling on ground~~~~F~~Up-B
+0x3780~~Model rotation traveling in air~~~~F~~Up-B
+0x3784~~Model width multiplier traveling in air~~~~F~~Up-B
+0x3788~~Model height multiplier traveling in air~~~~F~~Up-B
+0x378c~~Model length multiplier traveling in air~~~~F~~Up-B
+0x3790~~ ?? Read when air -> ground~~~~F~~Up-B
+0x3794~~Aiming sensitivity~~~~F~~Up-B
+0x3798~~Starting momentum of each segment~~~~F~~Up-B
+0x379c~~Momentum added to 3798~~~~F~~Up-B
+0x37a0~~Second segment length multiplier~~~~F~~Up-B
+0x37a4~~Horizontal momentum preservation~~~~F~~Up-B
+0x37a8~~Minimum direction change (degrees) for grounded second segment~~~~I~~Up-B
+0x37ac~~Horizontal momentum subtracted each frame after frame 5 of second segment~~~~F~~Up-B
+0x37b0~~Minimum direction change (degrees) for aerial second segment~~~~I~~Up-B
+0x37b4~~???? (Not read)~~~~F~~Up-B
+0x37b8~~Landing lag~~~~F~~Up-B
+0x37bc~~Vertical momentum on aerial thunder hit~~~~F~~Down-B
+0x37c0~~Something to do with rising from an aerial thunder hit?~~~~F~~Down-B
+0x37c4~~Something to do with vertical range for thunder self-hit?~~~~F~~Down-B
+0x37c8~~Projectile travel speed~~~~F~~Down-B
+0x37cc~~Horizontal range for thunder self-hit?~~~~F~~Down-B
+0x37d0~~Vertical range for thunder self-hit?~~~~F~~Down-B
+0x37d4~~Vertical displacement of cloud graphic~~~~F~~Down-B
+0x37d8~~Height of thunder creation~~~~F~~Down-B
+0x37dc~~Number of lightning bursts~~~~I~~Down-B
+0x37e0~~Time between individual lightning bursts (frames)~~~~I~~Down-B
+0x37e4~~Projectile spawn ID(Most values other than 81 or 82 freeze game)~~~~I~~Down-B

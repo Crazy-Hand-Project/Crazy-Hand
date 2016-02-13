@@ -1,0 +1,32 @@
+0x3a20~~Charge time (half-seconds)~~~~I~~Neutral-B
+0x3a24~~Base damage~~~~I~~Neutral-B
+0x3a28~~Damage added per second~~~~I~~Neutral-B
+0x3a2c~~????~~~~F~~Neutral-B
+0x3a30~~Aerial horizontal deceleration~~~~F~~Neutral-B
+0x3a34~~????~~~~F~~Neutral-B
+0x3a38~~????~~~~F~~Side-B
+0x3a3c~~Aerial vertical boost~~~~F~~Side-B
+0x3a40~~Aerial horizontal deceleration~~~~F~~Side-B
+0x3a44~~Gravity during move~~~~F~~Side-B
+0x3a48~~Max horizontal air movement in freefall~~~~F~~Up-B
+0x3a4c~~Landing lag~~~~F~~Up-B
+0x3a50~~????~~~~F~~Up-B
+0x3a54~~????~~~~F~~Up-B
+0x3a58~~directionalization distance (displacement, not angle)~~~~F~~Up-B
+0x3a5c~~directionalized pre-jump displacement (has a low max)~~~~F~~Up-B
+0x3a60~~aerial jump height ratio (relative to ground version)~~~~F~~Up-B
+0x3a64~~gravity after use~~~~F~~Up-B
+0x3a68~~max fall speed after use~~~~F~~Up-B
+0x3a6c~~????~~~~F~~Up-B
+0x3a70~~????~~~~F~~Down-B
+0x3a74~~Counter gravity~~~~F~~Down-B
+0x3a78~~Counter max fall speed~~~~F~~Down-B
+0x3a7c~~Damage multiplier~~~~F~~Down-B
+0x3a80~~Hitlag/Freeze frames on activation~~~~F~~Down-B
+0x3a84~~Y-axis height of Counter collision box (positive int only)~~~~I~~Down-B
+0x3a88~~Z-axis movement of collision box (floating point)~~~~F~~Down-B
+0x3a8c~~????~~~~F~~Down-B
+0x3a90~~X-axis movement of collision box (floating point)~~~~F~~Down-B
+0x3a94~~Counter collision box size~~~~F~~Down-B
+0x3a98~~????~~~~F~~Down-B
+0x3a9c~~????~~~~F~~Down-B

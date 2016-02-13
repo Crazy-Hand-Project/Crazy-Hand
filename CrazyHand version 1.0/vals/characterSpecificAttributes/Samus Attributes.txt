@@ -1,0 +1,72 @@
+0x3620~~Charge time. Higher value = slower charge. Unsure of ratio.~~~~F~~Neutral-B
+0x3624~~Recoil from charged shot (air only). Negative values send you backward, positive send you forward.~~~~F~~Neutral-B
+0x3628~~Frames between change in charge level~~~~I~~Neutral-B
+0x362c~~Anything other than 0 makes you go to special fall~~~~I~~Neutral-B
+0x3eb0~~Charge shot duration~~~~F~~Neutral-B
+0x3eb4~~Angle projectile fires at?~~~~I~~Neutral-B
+0x3eb8~~Base velocity. Diminishes with more charge (Full charge still goes same speed)~~~~F~~Neutral-B
+0x3ebc~~Charged shot velocity. Effect is greater with more charge (Uncharged shot goes same speed)~~~~F~~Neutral-B
+0x3ec0~~ ?? (read on shooting)~~~~F~~Neutral-B
+0x3ec4~~ ?? (read on shooting)~~~~F~~Neutral-B
+0x3ec8~~Initial charge shot size (graphic). Scales accordingly with charge~~~~F~~Neutral-B
+0x3ecc~~Final power shot size (graphic). Scales accordingly with charge.~~~~F~~Neutral-B
+0x36a4~~Something to do with standing grapple creation?~~~~I~~Grab/Tether
+0x36a8~~Frame grapple object is created (Standing)~~~~I~~Grab/Tether
+0x36ac~~Frame grapple begins retracting (Standing)~~~~I~~Grab/Tether
+0x36b0~~Frame grapple object is removed (Standing)~~~~I~~Grab/Tether
+0x36b4~~Something to do with running grapple creation?~~~~I~~Grab/Tether
+0x36b8~~Frame grapple object is created (Running)~~~~I~~Grab/Tether
+0x36bc~~Frame grapple begins retracting (Running)~~~~I~~Grab/Tether
+0x36c0~~Frame grapple object is removed (Running)~~~~I~~Grab/Tether
+0x36c4~~Something to do with air grapple creation?~~~~I~~Grab/Tether
+0x36c8~~Frame grapple object is created (Tether)~~~~I~~Grab/Tether
+0x36cc~~Frame grapple begins retracting (Tether)~~~~I~~Grab/Tether
+0x36d0~~Frame grapple object is removed (Tether)~~~~I~~Grab/Tether
+0x36d4~~Tether jump velocity multiplier~~~~F~~Grab/Tether
+0x36d8~~Number of frames you can hang using tether (actual number varies a little bit?)~~~~I~~Grab/Tether
+0x3630~~Frame buffer between tilt and smash missile~~~~F~~Side-B
+0x3634~~Traction~~~~F~~Side-B
+0x3638~~ ??~~~~F~~Side-B
+0x363c~~X offset~~~~F~~Side-B
+0x4038~~Y offset?~~~~F~~Side-B
+0x403c~~Homing missile duration~~~~F~~Side-B
+0x4040~~Homing missile deceleration point~~~~F~~Side-B
+0x4044~~Homing missile initial velocity~~~~F~~Side-B
+0x4048~~Homing missile secondary velocity, after it finishes deceleration and stops homing~~~~F~~Side-B
+0x404c~~Homing missile deceleration. Lower value = missile slows faster~~~~F~~Side-B
+0x4050~~Homing capability. Higher value = better homing~~~~F~~Side-B
+0x4054~~Something to do with homing. Lower value = worse homing. Range perhaps?~~~~F~~Side-B
+0x4058~~Something to do with homing. Higher value = no homing.~~~~F~~Side-B
+0x405c~~Super missile duration~~~~F~~Side-B
+0x4060~~Super missile duration point~~~~F~~Side-B
+0x4064~~Super missile initial velocity~~~~F~~Side-B
+0x4068~~Super missile acceleration~~~~F~~Side-B
+0x406c~~Super missile final speed~~~~F~~Side-B
+0x3640~~Horizontal momentum added on with no control~~~~F~~Up-B
+0x3644~~Aerial control~~~~F~~Up-B
+0x3648~~Air friction?~~~~F~~Up-B
+0x364c~~Aerial vertical momentum~~~~F~~Up-B
+0x3650~~ ?? (read on start of fall)~~~~F~~Up-B
+0x3654~~Joystick sensitivity to turn around during startup~~~~F~~Up-B
+0x3658~~Landing lag~~~~F~~Up-B
+0x365c~~Vertical momentum grounded bomb~~~~F~~Down-B
+0x3660~~Vertical momentum aerial bomb~~~~F~~Down-B
+0x3664~~Grounded mobility~~~~F~~Down-B
+0x3668~~Aerial mobility~~~~F~~Down-B
+0x366c~~ ??~~~~F~~Down-B
+0x3670~~ ??~~~~F~~Down-B
+0x3674~~Grounded momentum preservation~~~~F~~Down-B
+0x3678~~Aerial momentum preservation~~~~F~~Down-B
+0x367c~~X offset~~~~I~~Down-B
+0x3680~~Y offset~~~~F~~Down-B
+0x3684~~ ??~~~~I~~Down-B
+0x3688~~ ??~~~~F~~Down-B
+0x368c~~ ??~~~~F~~Down-B
+0x3690~~Landing detection from bomb jump?~~~~F~~Down-B
+0x3694~~Something else with landing detection?~~~~F~~Down-B
+0x3698~~ ??~~~~F~~Down-B
+0x369c~~Landing detection?~~~~F~~Down-B
+0x36a0~~ ??~~~~F~~Down-B
+0x4144~~Bomb duration~~~~F~~Down-B
+0x4148~~ ??~~~~F~~Down-B
+0x414c~~ ??~~~~F~~Down-B

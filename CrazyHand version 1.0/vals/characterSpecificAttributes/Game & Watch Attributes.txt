@@ -1,0 +1,19 @@
+0x37b0~~Frame repeated hit starts from~~~~F~~Neutral-B
+0x37b4~~Max number of sausage per rotation~~~~F~~Neutral-B
+0x435c~~Size of sausage~~~~F~~Neutral-B
+0x439c~~Sausage bounce against wall~~~~F~~Neutral-B
+0x43a0~~Duration of sausage (frames)~~~~F~~Neutral-B
+0x43a4~~Duration of stale sausage after hitting ground (frames)~~~~F~~Neutral-B
+0x43a8~~Horizontal velocity of sausage 1~~~~F~~Neutral-B
+0x43ac~~Vertical velocity of sausage 1~~~~F~~Neutral-B
+0x43b0~~Gravity of sausage 1~~~~F~~Neutral-B
+0x43b4~~Spin of sausage 1~~~~F~~Neutral-B
+0x43b8~~Also Spin of sausage 1?~~~~F~~Neutral-B
+0x37f4~~Maximum angle on up B? (radians)~~~~F~~Up B (Fire?)
+0x37f8~~Up B landing lag (/5)?~~~~F~~Up B (Fire?)
+0x3818~~Bucket absorption Y axis~~~~I~~Down-B
+0x381c~~Bucket absorption X axis~~~~F~~Down-B
+0x3820~~Bucket absorption Z axis~~~~F~~Down-B
+0x3824~~ ???~~~~I~~Down-B
+0x3828~~Bucket absorption hitbox size~~~~F~~Down-B
+0x3798~~Model width~~~~F~~Miscellaneous

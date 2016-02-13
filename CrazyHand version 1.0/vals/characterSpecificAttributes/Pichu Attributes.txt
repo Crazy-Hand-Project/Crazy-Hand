@@ -1,0 +1,10 @@
+0x3b54~~Lifetime~~~~F~~Neutral-B
+0x3b58~~Aerial jolt angle (radians)~~~~F~~Neutral-B
+0x3b5c~~Aerial jolt velocity~~~~F~~Neutral-B
+0x35fc~~Charge time~~~~F~~Side-B
+0x3600~~Base damage~~~~F~~Side-B
+0x3604~~Damage multiplier~~~~F~~Side-B
+0x3614~~Base horizontal momentum~~~~F~~Side-B
+0x3618~~Horizontal momentum multiplier~~~~F~~Side-B
+0x361c~~Base vertical momentum~~~~F~~Side-B
+0x3620~~Vertical momentum multiplier~~~~F~~Side-B
