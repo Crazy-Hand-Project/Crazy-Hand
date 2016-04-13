@@ -7,3 +7,5 @@
 0xa790~~loupe damage max~~i
 0xa78c~~frames before taking loupe damage~~i
 0xa794~~loupe damage~~i
+0xa4e0~~Death respawn timer~~i
+0xa69c~~Initial spawn platform lifetime~~i
