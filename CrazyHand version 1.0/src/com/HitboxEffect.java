@@ -22,7 +22,7 @@ public class HitboxEffect {
 		new HitboxEffect(0x3C, "Poison/Flower"),
 		new HitboxEffect(0x40, "Nothing (no graphic)"),
 		//Should be commented out for releases
-		new HitboxEffect(0x44, "Random Attribute(WITH PATCH)"),
+		new HitboxEffect(0x44, "Random (patch)"),
 	};
 
 	public int id;

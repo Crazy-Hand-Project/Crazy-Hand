@@ -78,6 +78,7 @@ public class ToolBar extends JToolBar{
 
 		//add(optionList);TODO get rid of the optionList combo box. obsolete now
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		setFloatable(false);
 
 		
 

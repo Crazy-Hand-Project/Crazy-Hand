@@ -1,13 +1,13 @@
 package com.panels;
 
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.text.DecimalFormat;
+import java.util.LinkedList;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -16,133 +16,137 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.text.MaskFormatter;
 
-import com.BitWork;
-import com.Character;
-import com.FileIO;
 import com.MeleeEdit;
-import com.scripts.Script;
-import com.scripts.ScriptUtils;
 
-public class FSMNode extends JPanel implements Comparable<FSMNode>{
-	public JComboBox character,actionBox;
-	JFormattedTextField value,frame;
-	JTextField val;
-	JButton deleteButton;
+import com.Character;
+
+
+public class FSMNode extends JPanel{
+	
+	
+	public JComboBox actionBox;
+	JButton addButton;
+	
+	
+	public LinkedList<SubNode> subNodes = new LinkedList<SubNode>();
+	
 	public int actionSubaction;
 	
 	public boolean active = true;//used to tell if this node should be deleted or not.
+
 	
-	int[] data;
-	
-	public FSMNode(int[] b, float modifier){
+	public FSMNode(LinkedList<FSMData> modifiers){
 		super();
-		character = new JComboBox(FSMPanel.characterNames);
-		character.addActionListener(new CharListener());
-		actionBox = new JComboBox(FSMPanel.actionNames);
+		
+		
 
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		
+		addButton = new JButton("Add");
+		addButton.addActionListener(new DeleteListener());
+		addButton.setPreferredSize(new Dimension(150,30));
 		
-		deleteButton = new JButton("Delete");
-		deleteButton.addActionListener(new DeleteListener());
+		actionBox = new JComboBox(SubactionPanel.getDefaultSubactions(Character.getIndexFromID(modifiers.get(0).charId)));
+		actionBox.setSelectedIndex(modifiers.get(0).actionID);
+		actionBox.setPreferredSize(new Dimension(150,30));
 
-		//TODO might just be able to do data=b here
-		data = new int[b.length];
-		for(int i = 0; i < data.length; i++){
-			data[i]=b[i];
-			System.out.print(b[i] + "  ");
-		}
-		System.out.println();
+		//this.add(new JSeparator(SwingConstants.HORIZONTAL));
+		//this.add(new JSeparator(SwingConstants.HORIZONTAL));
+		Box  mainBox = Box.createHorizontalBox();
+		mainBox.add(Box.createHorizontalStrut(30));
+		mainBox.add(actionBox);
+		mainBox.add(Box.createHorizontalStrut(20));
+        mainBox.add(addButton);
+        mainBox.add(Box.createHorizontalStrut(30));
 		
-		//TODO this is really bad
-		for(int i = 0; i < FSMPanel.characters.length; i++){
-			if(b[0]==FSMPanel.characters[i].value){
-				character.setSelectedIndex(i);
-			}
-		}
+        //this.add(Box.createVerticalStrut(1));
+        //this.add(new JSeparator(SwingConstants.HORIZONTAL));
+        
+		this.add(mainBox);
+		this.add(new JSeparator(SwingConstants.HORIZONTAL));
+		add(Box.createVerticalStrut(5));
 		
-		actionSubaction = BitWork.setBits(16,19,b);
-		if(actionSubaction==0){
-			int actionID = BitWork.setBits(20,31,b);
-			for(int i = 0; i < FSMPanel.actions.length; i++){
-				if(actionID==FSMPanel.actions[i].value){
-					actionBox.setSelectedIndex(i);
-				}
-			}
+		
+		
+		for(FSMData d: modifiers){
+			subNodes.add(new SubNode(d));
 		}
-		else{
-			int id = 0;
-			boolean hold = false;
-			for(int i = 0; i < Character.characters.length; i++){
-				if(b[0] == Character.characters[i].characterID){
-					id=i;
-					hold=true;
-				}
-				
-			}
-			String[] tmp = SubactionPanel.getDefaultSubactions(id);
-			actionBox.removeAll();
-			actionBox=new JComboBox(tmp);
-			actionBox.setSelectedIndex(BitWork.setBits(20,31,b));
-			
+		for(SubNode s: subNodes){
+			this.add(s);
 		}
 		
-		//TODO might help to define these formatters out front, but probably not
-		 value = new JFormattedTextField(new DecimalFormat("##.####"));
-		 value.setValue(modifier);
-		 value.setPreferredSize(new Dimension(60,5));
-		 
-		 frame = new JFormattedTextField(new DecimalFormat("###"));
-		 frame.setValue(b[1]);
-		 frame.setPreferredSize(new Dimension(40,5));
+		//this.add(new JSeparator(SwingConstants.HORIZONTAL));
 		
 		
-		Box  t = Box.createHorizontalBox();
-		t.add( Box.createHorizontalGlue() );
 
-        t.add(character);
-        
-        int space = 10;
-        t.add(Box.createHorizontalStrut(space));
-        t.add(new JSeparator(SwingConstants.VERTICAL));
-        t.add(Box.createHorizontalStrut(space));
-        
-        
-        t.add(new JLabel("Starting Frame: "));
-        t.add(frame);
-       
-        t.add(Box.createHorizontalStrut(space));
-        t.add(new JSeparator(SwingConstants.VERTICAL));
-        t.add(Box.createHorizontalStrut(space));
-        
-        t.add(actionBox);
-        actionBox.setPreferredSize(new Dimension(150,30));
-        
-        t.add(Box.createHorizontalStrut(space));
-        t.add(new JSeparator(SwingConstants.VERTICAL));
-        t.add(Box.createHorizontalStrut(space));
-
-        t.add(new JLabel("Multiplier: "));
-        t.add(value);
-        
-        t.add(Box.createHorizontalStrut(space));
-        t.add(new JSeparator(SwingConstants.VERTICAL));
-        t.add(Box.createHorizontalStrut(space));
-        
-        t.add(deleteButton);
-
-		this.add(t);
-		
-		this.setPreferredSize(new Dimension(670,60));
-		//character.setPreferredSize(new Dimension(100,30));
 		
 	}
 	
+
+	class SubNode extends JPanel{
+		
+		JFormattedTextField value,frame;
+		JButton deleteButton;
+		
+		public SubNode(FSMData d){
+			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			setPreferredSize(new Dimension(40,30));
+			
+			 value = new JFormattedTextField(new DecimalFormat("##.####"));
+			 value.setValue(d.multiplier);
+			 value.setPreferredSize(new Dimension(60,5));
+			 
+			 frame = new JFormattedTextField(new DecimalFormat("###"));
+			 frame.setValue(d.startFrame);
+			 frame.setPreferredSize(new Dimension(40,5));
+			 
+			 deleteButton = new JButton("Remove");
+			 deleteButton.addActionListener(new DeleteListener());
+
+			
+			Box  t = Box.createHorizontalBox();
+			t.add(Box.createHorizontalGlue());
+	        
+	        int space = 10;
+	        
+	        t.add(Box.createHorizontalStrut(60));
+	        
+	        t.add(Box.createHorizontalStrut(space));
+	        t.add(new JSeparator(SwingConstants.VERTICAL));
+	        t.add(Box.createHorizontalStrut(space));
+	        
+	        
+	        t.add(new JLabel("Starting Frame: "));
+	        t.add(frame);
+	        
+	        
+	        t.add(Box.createHorizontalStrut(space));
+	        t.add(new JSeparator(SwingConstants.VERTICAL));
+	        t.add(Box.createHorizontalStrut(space));
+
+	        t.add(new JLabel("Multiplier: "));
+	        t.add(value);
+	        
+	        t.add(Box.createHorizontalStrut(space));
+	        t.add(new JSeparator(SwingConstants.VERTICAL));
+	        t.add(Box.createHorizontalStrut(space));
+	        
+	        t.add(deleteButton);
+	        
+	        t.add(Box.createHorizontalStrut(60));
+	        
+	        this.add(t);
+
+	        add(Box.createVerticalStrut(space/2));
+			
+		}
+	}
+	
 	public void save(int location){
+		/*
 		//FileIO.writeByte(data[i]);
 		data[0] = FSMPanel.characters[character.getSelectedIndex()].value;
 
@@ -164,6 +168,7 @@ public class FSMNode extends JPanel implements Comparable<FSMNode>{
 		FileIO.writeByte(data[3]);
 		FileIO.writeFloat(((Number)value.getValue()).floatValue());
 		System.out.println("po5");
+		*/
 		
 	}
 	
@@ -177,6 +182,7 @@ public class FSMNode extends JPanel implements Comparable<FSMNode>{
 		}
 	}
 	public void reconstitute(){
+		/*
 		
 		if(actionSubaction==0)
 			return;
@@ -189,7 +195,7 @@ public class FSMNode extends JPanel implements Comparable<FSMNode>{
 				id=i;
 			}
 		}
-		String[] tmp = SubactionPanel.getDefaultSubactions(id);
+		String[] tmp = FileIO.getDefaultSubactions(id);
 		actionBox.removeAllItems();
 		for(int i = 0; i < tmp.length; i++){
 
@@ -219,34 +225,19 @@ public class FSMNode extends JPanel implements Comparable<FSMNode>{
 			dumbVar++;
 			System.out.println("update!");
 		}
-	}
-	
-	@Override
-	 public int compareTo(FSMNode n) {
-		 return (this.character.getSelectedIndex()*1000000+this.actionBox.getSelectedIndex()*1000+((Number)n.frame.getValue()).intValue()) - (n.character.getSelectedIndex()*1000000+n.actionBox.getSelectedIndex()*1000+((Number)this.frame.getValue()).intValue());
-
-	  }
-
-
-	
-	
-	
-	
-
-}
-
-
-class FSMData {
-	public String name;
-	public int value;
-	public FSMData(String n, int v){
-		name = n;
-		value = v;
-	}
-	public FSMData(int v, String n){
-		name = n;
-		value = v;
 		
+		*/
 	}
+	
+	
+
+
+	
+	
+	
+	
+
 }
+
+
 

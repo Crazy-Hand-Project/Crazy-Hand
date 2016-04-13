@@ -74,4 +74,26 @@ public class Character {
 		}
 		return 0;
 	}
+	
+	
+	//TODO this is really inefficient
+	public static String getNameFromID(int id){
+		for(int i = 0; i < characters.length; i++){
+			if(characters[i].characterID == id){
+				return characters[i].name;
+			}
+		}
+		
+		return "name";
+	}
+	
+	public static int getIndexFromID(int id){
+		for(int i = 0; i < characters.length; i++){
+			if(characters[i].characterID == id){
+				return i;
+			}
+		}
+		
+		return -1;
+	}
 }

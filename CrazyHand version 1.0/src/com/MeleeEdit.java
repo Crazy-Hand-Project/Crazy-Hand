@@ -79,7 +79,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			MENU_ANIMATION = 5, MENU_FRAME_SPEED_MODIFIERS = 6,
 			MENU_COMMON_DATA = 7, MENU_MOVE_LOGIC = 8, MENU_OTHER = 9;
 
-	public static int selected = 1, selectedMenu = 0;
+	public static int selected = 0, selectedMenu = MENU_FRAME_SPEED_MODIFIERS;
 
 	
 
@@ -206,8 +206,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		frame.pack();
 	}
 	
-	//this function updates the data of a given but does completely generate new panels,
-	//unless hardUpdate() is called from within this function
+	//this function updates the data of the selected menu but does completely generate new panels,
 	public void softUpdate(){
 		switch(selectedMenu){
 		case MENU_ATTRIBUTES:
@@ -245,10 +244,10 @@ public class MeleeEdit extends JPanel implements ActionListener {
 		}
 		frame.pack();
 		FileIO.loadedISOFile.close();
-		System.out.println("Character Selection Updated");
+		System.out.println("Soft Update");
 	}
 	
-	//this function will completely refresh panels, creating new objects
+	//this function will completely refresh panels, creating new objects. Much slower, use sparingly.
 	public void hardUpdate(){
 		removeAll();
 		add(toolBar, BorderLayout.PAGE_START);
@@ -342,6 +341,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 				ImageIcon img = new ImageIcon("img/hand.png");
 				frame.setIconImage(img.getImage());
 
+				
 				contentPane = new MeleeEdit();
 				contentPane.setOpaque(true);
 				frame.setContentPane(contentPane);
@@ -351,6 +351,7 @@ public class MeleeEdit extends JPanel implements ActionListener {
 			
 				//frame.setMaximizedBounds(new Rectangle(50,50,50,45));
 				frame.setMaximumSize(new Dimension(600, 1000));
+				frame.setPreferredSize(new Dimension(600, 700));
 		        frame.setMinimumSize(new Dimension(600, 300));
 				frame.pack();
 				frame.setVisible(true);

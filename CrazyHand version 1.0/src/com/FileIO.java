@@ -57,8 +57,10 @@ public class FileIO {
 		try {
 			FileNameExtensionFilter isoFilter = new FileNameExtensionFilter(
 					"ISO Files", "iso");
+
 			final JFileChooser fc = new JFileChooser();
 
+			
 			fc.setCurrentDirectory(Options.hasLastIso ? new File(
 					Options.isoPath) : new File(System.getProperty("user.dir")));
 			fc.addChoosableFileFilter(isoFilter);
@@ -80,6 +82,7 @@ public class FileIO {
 				if (loadedISOFile == null)
 					throw new RuntimeException("You must select a ISO file!");
 			}
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();

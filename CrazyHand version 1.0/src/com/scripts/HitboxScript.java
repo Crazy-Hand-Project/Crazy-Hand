@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,12 +33,11 @@ public class HitboxScript extends Script {
     			yOff ,
     			xOff ,
     			sound ,
-    			hurtboxInteraction ,
     			boneAttachment ,
     			hitboxId ,
     			hitboxInteraction ;
     	
-    	public JComboBox<String> Attribute;
+    	public JComboBox<String> Attribute,hurtboxInteraction;
     	
         public HitboxScript(String n, int[] d, int l){
         	super(n,d,l);
@@ -53,7 +53,7 @@ public class HitboxScript extends Script {
         			yOff = new JFormattedTextField(0);
         			xOff = new JFormattedTextField(0);
         			sound = new JFormattedTextField(0);
-        			hurtboxInteraction = new JFormattedTextField(0);
+        			
         			boneAttachment = new JFormattedTextField(0);
         			hitboxId = new JFormattedTextField(0);
         			hitboxInteraction = new JFormattedTextField(0);
@@ -75,19 +75,10 @@ public class HitboxScript extends Script {
             	tmp3[i]="Option " + (i+1);
             }
             
-            
 
-            
-            //int t = data[3];
-            //t=bit(t,8,getBit(data[2],0)); 
-            //int t = this.setBits(23,31);
             damage.setValue(this.setBits(23,31));
             
-            
-            //t=data[5];
-            //for(int i = 0 ; i < 8; i++){
-            //	t=bit(t,8+i,getBit(data[4],i));
-            //}
+
             size.setValue(this.setBits(32,47));
             
             
@@ -116,7 +107,6 @@ public class HitboxScript extends Script {
             baseKnockback.setValue(this.setBits(128,136));
             shieldDamage.setValue(this.setBits(143,149));
             sound.setValue(this.setBits(150,157));
-            hurtboxInteraction.setValue(this.setBits(158,159));
             
 
             hitboxInteraction.setValue(this.setBits(126,127));
@@ -130,7 +120,15 @@ public class HitboxScript extends Script {
 
             Attribute = new JComboBox<String>(tmp2);
             Attribute.setSelectedIndex(HitboxEffect.getSelect(elem));
+            
+            String[] tmp4 = {"Hits nothing","Hits air only","Hits ground only","Hits anything"};
+            elem = this.setBits(158,159);
+           
+            hurtboxInteraction = new JComboBox<String>(tmp4);
+            hurtboxInteraction.setSelectedIndex(elem);
 
+            
+            
             
             
 
@@ -139,140 +137,62 @@ public class HitboxScript extends Script {
             
             JPanel tempPanel= new JPanel();
             tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.LINE_AXIS));
+            int smallWidth=35,largeWidth=55,height=25,vertSpacing=2;
             
-            //damage.getValue()
-            tempPanel.add(new JLabel("Base Knockback: "));
-            tempPanel.add(baseKnockback);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
+            addField(tempPanel, "  Base KB: ", smallWidth, height, baseKnockback);
+            addField(tempPanel, "KB Growth: ", smallWidth, height, knockbackGrowth);
+            addField(tempPanel, "Damage: ", smallWidth, height, damage);
+            addField(tempPanel, "Shield Damage: ", smallWidth, height, shieldDamage);
+            addField(tempPanel, "Angle: ", smallWidth, height, angle);
             
-            tempPanel.add(new JLabel("Knockback Growth: "));
-            tempPanel.add(knockbackGrowth);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
             
-            tempPanel.add(new JLabel("WDSK: "));
-            tempPanel.add(weightKnockback);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
             
-            tempPanel.add(new JLabel("Damage: "));
-            tempPanel.add(damage);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
+            this.add(Box.createVerticalStrut(vertSpacing));
+            this.add(tempPanel);
+            this.add(Box.createVerticalStrut(vertSpacing));
             
-            tempPanel.add(new JLabel("Shield Damage: "));
-            tempPanel.add(shieldDamage);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
+            
+            
+            
+            tempPanel= new JPanel();
+            tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.LINE_AXIS));
+            
+            
+            
+            addField(tempPanel, "  Size: ", largeWidth, height, size);
+            
+            addField(tempPanel, "X-Pos: ", largeWidth, height, xOff);
+            addField(tempPanel, "Y-Pos: ", largeWidth, height, yOff);
+            addField(tempPanel, "Z-Pos: ", largeWidth, height, zOff);
+            addField(tempPanel, "Bone ID: ", smallWidth, height, boneAttachment);
+            
+            
+
+       
+            
+            this.add(Box.createVerticalStrut(vertSpacing));
+            this.add(tempPanel);
+            this.add(Box.createVerticalStrut(vertSpacing));
+            
+            
+            
+            tempPanel= new JPanel();
+            tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.LINE_AXIS));
+            
+            
+            
+            addField(tempPanel, "  Effect: ", 150, height, Attribute);
+            addField(tempPanel, "Collision: ", 110, height, hurtboxInteraction);
+            //addField(tempPanel, "Interaction: ", largeWidth, height, hitboxInteraction); //TODO add to the "unknowns" optional editor?
+            addField(tempPanel, "Hitbox ID: ", smallWidth, height,hitboxId);
+            addField(tempPanel, "SFX ID: ", smallWidth, height, sound);
+            
 
             
-            this.add(Box.createVerticalStrut(5));
+            
+            this.add(Box.createVerticalStrut(vertSpacing));
             this.add(tempPanel);
-            this.add(Box.createVerticalStrut(5));
-            tempPanel= new JPanel();
-            tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.LINE_AXIS));
-            
-            tempPanel.add(new JLabel("Size: "));
-            tempPanel.add(size);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-            tempPanel.add(new JLabel("Angle: "));
-            tempPanel.add(angle);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-            tempPanel.add(new JLabel("X-Offset: "));
-            tempPanel.add(xOff);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-            tempPanel.add(new JLabel("Y-Offset: "));
-            tempPanel.add(yOff);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-            tempPanel.add(new JLabel("Z-Offset: "));
-            tempPanel.add(zOff);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-            
-            this.add(Box.createVerticalStrut(5));
-            this.add(tempPanel);
-            this.add(Box.createVerticalStrut(5));
-            tempPanel= new JPanel();
-            tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.LINE_AXIS));
-            
-            tempPanel.add(new JLabel("Attribute: "));
-            tempPanel.add(Attribute);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-            tempPanel.add(new JLabel("Bone: "));
-            tempPanel.add(boneAttachment);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-            
-            
-            tempPanel.add(new JLabel("Sound FX: "));
-            tempPanel.add(sound);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-            this.add(Box.createVerticalStrut(5));
-            this.add(tempPanel);
-            this.add(Box.createVerticalStrut(5));
-            
-            tempPanel= new JPanel();
-            tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.LINE_AXIS));
-            
-            
-            
-            tempPanel.add(new JLabel("Hurtbox Interaction: "));
-            tempPanel.add(hurtboxInteraction);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-           
-            
-            
-            tempPanel.add(new JLabel("Hitbox Interaction: "));
-            tempPanel.add(hitboxInteraction);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-            
-            //hitboxId.setPreferredSize(new Dimension(25,hitboxId.getPreferredSize().height));
-            //hitboxId.setMaximumSize(hitboxId.getPreferredSize());
-            //hitboxId.setMinimumSize(hitboxId.getPreferredSize());
-            tempPanel.add(new JLabel("Hitbox ID: "));
-            tempPanel.add(hitboxId);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-            
-            this.add(Box.createVerticalStrut(5));
-            this.add(tempPanel);
-            this.add(Box.createVerticalStrut(5));
+            this.add(Box.createVerticalStrut(vertSpacing));
             
             
             
@@ -282,6 +202,18 @@ public class HitboxScript extends Script {
             this.setBackground(Color.WHITE);
             this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
             
+        }
+        
+        public void addField(JPanel tmp, String name, int w, int h, JComponent j){
+        	
+        	tmp.add(new JLabel(name));
+            j.setMinimumSize(new Dimension(w,h));
+            j.setPreferredSize(new Dimension(w,h));
+            j.setMaximumSize(new Dimension(w,h));
+            tmp.add(j);
+            //tmp.add(Box.createHorizontalStrut(5));
+            tmp.add(new JSeparator(SwingConstants.VERTICAL));
+            //tmp.add(Box.createHorizontalStrut(5));
         }
         
         
@@ -320,8 +252,11 @@ public class HitboxScript extends Script {
             this.saveBits(128,136,((Number)baseKnockback.getValue()).intValue());
             this.saveBits(143,149,((Number)shieldDamage.getValue()).intValue());
             this.saveBits(150,157,((Number)sound.getValue()).intValue());
-            this.saveBits(158,159,((Number)hurtboxInteraction.getValue()).intValue());
-
+            
+            
+            
+            this.saveBits(158,159,(hurtboxInteraction.getSelectedIndex()));
+            System.out.println("YOLO" + hurtboxInteraction.getSelectedIndex());
             
 
         	int bit0=getBit(data[17],0),bit1=getBit(data[17],1);

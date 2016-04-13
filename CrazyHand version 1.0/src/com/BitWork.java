@@ -2,6 +2,7 @@ package com;
 
 public class BitWork {
 
+	//TODO good lord... this whole class is a nightmare. I knew nothing about bit-wise operations when I wrote this. Just needs to be reworked from scratch.
 	
 	public static int bit(int num, int bit, int set) {
     	if(set==1){

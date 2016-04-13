@@ -13,8 +13,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -27,96 +29,25 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.border.EtchedBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.stream.events.Characters;
 
 import com.FileIO;
 import com.MeleeEdit;
+import com.BitWork;
+import com.Character;
 
 public class FSMPanel extends JPanel {
 	
-	public static FSMData[] characters = {
-		new FSMData("Captain Falcon",0x00),
-		new FSMData("Donkey Kong",0x01),
-		new FSMData("Fox",0x02),
-		new FSMData("Game & Watch",0x03),
-		new FSMData("Kirby",0x04),
-		new FSMData("Bowser",0x05),
-		new FSMData("Link",0x06),
-		new FSMData("Luigi",0x07),
-		new FSMData("Mario",0x08),
-		new FSMData("Marth",0x09),
-		new FSMData("Mewtwo",0x0A),
-		new FSMData("Ness",0x0B),
-		new FSMData("Peach",0x0C),
-		new FSMData("Pikachu",0x0D),
-		new FSMData("Ice Climbers",0x0E),
-		new FSMData("Jigglypuff",0x0F),
-		new FSMData("Samus",0x10),
-		new FSMData("Yoshi",0x11),
-		new FSMData("Zelda",0x12),
-		new FSMData("Sheik",0x13),
-		new FSMData("Falco",0x14),
-		new FSMData("Young Link",0x15),
-		new FSMData("Dr Mario",0x16),
-		new FSMData("Roy",0x17),
-		new FSMData("Pichu",0x18),
-		new FSMData("Ganondorf",0x19),
-		new FSMData("Master Hand",0x1A),
-		new FSMData("M Wireframe",0x1B),
-		new FSMData("F Wireframe",0x1C),
-		new FSMData("Giga Bowser",0x1D),
-		new FSMData("Crazy Hand",0x1E),
-		new FSMData("Sandbag",0x1F),
-		new FSMData("ALL",0xFF),
-	};
-	public static String[] characterNames = new String[characters.length];
+	
+	public LinkedList<FSMData> modifiers = new LinkedList<FSMData>();
+	public LinkedList<FSMData> modifiersShortList = new LinkedList<FSMData>();
 	
 	
-	//TODO what is this???? no wait I think i got it. Nope. forgot again.
-	public static FSMData[] actions = {
-		new FSMData(0xFFF,"UNKNOWN"),
-		new FSMData(0x02C,"Attack11"), 
-		new FSMData(0x02D,"Attack12"), 
-		new FSMData(0x02E,"Attack13"), 
-		new FSMData(0x02F,"Attack100Start"), 
-		new FSMData(0x030,"Attack100Loop"), 
-		new FSMData(0x031,"Attack100End"), 
-		new FSMData(0x032,"AttackDash"), 
-		new FSMData(0x033,"AttackS3Hi"), 
-		new FSMData(0x034,"AttackS3HiS"), 
-		new FSMData(0x035,"AttackS3S"), 
-		new FSMData(0x036,"AttackS3LwS"), 
-		new FSMData(0x037,"AttackS3Lw"), 
-		new FSMData(0x038,"AttackHi3"), 
-		new FSMData(0x039,"AttackLw3"), 
-		new FSMData(0x03A,"AttackS4Hi"), 
-		new FSMData(0x03B,"AttackS4HiS"), 
-		new FSMData(0x03C,"AttackS4S"), 
-		new FSMData(0x03D,"AttackS4LwS"), 
-		new FSMData(0x03E,"AttackS4Lw"), 
-		new FSMData(0x03F,"AttackHi4"), 
-		new FSMData(0x040,"AttackLw4"), 
-		new FSMData(0x041,"AttackAirN"), 
-		new FSMData(0x042,"AttackAirF"), 
-		new FSMData(0x043,"AttackAirB"), 
-		new FSMData(0x044,"AttackAirHi"), 
-		new FSMData(0x045,"AttackAirLw"), 
-		new FSMData(0x0D4,"Catch"), 
-		new FSMData(0x0D5,"CatchPull"), 
-		new FSMData(0x0D6,"CatchDash"), 
-		new FSMData(0x0D7,"CatchDashPull"), 
-		new FSMData(0x0D8,"CatchWait"), 
-		new FSMData(0x0D9,"CatchAttack"), 
-		new FSMData(0x0DA,"CatchCut"), 
-		new FSMData(0x0DB,"ThrowF"), 
-		new FSMData(0x0DC,"ThrowB"), 
-		new FSMData(0x0DD,"ThrowHi"), 
-		new FSMData(0x0DE,"ThrowLw"),
-		
-		
-	};
-	public static String[] actionNames = new String[actions.length];
 	public ArrayList<FSMNode> nodes = new ArrayList<FSMNode>();
+	
+	
 	public JPanel j;//a temporary panel
 	public JButton addNew, importFrom,exportTo;
 
@@ -128,19 +59,12 @@ public class FSMPanel extends JPanel {
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setPreferredSize(new Dimension(700, 500));
+		
 	}
 	
 	public void refresh(){
-		nodes.clear();
-		
-		
-		
-		for(int i = 0; i < characters.length; i++){
-			characterNames[i] = characters[i].name;
-		}
-		for(int i = 0; i < actions.length; i++){
-			actionNames[i] = actions[i].name;
-		}
+
+
 
 		
 		FileIO.initDOL();
@@ -164,22 +88,98 @@ public class FSMPanel extends JPanel {
 					tmp=false;
 				}
 			}
-			if(tmp || b[0]>(characters.length-2))// -2 because the last element in the list is "ALL"
+			if(tmp)
 				break;
 
 
 			
 			float flt = FileIO.readFloat();
 			
-			nodes.add(new FSMNode(b,flt));
-			
-			//System.out.println(b[0]);
+			modifiers.add(new FSMData(b,flt));
 			
 		}
-		update();
 		
+		Collections.sort(modifiers);
+		
+		System.out.println("\n\n\nALL SCRIPTS");
+		for(int i = 0; i < modifiers.size(); i++){
+			FSMData n = modifiers.get(i);
+			printModifier(n);
+			
+			
+			
+			if(n.charId == Character.characters[MeleeEdit.selected].characterID){
+				modifiersShortList.add(modifiers.get(i));
+				modifiers.remove(i);
+				i--;	
+			}
+			
+
+			
+			
+		}
+
+		
+		System.out.println("\n\n\nFILTERED SCRIPTS");
+		printModifiers(modifiersShortList);
+		System.out.println("\n\n\nOTHER SCRIPTS");
+		printModifiers(modifiers);
+		
+		
+		
+		System.out.println("\n\n\nBREAKIN' IT UP");
+		LinkedList<FSMData> singleList = new LinkedList<FSMData>();
+		int currentID=-1;
+		if(modifiersShortList.size()>0){
+			currentID=modifiersShortList.get(0).actionID;
+		}
+		
+		for(int i = 0; i < modifiersShortList.size(); i++){
+			FSMData n = modifiersShortList.get(i);
+			
+			
+			
+			if(n.actionID != currentID){
+				nodes.add(new FSMNode(singleList));
+				printModifiers(singleList);
+				singleList.clear();
+				currentID = n.actionID;
+				System.out.println();
+			}
+			
+			singleList.add(n);
+			
+		}
+		if(modifiersShortList.size()>0){
+			nodes.add(new FSMNode(singleList));
+			printModifiers(singleList);
+			singleList.clear();
+			System.out.println();
+		}
+		
+		
+		
+		
+		
+		
+		
+		update();
+
 	}
 
+	public void printModifier(FSMData n){
+		System.out.print(Character.getNameFromID(n.charId));
+		System.out.print("  charID=" + n.charId);
+		System.out.print("  frame=" + n.startFrame);
+		System.out.print("  actID=" + n.actionID);
+		System.out.print("  mul=" + n.multiplier);
+		System.out.println("  action=" + n.isAction);
+	}
+	public void printModifiers(LinkedList<FSMData> n){
+		for(int i = 0; i < n.size(); i++){
+			printModifier(n.get(i));
+		}	
+	}
 	
 	public void update(){
 		
@@ -195,6 +195,9 @@ public class FSMPanel extends JPanel {
 		
 		j = new JPanel();
 		j.setLayout(new BoxLayout(j, BoxLayout.PAGE_AXIS));
+		//j.setBackground(new Color(.8f,.8f,.8f));
+		j.setBackground(new Color(1f,1f,1f));
+		
 		
 		for(int i = 0; i < nodes.size(); i++)
 		{
@@ -202,24 +205,23 @@ public class FSMPanel extends JPanel {
 			{
 				nodes.remove(i);
 				i--;
-				
 			}
 		}
 		
+		j.add(Box.createVerticalStrut(5));
 		for(FSMNode n: nodes){
 			n.reconstitute();
+			n.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 			j.add(n);
-			j.add(new JSeparator(SwingConstants.HORIZONTAL));
+			j.add(Box.createVerticalStrut(15));
 			
 		}
 		
-		System.out.println(scroll);
+		//System.out.println(scroll);
 		
-		//if(an==null){
-			an = new JScrollPane(j);
-			an.getVerticalScrollBar().setUnitIncrement(10);
-	        an.setPreferredSize(new Dimension(700,500));
-		//}
+		an = new JScrollPane(j);
+		an.getVerticalScrollBar().setUnitIncrement(10);
+	    an.setPreferredSize(new Dimension(700,500));
 		an.getVerticalScrollBar().setValue(scroll*10);
 		an.getVerticalScrollBar().updateUI();
         
@@ -256,14 +258,13 @@ public class FSMPanel extends JPanel {
 		
 		MeleeEdit.frame.pack();
 		
-		//FileIO.loadedISOFile.close();
+		FileIO.loadedISOFile.close();
 	}
 	
 	JScrollPane an;
 	
 	public void save(){
-		
-		Collections.sort(nodes);
+
 		
 		int pointer = 0x4089b0;
 		
@@ -273,11 +274,11 @@ public class FSMPanel extends JPanel {
 		FileIO.setPosition(pointer);
 		System.out.println("po2");
 		int i = 0;
-		for(FSMNode n: nodes){
-			n.save(0);
-			i++;
-			System.out.println("po3");
-		}
+		//for(FSMNode n: nodes){
+		//	n.save(0);
+		//	i++;
+		//	System.out.println("po3");
+		//}
 		while(i<150){
 			for(int k = 0; k < 8; k++)
 				FileIO.writeByte(0);
@@ -315,7 +316,7 @@ public class FSMPanel extends JPanel {
 			String cmd = arg0.getActionCommand();
 			if(cmd=="add"){
 				int[] b = {0,0,0x80,0x2c};
-				nodes.add(new FSMNode(b,1.f));
+				//nodes.add(new FSMNode(b,1.f));
 				
 				update();
 			}
@@ -361,8 +362,8 @@ public class FSMPanel extends JPanel {
 							}
 							float val = Float.parseFloat(params[4]);
 							
-							FSMNode n = new FSMNode(data, val);
-							nodes.add(n);
+							//FSMNode n = new FSMNode(data, val);
+							//nodes.add(n);
 						}
 						
 					} catch (IOException e) {
@@ -410,19 +411,19 @@ public class FSMPanel extends JPanel {
 					String ln = System.lineSeparator();
 					String output="";
 					
-					Collections.sort(nodes);
+					//Collections.sort(nodes);
 					
-					for(FSMNode n : nodes){
-						n.reconstitute();
-						for(int i = 0; i < n.data.length; i ++){
-							output+=n.data[i];
-							output+=",";
-						}
-						output+=((Number)n.value.getValue()).floatValue();
-						if(nodes.get(nodes.size()-1)!=n){
-							output+=ln;
-						}
-					}
+					//for(FSMNode n : nodes){
+					//	n.reconstitute();
+					//	for(int i = 0; i < n.data.length; i ++){
+					//		output+=n.data[i];
+					//		output+=",";
+					//	}
+					//	output+=((Number)n.value.getValue()).floatValue();
+					//	if(nodes.get(nodes.size()-1)!=n){
+					//		output+=ln;
+					//	}
+					//}
 					
 					out.write(output);
 					out.close();
@@ -434,6 +435,7 @@ public class FSMPanel extends JPanel {
 			}
 		}
 	}
+	
 	
 	
 }

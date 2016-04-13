@@ -24,6 +24,8 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 import javax.swing.text.MaskFormatter;
 
 import com.Character;
@@ -116,28 +118,26 @@ public class Script extends JPanel{
 		b0.add(upButton);
 		b0.add(downButton);
 		
-		if(this instanceof HitboxScript){
-			JButton copyButton = new JButton(new ImageIcon("img/copy.png"));
-			copyButton.setPreferredSize(new Dimension(30, 30));
-			copyButton.setToolTipText("copy data");
-			copyButton.setActionCommand("hbCopy");
-			
-			JButton pasteButton = new JButton(new ImageIcon("img/paste.png"));
-			pasteButton.setPreferredSize(new Dimension(30, 30));
-			pasteButton.setToolTipText("paste data");
-			pasteButton.setActionCommand("hbPaste");
-			
-			copyButton.addActionListener(bac);
-			pasteButton.addActionListener(bac);
-			
-			b0.add(copyButton);
-			b0.add(pasteButton);			
-		}
+		JButton copyButton = new JButton(new ImageIcon("img/copy.png"));
+		copyButton.setPreferredSize(new Dimension(30, 30));
+		copyButton.setToolTipText("copy data");
+		copyButton.setActionCommand("hbCopy");
 		
+		JButton pasteButton = new JButton(new ImageIcon("img/paste.png"));
+		pasteButton.setPreferredSize(new Dimension(30, 30));
+		pasteButton.setToolTipText("paste data");
+		pasteButton.setActionCommand("hbPaste");
+		
+		copyButton.addActionListener(bac);
+		pasteButton.addActionListener(bac);
+		
+		b0.add(copyButton);
+		b0.add(pasteButton);			
+			
 		
         JPanel pan = new JPanel();
         //pan.setBackground(new Color(.96f,.96f,1f,1f));//TODO idk color stuff. this is for title background thing
-        pan.setLayout(new BoxLayout(pan, BoxLayout.X_AXIS));
+        pan.setLayout(new BoxLayout(pan, BoxLayout.LINE_AXIS));
 		Box  b = Box.createHorizontalBox();
         //b.add(numTag);
         
@@ -179,6 +179,8 @@ public class Script extends JPanel{
         MaskFormatter formatter = createHexadecimalMaskFormatter();
         hex = new JFormattedTextField(formatter);
         hex.setValue(tmp);
+        //hex.setPreferredSize(new Dimension(100,40));
+        //hex.setMaximumSize(new Dimension(100,40));
         
         this.add(Box.createVerticalStrut(5));
         
@@ -189,7 +191,11 @@ public class Script extends JPanel{
         
         if(hexField){
              b.add(hex);
+             
              b.add( Box.createHorizontalGlue() );
+             b.add(new JSeparator(SwingConstants.VERTICAL));
+             b.add( Box.createHorizontalGlue() );
+
         }
         
         this.add(b);

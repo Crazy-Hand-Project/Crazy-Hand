@@ -100,7 +100,8 @@ public class PlCoPanel extends JPanel{
 
 			}
 			else{
-				FileIO.writeInt((int)attributeTable.getValueAt( i, 0));
+				FileIO.writeInt(((Number)attributeTable.getValueAt(i,0)).intValue());
+				
 			}
 
 		}

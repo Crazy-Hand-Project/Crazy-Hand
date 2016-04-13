@@ -94,10 +94,28 @@ public class SubactionPanel extends JPanel {
 	}
 
 	public void updateSubactions() {
+		//TOGO remove this bogus
+		System.out.println("LO");
+		System.out.println(MeleeEdit.selected);
+		System.out.println(selectedSubaction);
+		System.out.println("");
+		
 		FileIO.init();
-		readScripts();
+		readScripts(Script.scripts, MeleeEdit.selected, selectedSubaction);
+		
+		System.out.println("LO");
+		System.out.println(MeleeEdit.selected);
+		System.out.println(selectedSubaction);
+		System.out.println("");
 
-		//setSubactionList();
+		//scripts = new JScrollPane(scriptInner);//TODO see what to do about this
+		//scripts.setPreferredSize(new Dimension(600, 600));
+		//scripts.getVerticalScrollBar().setUnitIncrement(10);
+
+		//setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		//add(subactionList);
+		//add(scripts);
+
 
 	}
 
@@ -128,13 +146,14 @@ public class SubactionPanel extends JPanel {
 	public class SubactionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JComboBox cb = (JComboBox) e.getSource();
-			selectedSubaction = cb.getSelectedIndex();
-			FileIO.init();
-			readScripts();
 			
-			removeAll();
-			add(subactionList);
-			add(scripts);
+			System.out.print("subaction Index:");
+			System.out.println(cb.getSelectedIndex());
+			
+			selectedSubaction = cb.getSelectedIndex();
+			
+			MeleeEdit.contentPane.softUpdate();
+
 		}
 	}
 
@@ -154,14 +173,12 @@ public class SubactionPanel extends JPanel {
 		scripts.clear();
 		scriptInner.removeAll();
 
-		
-		
+
 		// -1 means that loopScript should be set to 0(Used after 10 00 00 00)
 		// 0 means that a script is NOT inside a loop
 		// 1 means that a script is inside a loop
 		int loopScript = 0;
-
-
+		
 		
 		
 		if (subactionIndex < 0) {
@@ -329,7 +346,7 @@ public class SubactionPanel extends JPanel {
 					c++;
 			}
 
-			System.out.println("[No name] = " + c);
+			//System.out.println("[No name] = " + c);
 
 			file.close();
 			return subactions;

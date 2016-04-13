@@ -29,7 +29,7 @@ public class SynchronousScript extends Script {
         	hexField=false;
         	init(n,d,l);
         	
-        	this.add(Box.createVerticalStrut(5));
+        	//this.add(Box.createVerticalStrut(5));
         	Box b = Box.createHorizontalBox();
         	b.add(new JLabel("Frames: "));
             b.add(frames);

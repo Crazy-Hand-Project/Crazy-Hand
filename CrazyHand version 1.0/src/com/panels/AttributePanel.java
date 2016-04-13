@@ -51,13 +51,13 @@ public class AttributePanel extends JPanel{
 		
 		
 		update();
-		attributeTable.getColumnModel().getColumn(0).setMaxWidth(300);//TODO scale this with window size
-		attributeTable.getColumnModel().getColumn(0).setMinWidth(200);//TODO these are both pretty jank right now.
+		//attributeTable.getColumnModel().getColumn(0).setMaxWidth(300);//TODO scale this with window size
+		//attributeTable.getColumnModel().getColumn(0).setMinWidth(200);//TODO these are both pretty jank right now.
 		
 		
 		// Create the scroll pane and add the table to it.
 		aPane = new JScrollPane(attributeTable);
-		aPane.setPreferredSize(new Dimension(500, 500));
+		//aPane.setPreferredSize(new Dimension(500, 500));
 		//aPane.setBorder(BorderFactory.createEmptyBorder(3, 125, 3, 125));//TODO make these values scale with window size so the table is always the same width
 		add(aPane);
 				

@@ -68,11 +68,7 @@ public class GraphicScript extends Script {
     
             
             
-            tempPanel.add(new JLabel("Graphic ID: "));
-            tempPanel.add(graphicID);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
+            
 
 
             
@@ -81,7 +77,11 @@ public class GraphicScript extends Script {
             //this.add(Box.createVerticalStrut(5));
             //tempPanel= new JPanel();
             //tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.LINE_AXIS));
-            
+            tempPanel.add(new JLabel("Graphic ID: "));
+            tempPanel.add(graphicID);
+            tempPanel.add(Box.createHorizontalStrut(5));
+            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
+            tempPanel.add(Box.createHorizontalStrut(5));
             
             
             tempPanel.add(new JLabel("X Offset: "));
@@ -108,23 +108,6 @@ public class GraphicScript extends Script {
             //tempPanel= new JPanel();
             //tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.LINE_AXIS));
             
-            tempPanel.add(new JLabel("X Scatter: "));
-            tempPanel.add(xExtent);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-            tempPanel.add(new JLabel("Y Scatter: "));
-            tempPanel.add(yExtent);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
-            
-            tempPanel.add(new JLabel("Z Scatter: "));
-            tempPanel.add(zExtent);
-            tempPanel.add(Box.createHorizontalStrut(5));
-            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
-            tempPanel.add(Box.createHorizontalStrut(5));
             
             this.add(Box.createVerticalStrut(5));
             this.add(tempPanel);
@@ -169,11 +152,34 @@ public class GraphicScript extends Script {
             
             //
             
+            
+            
+            
             tempPanel.add(new JLabel("Bone attachment: "));
             tempPanel.add(boneAttachment);
             tempPanel.add(Box.createHorizontalStrut(5));
             tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
             tempPanel.add(Box.createHorizontalStrut(5));
+            
+            
+            tempPanel.add(new JLabel("X Scatter: "));
+            tempPanel.add(xExtent);
+            tempPanel.add(Box.createHorizontalStrut(5));
+            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
+            tempPanel.add(Box.createHorizontalStrut(5));
+            
+            tempPanel.add(new JLabel("Y Scatter: "));
+            tempPanel.add(yExtent);
+            tempPanel.add(Box.createHorizontalStrut(5));
+            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
+            tempPanel.add(Box.createHorizontalStrut(5));
+            
+            tempPanel.add(new JLabel("Z Scatter: "));
+            tempPanel.add(zExtent);
+            tempPanel.add(Box.createHorizontalStrut(5));
+            tempPanel.add(new JSeparator(SwingConstants.VERTICAL));
+            tempPanel.add(Box.createHorizontalStrut(5));
+            
             
           
             this.add(Box.createVerticalStrut(5));
